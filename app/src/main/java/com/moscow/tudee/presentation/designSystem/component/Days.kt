@@ -20,7 +20,7 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 
 @Composable
-fun Day(
+fun DayItem(
     modifier: Modifier = Modifier,
     day: String,
     dayDate: Int,
@@ -65,7 +65,7 @@ fun Day(
 @Preview
 @Composable
 fun PreviewDay() {
-    Day(
+    DayItem(
         day = "Mon",
         dayDate = 12,
         isSelected = true,
