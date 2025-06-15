@@ -2,6 +2,7 @@ package com.moscow.tudee.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
@@ -30,20 +31,10 @@ fun DatePickerModal(
             containerColor = Theme.colors.surface
         ),
         confirmButton = {
-            TudeeTextButton(
-                text = "OK",
-                onClick = {
-                    onDateSelected(datePickerState.selectedDateMillis)
-                    onDismiss()
-                },
-                colors = Theme.colors.primary,
-                style = Theme.textStyle.label.large,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(end = 16.dp, bottom = 8.dp)
-            )
-        },
-        dismissButton = {
-            Row(horizontalArrangement = Arrangement.spacedBy(140.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 TudeeTextButton(
                     text = "Clear",
                     onClick = {
@@ -52,14 +43,30 @@ fun DatePickerModal(
                     },
                     colors = Theme.colors.primary,
                     style = Theme.textStyle.label.large,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(start = 16.dp)
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
+
                 TudeeTextButton(
                     text = "Cancel",
                     onClick = onDismiss,
                     colors = Theme.colors.primary,
                     style = Theme.textStyle.label.large,
                     fontSize = 16.sp
+                )
+
+                TudeeTextButton(
+                    text = "OK",
+                    onClick = {
+                        onDateSelected(datePickerState.selectedDateMillis)
+                        onDismiss()
+                    },
+                    colors = Theme.colors.primary,
+                    style = Theme.textStyle.label.large,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(end = 16.dp, bottom = 8.dp)
                 )
             }
         }
