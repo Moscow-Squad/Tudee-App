@@ -1,0 +1,74 @@
+name: TudeeWorkFlow
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Clean Project
+        run: ./gradlew clean
+
+      - name: Compile Project
+        run: ./gradlew assemble
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Generate JaCoCo Test Report
+        run: ./gradlew jacocoTestReport
+
+      - name: Verify JaCoCo Coverage
+        run: ./gradlew jacocoTestCoverageVerification
+
+      - name: Upload JaCoCo HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-html
+          path: build/reports/jacoco/test/html
+
+      - name: Comment on coverage for current branch
+        if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+        uses: madrapps/jacoco-report@v1.7.1
+        with:
+          paths: |
+            build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 70
+          min-coverage-changed-files: 70
+          update-comment: true
+          title: "🛡️ Code Coverage Report"
+          check-for-current-branch: true
+          coverage-counter-type: LINE,INSTRUCTION,BRANCH,METHOD,CLASS
+          include-all-sources: true
+          debug-mode: true
+          fail-if-coverage-less: true
+          fail-on-coverage-violation: true
+          failure-message: "Code coverage is currently at {coverage}%. Target is 100%."
+          success-message: "✅ Code coverage is at {coverage}%."
+          report-on-status: true
+
