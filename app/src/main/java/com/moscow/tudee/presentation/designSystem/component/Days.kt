@@ -2,6 +2,7 @@ package com.moscow.tudee.presentation.designSystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -43,6 +44,7 @@ fun Day(
             .wrapContentHeight()
             .padding(vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
             text = "$dayDate",
