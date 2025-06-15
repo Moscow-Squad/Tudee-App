@@ -1,14 +1,13 @@
-package com.moscow.tudee.presentation.designSystem.typograghy
+package com.moscow.tudee.presentation.designSystem.typography
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moscow.tudee.R
 
-val defaultTextStyle = TudeeTextStyle(
+val DefaultTextStyle = TudeeTextStyle(
     headline = SizedTextStyle(
         large = TextStyle(
             fontSize = 28.sp,

@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.typograghy
+package com.moscow.tudee.presentation.designSystem.typography
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
@@ -17,4 +17,4 @@ data class SizedTextStyle(
     val small: TextStyle,
 )
 
-val LocalTudeeTextStyle = staticCompositionLocalOf { defaultTextStyle }
+val LocalTudeeTextStyle = staticCompositionLocalOf { DefaultTextStyle }

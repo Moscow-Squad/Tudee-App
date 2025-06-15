@@ -3,7 +3,7 @@ package com.moscow.tudee.presentation.designSystem.color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-val tudeeLightColor = TudeeColors(
+val lightThemeColors = TudeeColors(
     primary = Color(0xFF49BAF2),
     secondary = Color(0xFFF49061),
     primaryVariant = Color(0xFFEFF9FE),

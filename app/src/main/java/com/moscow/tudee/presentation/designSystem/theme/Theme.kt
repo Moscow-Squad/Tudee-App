@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.theme
+package com.moscow.tudee.presentation.designSystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
@@ -6,11 +6,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import com.moscow.tudee.presentation.designSystem.color.LocalTudeeColors
 import com.moscow.tudee.presentation.designSystem.color.TudeeColors
-import com.moscow.tudee.presentation.designSystem.color.tudeeDarkTheme
-import com.moscow.tudee.presentation.designSystem.color.tudeeLightColor
-import com.moscow.tudee.presentation.designSystem.typograghy.LocalTudeeTextStyle
-import com.moscow.tudee.presentation.designSystem.typograghy.TudeeTextStyle
-import com.moscow.tudee.presentation.designSystem.typograghy.defaultTextStyle
+import com.moscow.tudee.presentation.designSystem.color.darkThemeColors
+import com.moscow.tudee.presentation.designSystem.color.lightThemeColors
+import com.moscow.tudee.presentation.designSystem.typography.LocalTudeeTextStyle
+import com.moscow.tudee.presentation.designSystem.typography.TudeeTextStyle
+import com.moscow.tudee.presentation.designSystem.typography.DefaultTextStyle
 
 
 @Composable
@@ -19,12 +19,12 @@ fun TudeeTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        darkTheme -> tudeeDarkTheme
-        else -> tudeeLightColor
+        darkTheme -> darkThemeColors
+        else -> lightThemeColors
     }
     CompositionLocalProvider(
         LocalTudeeColors provides colorScheme,
-        LocalTudeeTextStyle provides defaultTextStyle
+        LocalTudeeTextStyle provides DefaultTextStyle
     ) {
         content()
     }

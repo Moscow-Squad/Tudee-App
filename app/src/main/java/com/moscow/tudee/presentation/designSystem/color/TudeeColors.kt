@@ -35,4 +35,4 @@ data class TudeeColors(
     val emojiTint: Color
 )
 
-val LocalTudeeColors = staticCompositionLocalOf { tudeeLightColor }
+val LocalTudeeColors = staticCompositionLocalOf { lightThemeColors }
