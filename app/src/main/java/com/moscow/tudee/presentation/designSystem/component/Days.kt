@@ -55,7 +55,7 @@ fun Day(
         )
         Text(
             text = day,
-            color = if (isSelected) colors.onPrimary else colors.hint,
+            color = if (isSelected) colors.onPrimaryCaption else colors.hint,
             style = textStyle.body.small,
             modifier = Modifier.wrapContentSize()
         )
