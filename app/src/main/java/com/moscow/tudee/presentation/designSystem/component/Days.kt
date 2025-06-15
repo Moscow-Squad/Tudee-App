@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +24,7 @@ fun DayItem(
     day: String,
     dayDate: Int,
     isSelected: Boolean,
-    onDayClick: () -> Unit = {},
+    onDayClick: () -> Unit,
 ) {
 
     Column(
@@ -44,14 +43,12 @@ fun DayItem(
             text = "$dayDate",
             color = if (isSelected) colors.onPrimary else colors.body,
             style = textStyle.title.medium,
-            modifier = Modifier.wrapContentSize()
 
-        )
+            )
         Text(
             text = day,
             color = if (isSelected) colors.onPrimaryCaption else colors.hint,
             style = textStyle.body.small,
-            modifier = Modifier.wrapContentSize()
         )
     }
 }
@@ -63,5 +60,6 @@ fun PreviewDay() {
         day = "Mon",
         dayDate = 12,
         isSelected = true,
+        onDayClick = { }
     )
 }
