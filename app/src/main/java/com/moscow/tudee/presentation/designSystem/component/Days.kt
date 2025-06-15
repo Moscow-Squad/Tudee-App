@@ -49,7 +49,7 @@ fun Day(
         Text(
             text = "$dayDate",
             color = if (isSelected) colors.onPrimary else colors.body,
-            style = textStyle.body.large,
+            style = textStyle.title.medium,
             modifier = Modifier.wrapContentSize()
 
         )
