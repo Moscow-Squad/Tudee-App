@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("com.google.gms.google-services")
+    id("jacoco")
 }
 
 android {
@@ -26,6 +28,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            enableUnitTestCoverage = true
         }
     }
     compileOptions {
@@ -61,9 +66,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Firebase
+    implementation(platform(libs.firebase.bom))
 }
 
-
+/**
+ * git hooks installation task
+ * */
 tasks.register("installGitHooks") {
     doLast {
         fun installHook(name: String) {
@@ -88,4 +97,47 @@ tasks.register("installGitHooks") {
 
 gradle.projectsEvaluated {
     tasks["build"].dependsOn("installGitHooks")
+}
+
+
+/**
+ * jacoco configuration
+ * */
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        xml.outputLocation.set(file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml"))
+        html.outputLocation.set(file("${buildDir}/reports/jacoco/test/html"))
+    }
+
+    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug")
+    val mainSrc = "${project.projectDir}/src/main/java"
+    val kotlinSrc = "${project.projectDir}/src/main/kotlin"
+
+    sourceDirectories.setFrom(files(listOf(mainSrc, kotlinSrc)))
+    classDirectories.setFrom(files(listOf(debugTree)))
+    executionData.setFrom(fileTree(buildDir).include("jacoco/testDebugUnitTest.exec"))
+}
+
+tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
+    dependsOn("testDebugUnitTest")
+
+    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug")
+    classDirectories.setFrom(files(listOf(debugTree)))
+    executionData.setFrom(fileTree(buildDir).include("jacoco/testDebugUnitTest.exec"))
+
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70.toBigDecimal()
+            }
+        }
+    }
 }
