@@ -10,20 +10,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.typography.LocalTudeeTextStyle
 
 @Composable
-fun Text(
+fun TudeeText(
     text: String,
     modifier: Modifier = Modifier,
-    style: TextStyle = LocalTudeeTextStyle.current.body.medium,
+    style: TextStyle = Theme.textStyle.body.medium,
     color: Color? = null,
     fontSize: TextUnit? = null,
     fontWeight: FontWeight? = null,
     fontFamily: FontFamily? = null,
     textAlign: TextAlign = TextAlign.Start,
     maxLines: Int = Int.MAX_VALUE,
-    overflow: TextOverflow = TextOverflow.Clip
+    overflow: TextOverflow = TextOverflow.Clip,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    letterSpacing: TextUnit = TextUnit.Unspecified
 ) {
     val finalStyle = style.merge(
         TextStyle(
@@ -31,7 +34,9 @@ fun Text(
             fontSize = fontSize ?: TextUnit.Unspecified,
             fontWeight = fontWeight,
             fontFamily = fontFamily,
-            textAlign = textAlign
+            textAlign = textAlign,
+            lineHeight = lineHeight,
+            letterSpacing = letterSpacing
         )
     )
 

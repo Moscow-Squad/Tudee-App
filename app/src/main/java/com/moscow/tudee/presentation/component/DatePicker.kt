@@ -2,6 +2,7 @@ package com.moscow.tudee.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -29,7 +30,7 @@ fun DatePickerModal(
             containerColor = Theme.colors.surface
         ),
         confirmButton = {
-            TextButton(
+            TudeeTextButton(
                 text = "OK",
                 onClick = {
                     onDateSelected(datePickerState.selectedDateMillis)
@@ -43,7 +44,7 @@ fun DatePickerModal(
         },
         dismissButton = {
             Row(horizontalArrangement = Arrangement.spacedBy(140.dp)) {
-                TextButton(
+                TudeeTextButton(
                     text = "Clear",
                     onClick = {
                         onDateSelected(null)
@@ -53,7 +54,7 @@ fun DatePickerModal(
                     style = Theme.textStyle.label.large,
                     fontSize = 16.sp
                 )
-                TextButton(
+                TudeeTextButton(
                     text = "Cancel",
                     onClick = onDismiss,
                     colors = Theme.colors.primary,

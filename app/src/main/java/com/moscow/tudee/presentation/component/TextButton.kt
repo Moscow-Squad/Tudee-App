@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.moscow.tudee.presentation.designSystem.typography.LocalTudeeTextStyle
 
 @Composable
-fun TextButton(
+fun TudeeTextButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -23,7 +23,7 @@ fun TextButton(
     fontWeight: FontWeight? = null,
     fontFamily: FontFamily? = null,
 ) {
-    Text(
+    TudeeText(
         text = text,
         style = style,
         color = colors,
