@@ -27,18 +27,12 @@ fun DayItem(
     isSelected: Boolean,
     onDayClick: () -> Unit = {},
 ) {
-    val modifierWithBackground = if (isSelected) {
-        modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(colors.primaryGradient)
-    } else {
-        modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(colors.surface)
-    }
 
     Column(
-        modifier = modifierWithBackground
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .applyIf(isSelected) { background(colors.primaryGradient) }
+            .applyIf(!isSelected) { background(colors.surface) }
             .clickable(onClick = onDayClick)
             .width(56.dp)
             .wrapContentHeight()
