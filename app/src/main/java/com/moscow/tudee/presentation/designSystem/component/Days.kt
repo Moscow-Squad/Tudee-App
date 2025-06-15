@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.presentation.designSystem.color.LocalTudeeColors
-import com.moscow.tudee.presentation.designSystem.typography.LocalTudeeTextStyle
+import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
+import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 
 @Composable
 fun Day(
@@ -26,8 +26,6 @@ fun Day(
     isSelected: Boolean,
     onDayClick: () -> Unit = {},
 ) {
-    val colors = LocalTudeeColors.current
-    val textStyle = LocalTudeeTextStyle.current.body
     val modifierWithBackground = if (isSelected) {
         modifier
             .clip(RoundedCornerShape(16.dp))
@@ -49,14 +47,14 @@ fun Day(
         Text(
             text = "$dayDate",
             color = if (isSelected) colors.onPrimary else colors.body,
-            style = textStyle.large,
+            style = textStyle.body.large,
             modifier = Modifier.wrapContentSize()
 
         )
         Text(
             text = day,
             color = if (isSelected) colors.onPrimary else colors.hint,
-            style = textStyle.small,
+            style = textStyle.body.small,
             modifier = Modifier.wrapContentSize()
         )
     }
