@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.designSystem.component.modifier
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
