@@ -62,3 +62,30 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+
+tasks.register("installGitHooks") {
+    doLast {
+        fun installHook(name: String) {
+            val source = rootProject.file("scripts/hooks/$name")
+            val target = rootProject.file(".git/hooks/$name")
+
+            if (!target.exists() || target.readText() != source.readText()) {
+                target.writeText(source.readText())
+                target.setExecutable(true)
+                source.setReadable(true)
+                source.setWritable(false)
+                println("✅ $name hook installed and made executable.")
+            } else {
+                println("✅ $name hook is already up to date.")
+            }
+        }
+
+        installHook("commit-msg")
+        installHook("pre-push")
+    }
+}
+
+gradle.projectsEvaluated {
+    tasks["build"].dependsOn("installGitHooks")
+}

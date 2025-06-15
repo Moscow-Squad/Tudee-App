@@ -1,0 +1,17 @@
+#!/bin/bash
+
+branch_name=$(git symbolic-ref --short HEAD)
+
+# Require #ticket-number- in the branch name (escaped #)
+pattern="^(feature|fix|hotfix|release|chore|test|refactor)/\#[0-9]+-[a-z0-9\-]+$"
+
+if [[ ! "$branch_name" =~ $pattern ]]; then
+  echo ""
+  echo "❌ Invalid branch name: '$branch_name'"
+  echo "👉 Must match pattern: type/#ticket-number-branch-name"
+  echo "✅ Allowed types: feature, fix, hotfix, release, chore, test, refactor"
+  echo "📌 Example: feature/#12-add-login-screen"
+  exit 1
+fi
+
+echo "✅ Branch name is valid: '$branch_name'"
