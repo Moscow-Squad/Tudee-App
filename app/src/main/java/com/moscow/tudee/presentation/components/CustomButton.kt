@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -53,6 +55,12 @@ fun PrimaryButton(
     Box(
         modifier = modifier
             .height(56.dp)
+            .shadow(
+                elevation = 4.dp,
+                shape = RoundedCornerShape(360.dp),
+                ambientColor = Color(0x1F000000),
+                spotColor = Color(0x1F000000)
+            )
             .clip(RoundedCornerShape(360.dp))
             .background(brush = backGroundColor, RoundedCornerShape(360.dp))
             .clickable(
@@ -71,11 +79,11 @@ fun PrimaryButton(
                 style = Theme.textStyle.label.large,
                 color = textColor,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
             )
             if (isLoading) {
                 AnimatedLoading(
-                    modifier = Modifier,
+                    modifier = Modifier.size(24.dp),
                     tintColor = if (navButton) themeColors.error else Theme.colors.onPrimary
                 )
             }
@@ -126,7 +134,7 @@ fun SecondaryButton(
             )
             if (isLoading) {
                 AnimatedLoading(
-                    modifier = Modifier,
+                    modifier = Modifier.size(24.dp),
                     tintColor = Theme.colors.primary
                 )
             }
@@ -176,69 +184,93 @@ fun CustomTextButton(
             )
             if (isLoading) {
                 AnimatedLoading(
-                    modifier = Modifier,
+                    modifier = Modifier.size(24.dp),
                     tintColor = if (navTextButton) Theme.colors.error else Theme.colors.primary
                 )
             }
         }
     }
 }
-
-@Preview
+@Preview(apiLevel = 33, showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
+@Preview(apiLevel = 33, showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun NormalButtonPreview() {
     TudeeTheme {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(Theme.colors.surface),
             verticalArrangement = Arrangement.spacedBy(3.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            PrimaryButton(
-                text = "Submit",
-                onClick = {},
-            )
-            PrimaryButton(
-                text = "Submit",
-                onClick = {},
-                isLoading = true
-            )
-            PrimaryButton(
-                text = "Submit",
-                onClick = {},
-                isEnabled = false
-            )
-            PrimaryButton(
-                text = "Submit",
-                onClick = {},
-                navButton = true
-            )
-            PrimaryButton(
-                text = "Submit",
-                onClick = {},
-                navButton = true,
-                isLoading = true
-            )
-            PrimaryButton(
-                text = "Submit",
-                onClick = {},
-                navButton = true,
-                isEnabled = false
-            )
-            SecondaryButton(
-                text = "Submit",
-                onClick = {},
-            )
-            SecondaryButton(
-                text = "Submit",
-                onClick = {},
-                isEnabled = false
-            )
-            SecondaryButton(
-                text = "Submit",
-                onClick = {},
-                isLoading = true
-            )
+            Row(
+                modifier = Modifier.padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                PrimaryButton(
+                    text = "Submit",
+                    onClick = {},
+                )
+                PrimaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    isLoading = true
+                )
+                PrimaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    isEnabled = false
+                )
+            }
+            Row(
+                modifier = Modifier.padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                PrimaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    navButton = true,
+                    isLoading = true
+                )
+                PrimaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    navButton = true,
+                )
+                PrimaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    navButton = true,
+                    isEnabled = false
+                )
+            }
+            Row(
+                modifier = Modifier.padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                SecondaryButton(
+                    text = "Submit",
+                    onClick = {},
+                )
+                SecondaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    isEnabled = false
+                )
+                SecondaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    isLoading = true
+                )
+            }
+            Row(
+                modifier = Modifier.padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
             CustomTextButton(
                 text = "Submit",
                 onClick = {},
@@ -253,27 +285,30 @@ private fun NormalButtonPreview() {
                 onClick = {},
                 isLoading = true
             )
+            }
+            Row(
+                modifier = Modifier.padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
             CustomTextButton(
                 text = "Submit",
                 onClick = {},
-            )
-            CustomTextButton(
-                text = "Submit",
-                onClick = {},
-                navTextButton = true
+                navTextButton = true,
             )
             CustomTextButton(
                 text = "Submit",
                 onClick = {},
                 navTextButton = true,
-                isEnabled = true
-            )
-            CustomTextButton(
-                text = "Submit",
-                onClick = {},
-                navTextButton = true,
                 isLoading = true
             )
+                CustomTextButton(
+                    text = "Submit",
+                    onClick = {},
+                    navTextButton = true,
+                    isEnabled = false
+                )
+            }
         }
     }
 }
