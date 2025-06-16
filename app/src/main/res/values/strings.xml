@@ -2,4 +2,25 @@
     <string name="app_name">Tudee</string>
     <string name="text_field_icon">Text Field Icon</string>
     <string name="divider">divider</string>
+    <string name="task_card_icon">task card icon</string>
+    <string name="calender_icon">calender icon</string>
+    <string name="priority_icon">priority icon</string>
+    <string name="category_icon">category icon</string>
+    <string name="selected_icon">selected icon</string>
+    <string name="greater_than_100">+100</string>
+    <string name="home">Home</string>
+    <string name="tasks">Tasks</string>
+    <string name="options">Options</string>
+    <string name="status_icon">status icon</string>
+    <string name="stay_working">Stay working!</string>
+    <string name="tadaa">Tadaa!</string>
+    <string name="zero_progress">Zero progress?!</string>
+    <string name="Noting_to_do">Nothing on your list</string>
+    <string name="stay_working_description">You\'ve completed 3 out of 10 tasks Keep going!</string>
+    <string name="tadaa_description">You’re doing amazing!!!\nTudee is proud of you.</string>
+    <string name="zero_progress_description">You just scrolling, not working.\nTudee is watching. back to work!!!</string>
+    <string name="Noting_to_do_description">Fill your day with something awesome.</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 </resources>
