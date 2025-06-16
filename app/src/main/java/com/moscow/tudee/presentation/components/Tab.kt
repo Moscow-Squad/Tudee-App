@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
