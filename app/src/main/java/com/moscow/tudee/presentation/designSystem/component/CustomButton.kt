@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.components
+package com.moscow.tudee.presentation.designSystem.component
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween

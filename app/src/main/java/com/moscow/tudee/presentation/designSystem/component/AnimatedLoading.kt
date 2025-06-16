@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.components
+package com.moscow.tudee.presentation.designSystem.component
 import androidx.compose.runtime.Composable
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.compose.LottieAnimation
