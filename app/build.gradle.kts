@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
     id("jacoco")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -68,6 +69,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     // Firebase
     implementation(platform(libs.firebase.bom))
+
+
+    implementation(libs.androidx.room.runtime)
+
+    ksp(libs.androidx.room.compiler.v250)
+
+    annotationProcessor(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.room.ktx)
+
+    testImplementation(libs.androidx.room.testing)
 
     implementation(libs.kotlinx.datetime)
 }
