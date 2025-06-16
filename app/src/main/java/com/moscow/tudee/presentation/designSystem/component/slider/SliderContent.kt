@@ -1,4 +1,4 @@
-package com.moscow.tudee.domain.entity
+package com.moscow.tudee.presentation.designSystem.component.slider
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
