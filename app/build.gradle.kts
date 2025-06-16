@@ -70,6 +70,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.0.0")
+
+    implementation(libs.kotlinx.datetime)
 }
 
 /**
