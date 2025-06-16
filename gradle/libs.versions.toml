@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.1"
+agp = "8.6.1"
 firebaseBom = "33.15.0"
 koinAndroid = "4.0.3"
 kotlin = "2.0.21"

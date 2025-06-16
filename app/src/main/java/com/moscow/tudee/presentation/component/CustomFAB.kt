@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.component
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -28,7 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.designSystem.component.modifier.applyIf
+import com.moscow.tudee.presentation.component.modifier.applyIf
+import com.moscow.tudee.presentation.designSystem.component.AnimatedLoading
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import kotlinx.coroutines.delay
