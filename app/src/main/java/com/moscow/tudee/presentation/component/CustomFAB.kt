@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.component
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.designSystem.component.modifier.applyIf
+import com.moscow.tudee.presentation.component.modifier.applyIf
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import kotlinx.coroutines.delay
@@ -40,10 +40,8 @@ fun CustomFAB(
     isLoading: Boolean = false,
     isEnabled: Boolean = true,
     size: Dp = 64.dp,
+    icon : Int
 ) {
-    val iconTint = if (!isEnabled)
-        colors.stroke
-    else colors.onPrimary
     Box(
         modifier = modifier
             .size(size)
@@ -74,9 +72,9 @@ fun CustomFAB(
                 )
             } else {
                 Icon(
-                    painter = painterResource(R.drawable.download),
+                    painter = painterResource(icon),
                     contentDescription = "loading",
-                    tint = iconTint
+                    tint = if (!isEnabled) colors.stroke else colors.onPrimary
                 )
             }
         }
@@ -98,15 +96,13 @@ private fun CustomFABPreview() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomFAB(
-                onClick = {}
+                onClick = {},
+                icon = R.drawable.download
             )
             CustomFAB(
                 onClick = {},
-                isLoading = true
-            )
-            CustomFAB(
-                onClick = {},
-                isEnabled = false
+                isEnabled = false,
+                icon = R.drawable.download
             )
         }
     }
@@ -133,7 +129,8 @@ fun CustomFABAnimatedPreview() {
         ) {
             CustomFAB(
                 onClick = {},
-                isLoading = isLoading
+                isLoading = isLoading,
+                icon = R.drawable.download
             )
         }
     }
