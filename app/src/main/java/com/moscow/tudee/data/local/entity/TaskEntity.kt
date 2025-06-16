@@ -8,14 +8,14 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "tasks_table",
     foreignKeys = [ForeignKey(
-        entity = Category::class,
+        entity = CategoryEntity::class,
         parentColumns = ["id"],
         childColumns = ["categoryId"],
         onDelete = ForeignKey.CASCADE
     )],
     indices = [Index("categoryId")]
 )
-data class Task(
+data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val title: String,
     val description: String,
