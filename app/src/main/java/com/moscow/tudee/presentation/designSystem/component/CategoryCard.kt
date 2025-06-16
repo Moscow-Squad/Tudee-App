@@ -1,5 +1,8 @@
 package com.moscow.tudee.presentation.designSystem.component
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,16 +35,19 @@ fun CategoryCard(
     label: String,
     count: Int? = null,
     selected: Boolean = false,
-    iconTint: Color = Theme.colors.greenAccent,
+    iconTint: androidx.compose.ui.graphics.Color = Theme.colors.greenAccent,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .animateContentSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier.wrapContentSize(),
+            modifier = Modifier
+                .wrapContentSize()
+                .animateContentSize(),
             contentAlignment = Alignment.TopEnd
         ) {
             Icon(
@@ -57,35 +62,41 @@ fun CategoryCard(
                     .size(32.dp)
             )
 
-            when {
-                selected -> {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_tick_double),
-                        contentDescription = stringResource(R.string.selected_icon),
-                        tint = Theme.colors.onPrimary,
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .size(20.dp)
-                            .clip(CircleShape)
-                            .background(Theme.colors.greenAccent)
-                            .padding(4.dp)
-                            .size(12.dp)
-                    )
-                }
+            androidx.compose.animation.AnimatedVisibility(
+                visible = selected,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_tick_double),
+                    contentDescription = stringResource(R.string.selected_icon),
+                    tint = Theme.colors.onPrimary,
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .size(20.dp)
+                        .clip(CircleShape)
+                        .background(Theme.colors.greenAccent)
+                        .padding(4.dp)
+                        .size(12.dp)
+                )
+            }
 
-                count != null && count > 0 -> {
-                    Text(
-                        text = if (count > 100) stringResource(R.string.greater_than_100) else count.toString(),
-                        style = Theme.textStyle.label.small,
-                        color = Theme.colors.hint,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .width(36.dp)
-                            .clip(RoundedCornerShape(100))
-                            .background(Theme.colors.surfaceLow)
-                            .padding(vertical = 2.dp)
-                    )
-                }
+            androidx.compose.animation.AnimatedVisibility(
+                visible = !selected && (count ?: 0) > 0,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Text(
+                    text = if ((count ?: 0) > 100) stringResource(R.string.greater_than_100) else (count ?: 0).toString(),
+                    style = Theme.textStyle.label.small,
+                    color = Theme.colors.hint,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .width(36.dp)
+                        .clip(RoundedCornerShape(100))
+                        .background(Theme.colors.surfaceLow)
+                        .padding(vertical = 2.dp)
+                )
             }
         }
 
