@@ -56,7 +56,7 @@ fun CategoryCard(
                 tint = iconTint,
                 modifier = Modifier
                     .size(78.dp)
-                    .clip(RoundedCornerShape(88.dp))
+                    .clip(CircleShape)
                     .background(Theme.colors.surfaceHigh)
                     .padding(23.dp)
                     .size(32.dp)
