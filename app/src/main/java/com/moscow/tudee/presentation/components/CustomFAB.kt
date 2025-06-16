@@ -28,7 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.designSystem.component.modifier.applyIf
+import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import kotlinx.coroutines.delay
 
@@ -41,26 +42,24 @@ fun CustomFAB(
     size: Dp = 64.dp,
 ) {
     val iconTint = if (!isEnabled)
-         Theme.colors.stroke
-        else  Theme.colors.onPrimary
+        colors.stroke
+    else colors.onPrimary
     Box(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .then(
-                if (isEnabled) {
-                    Modifier
-                        .shadow(
-                            elevation = 4.dp,
-                            shape = CircleShape,
-                            ambientColor = Color(0x1F000000),
-                            spotColor = Color(0x1F000000)
-                        )
-                        .background(brush = Theme.colors.primaryGradient, shape = CircleShape)
-                } else {
-                    Modifier.background(color = Theme.colors.disable, shape = CircleShape)
-                }
-            )
+            .applyIf(isEnabled) {
+                shadow(
+                    elevation = 4.dp,
+                    shape = CircleShape,
+                    ambientColor = Color(0x1F000000),
+                    spotColor = Color(0x1F000000)
+                )
+                background(colors.primaryGradient, shape = CircleShape)
+            }
+            .applyIf(!isEnabled) {
+                background(colors.disable, shape = CircleShape)
+            }
             .clickable(enabled = isEnabled && !isLoading, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -71,7 +70,7 @@ fun CustomFAB(
             if (isLoading) {
                 AnimatedLoading(
                     modifier = Modifier.padding(10.dp),
-                    Theme.colors.onPrimary
+                    colors.onPrimary
                 )
             } else {
                 Icon(
@@ -93,7 +92,7 @@ private fun CustomFABPreview() {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Theme.colors.surface)
+                .background(colors.surface)
                 .padding(24.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -127,7 +126,7 @@ fun CustomFABAnimatedPreview() {
         Column(
             Modifier
                 .fillMaxSize()
-                .background(Theme.colors.surface)
+                .background(colors.surface)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
