@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.designSystem.component.slider
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -11,8 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.SliderContent
-import com.moscow.tudee.domain.entity.SliderState
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.typography.DefaultTextStyle
 
@@ -29,21 +27,25 @@ fun TudeeSlider(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 15.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Text(
                     text = stringResource(id = content.title),
                     color = colors.title,
                     style = DefaultTextStyle.title.small
                 )
-                Spacer(modifier = Modifier.width(8.dp))
                 Image(
                     painter = painterResource(id = content.emojiState),
                     contentDescription = null,
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = stringResource(id = content.description),
@@ -51,18 +53,20 @@ fun TudeeSlider(
                 style = DefaultTextStyle.body.small
             )
         }
-        Spacer(modifier = Modifier.width(12.dp))
 
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            modifier = modifier.padding(top = 17.dp),
+            contentAlignment = Alignment.Center)
+        {
             Image(
                 painter = painterResource(R.drawable.ic_moon_pit_big),
-                contentDescription = null,
+                contentDescription = "frame_moon_pit",
                 modifier = Modifier.size(76.dp)
             )
 
             Image(
                 painter = painterResource(id = content.imageResId),
-                contentDescription = null,
+                contentDescription = "Tudee Slider Image",
             )
         }
     }
@@ -72,6 +76,6 @@ fun TudeeSlider(
 @Composable
 fun TudeeSliderPreview() {
     TudeeSlider(
-        state = SliderState.TADAA
+        state = SliderState.ZERO_PROGRESS
     )
 }
