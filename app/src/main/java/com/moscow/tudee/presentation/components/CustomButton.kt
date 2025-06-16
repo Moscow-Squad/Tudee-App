@@ -1,5 +1,7 @@
 package com.moscow.tudee.presentation.components
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,7 +16,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun PrimaryButton(
@@ -81,11 +88,16 @@ fun PrimaryButton(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
             )
-            if (isLoading) {
-                AnimatedLoading(
-                    modifier = Modifier.size(24.dp),
-                    tintColor = if (navButton) themeColors.error else Theme.colors.onPrimary
-                )
+            Crossfade(
+                targetState = isLoading,
+                animationSpec = tween(durationMillis = 1000), label = "primary button animation"
+            ) { isLoading ->
+                if (isLoading) {
+                    AnimatedLoading(
+                        modifier = Modifier.size(48.dp),
+                        tintColor = if (navButton) themeColors.error else Theme.colors.onPrimary
+                    )
+                }
             }
         }
     }
@@ -132,16 +144,20 @@ fun SecondaryButton(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )
-            if (isLoading) {
-                AnimatedLoading(
-                    modifier = Modifier.size(24.dp),
-                    tintColor = Theme.colors.primary
-                )
+            Crossfade(
+                targetState = isLoading,
+                animationSpec = tween(durationMillis = 1000), label = "primary button animation"
+            ) { isLoading ->
+                if (isLoading) {
+                    AnimatedLoading(
+                        modifier = Modifier.size(48.dp),
+                        tintColor = Theme.colors.primary
+                    )
+                }
             }
         }
     }
 }
-
 @Composable
 fun CustomTextButton(
     text: String,
@@ -182,11 +198,16 @@ fun CustomTextButton(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )
-            if (isLoading) {
-                AnimatedLoading(
-                    modifier = Modifier.size(24.dp),
-                    tintColor = if (navTextButton) Theme.colors.error else Theme.colors.primary
-                )
+            Crossfade(
+                targetState = isLoading,
+                animationSpec = tween(durationMillis = 1000), label = ""
+            ) { loading ->
+                if (loading) {
+                    AnimatedLoading(
+                        modifier = Modifier.size(48.dp),
+                        tintColor = if (navTextButton) Theme.colors.error else Theme.colors.primary
+                    )
+                }
             }
         }
     }
@@ -310,6 +331,24 @@ private fun NormalButtonPreview() {
                 )
             }
         }
+    }
+}
+@Preview(showBackground = true, apiLevel = 33)
+@Composable
+fun PrimaryButtonAnimatedPreview() {
+    var isLoading by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(1500)
+        isLoading = true
+    }
+
+    TudeeTheme {
+        PrimaryButton(
+            onClick = {},
+            text = "Submit",
+            isLoading = isLoading
+        )
     }
 }
 

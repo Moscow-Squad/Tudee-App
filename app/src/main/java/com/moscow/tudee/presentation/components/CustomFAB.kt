@@ -1,5 +1,7 @@
 package com.moscow.tudee.presentation.components
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +13,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,9 +30,11 @@ import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun CustomFAB(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     isLoading: Boolean = false,
     isEnabled: Boolean = true,
@@ -34,9 +43,8 @@ fun CustomFAB(
     val iconTint = if (!isEnabled)
          Theme.colors.stroke
         else  Theme.colors.onPrimary
-
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(size)
             .clip(CircleShape)
             .then(
@@ -56,19 +64,24 @@ fun CustomFAB(
             .clickable(enabled = isEnabled && !isLoading, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        if (isLoading) {
-            AnimatedLoading(
-                modifier = Modifier
-                    .padding(15.dp),
-                Theme.colors.onPrimary
-            )
-        } else {
-            Icon(
-                painter = painterResource(R.drawable.download),
-                contentDescription = null,
-                tint = iconTint
-            )
+        Crossfade(
+            targetState = isLoading,
+            animationSpec = tween(durationMillis = 1000), label = ""
+        ) { isLoading ->
+            if (isLoading) {
+                AnimatedLoading(
+                    modifier = Modifier.padding(10.dp),
+                    Theme.colors.onPrimary
+                )
+            } else {
+                Icon(
+                    painter = painterResource(R.drawable.download),
+                    contentDescription = "loading",
+                    tint = iconTint
+                )
+            }
         }
+
     }
 }
 
@@ -80,6 +93,7 @@ private fun CustomFABPreview() {
         Column (
             modifier = Modifier
                 .fillMaxSize()
+                .background(Theme.colors.surface)
                 .padding(24.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -94,6 +108,33 @@ private fun CustomFABPreview() {
             CustomFAB(
                 onClick = {},
                 isEnabled = false
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CustomFABAnimatedPreview() {
+    var isLoading by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(1000)
+        isLoading = true
+    }
+
+    TudeeTheme {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background(Theme.colors.surface)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CustomFAB(
+                onClick = {},
+                isLoading = isLoading
             )
         }
     }

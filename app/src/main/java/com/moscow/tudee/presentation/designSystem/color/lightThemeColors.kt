@@ -7,7 +7,7 @@ val lightThemeColors = TudeeColors(
     primary = Color(0xFF49BAF2),
     secondary = Color(0xFFF49061),
     primaryVariant = Color(0xFFEFF9FE),
-    primaryGradient = Brush.linearGradient(
+    primaryGradient = Brush.verticalGradient(
         colors = listOf( Color(0xFF49BAF2),Color(0xFF3A9CCD))
     ),
     title = Color(0xDE1F1F1F),
