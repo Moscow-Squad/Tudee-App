@@ -56,8 +56,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.android)
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)
@@ -82,6 +80,8 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
 
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.bundles.koin)
 }
 
 /**
