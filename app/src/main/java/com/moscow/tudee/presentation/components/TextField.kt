@@ -63,7 +63,7 @@ fun TextField(
     ) {
         Row(modifier=Modifier
             .fillMaxWidth()
-            .height(size.dp), verticalAlignment = Alignment.CenterVertically ) {
+            .height(size.dp) ) {
             if (startIcon != null) {
                 Image(
                     painter = startIcon,
@@ -80,7 +80,7 @@ fun TextField(
             }
             BasicTextField(
 
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).height(size.dp),
                 enabled = true,
                 readOnly = false,
                 singleLine = singleLine,
