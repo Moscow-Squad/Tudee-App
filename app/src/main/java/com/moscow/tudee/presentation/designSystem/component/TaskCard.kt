@@ -1,5 +1,9 @@
 package com.moscow.tudee.presentation.designSystem.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,6 +45,7 @@ fun TaskCard(
             .clip(RoundedCornerShape(16.dp))
             .background(Theme.colors.surfaceHigh)
             .fillMaxWidth()
+            .animateContentSize()
             .padding(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
@@ -64,7 +69,11 @@ fun TaskCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                if (date != null) {
+                AnimatedVisibility(
+                    visible = date != null,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(100))
@@ -80,12 +89,13 @@ fun TaskCard(
                             modifier = Modifier.size(12.dp)
                         )
                         Text(
-                            text = date,
+                            text = date.orEmpty(),
                             style = Theme.textStyle.label.small,
                             color = Theme.colors.body
                         )
                     }
                 }
+
                 priorityChip()
             }
         }
@@ -111,6 +121,7 @@ fun TaskCard(
         }
     }
 }
+
 
 @Preview(showBackground = true, widthDp = 330)
 @Composable
