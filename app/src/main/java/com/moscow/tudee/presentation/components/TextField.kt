@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,9 +39,9 @@ fun TextField(
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions,
     singleLine: Boolean,
+    hint:String ,
     modifier: Modifier = Modifier,
     value: String = "",
-    hint:String = "",
     startIcon: Painter? = null,
     size: Int = 24,
     paddingValues: Int = 16
@@ -47,29 +49,32 @@ fun TextField(
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
 
-
+    val borderColor by animateColorAsState(if (isFocused) Theme.colors.primary else Theme.colors.stroke)
+    val iconColor by animateColorAsState(if (value.isEmpty()) Theme.colors.hint else Theme.colors.body)
     Box(
         modifier = modifier
             .border(
                 width = 1.dp,
-                color = if (isFocused) Theme.colors.primary else Theme.colors.stroke,
+                color = borderColor,
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(horizontal = 12.dp, vertical = paddingValues.dp)
 
     ) {
-        Row(modifier=Modifier.fillMaxWidth().height(size.dp), verticalAlignment = Alignment.CenterVertically ) {
+        Row(modifier=Modifier
+            .fillMaxWidth()
+            .height(size.dp), verticalAlignment = Alignment.CenterVertically ) {
             if (startIcon != null) {
                 Image(
                     painter = startIcon,
-                    colorFilter = ColorFilter.tint(if (value.isEmpty()) Theme.colors.hint else Theme.colors.body),
-                    contentDescription = "Text Field Icon",
+                    colorFilter = ColorFilter.tint(iconColor),
+                    contentDescription = stringResource(R.string.text_field_icon),
                     modifier = Modifier.size(24.dp)
                 )
 
                 Image(
                     painter = painterResource(R.drawable.ic_line),
-                    contentDescription = "divider",
+                    contentDescription = stringResource(R.string.divider),
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
             }
@@ -111,11 +116,14 @@ fun TextField(
     @Composable
     private fun TextFieldPreview() {
 
-        Column (Modifier.fillMaxWidth().padding(16.dp)){
+        Column (Modifier
+            .fillMaxWidth()
+            .padding(16.dp)){
 
             Spacer(Modifier.height(150.dp))
             TextField(
               {},
+                hint = "Description",
                 singleLine = false, keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
                 ), size = 150
