@@ -25,7 +25,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.modifier.applyIf
@@ -39,12 +38,11 @@ fun CustomFAB(
     onClick: () -> Unit,
     isLoading: Boolean = false,
     isEnabled: Boolean = true,
-    size: Dp = 64.dp,
     icon : Int
 ) {
     Box(
         modifier = modifier
-            .size(size)
+            .size(64.dp)
             .clip(CircleShape)
             .applyIf(isEnabled) {
                 shadow(
