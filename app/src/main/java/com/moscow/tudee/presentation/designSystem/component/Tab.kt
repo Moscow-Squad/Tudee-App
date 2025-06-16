@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.designSystem.component
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -53,7 +54,8 @@ fun Tabs(
         verticalAlignment = Alignment.CenterVertically
     ) {
         tabs.forEachIndexed { index, tabData ->
-            TabItem(
+            Tab(
+                modifier = Modifier.weight(1f),
                 tabLabel = tabData.label,
                 counter = tabData.count.toString(),
                 isSelected = index == selectedTabIndex,
@@ -64,7 +66,7 @@ fun Tabs(
 }
 
 @Composable
-fun TabItem(
+fun Tab(
     tabLabel: String,
     counter : String,
     isSelected: Boolean,
@@ -92,6 +94,7 @@ fun TabItem(
             }
         ) {
             Text(
+                modifier = Modifier.animateContentSize(),
                 text = tabLabel,
                 style = if (isSelected) textStyle.label.medium else textStyle.label.small,
                 color = if (isSelected) colors.title else colors.hint
@@ -128,7 +131,7 @@ fun TabItem(
 
 data class Tab(val label: String, val count: Int)
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 34)
 @Composable
 fun TabPreview() {
     val sampleTabs = listOf(
