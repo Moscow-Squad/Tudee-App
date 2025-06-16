@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">Tudee</string>
+    <string name="task_card_icon">task card icon</string>
+    <string name="calender_icon">calender icon</string>
+    <string name="priority_icon">priority icon</string>
+    <string name="category_icon">category icon</string>
+    <string name="selected_icon">selected icon</string>
+    <string name="greater_than_100">+100</string>
+    <string name="home">Home</string>
+    <string name="tasks">Tasks</string>
+    <string name="options">Options</string>
+    <string name="status_icon">status icon</string>
     <string name="stay_working">Stay working!</string>
     <string name="tadaa">Tadaa!</string>
     <string name="zero_progress">Zero progress?!</string>
