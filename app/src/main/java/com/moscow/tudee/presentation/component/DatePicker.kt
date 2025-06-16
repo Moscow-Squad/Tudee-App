@@ -12,9 +12,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +38,7 @@ fun DatePickerModal(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 TudeeTextButton(
-                    text = "Clear",
+                    text = stringResource(R.string.clear),
                     onClick = {
                         onDateSelected(null)
                         onDismiss()
@@ -50,7 +52,7 @@ fun DatePickerModal(
                 Spacer(modifier = Modifier.weight(1f))
 
                 TudeeTextButton(
-                    text = "Cancel",
+                    text = stringResource(R.string.cancel),
                     onClick = onDismiss,
                     colors = Theme.colors.primary,
                     style = Theme.textStyle.label.large,
@@ -58,7 +60,7 @@ fun DatePickerModal(
                 )
 
                 TudeeTextButton(
-                    text = "OK",
+                    text = stringResource(R.string.ok),
                     onClick = {
                         onDateSelected(datePickerState.selectedDateMillis)
                         onDismiss()

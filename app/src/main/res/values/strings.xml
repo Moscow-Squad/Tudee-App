@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Tudee</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 </resources>
