@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,10 +29,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import kotlinx.coroutines.delay
@@ -105,11 +108,12 @@ fun PrimaryButton(
 
 @Composable
 fun SecondaryButton(
-    text: String,
+    text: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     isLoading: Boolean = false,
+    icon: Int?
 ) {
     val themeColors = Theme.colors
     val textColor = remember(isEnabled) {
@@ -118,7 +122,6 @@ fun SecondaryButton(
         else
             themeColors.primary
     }
-
     Box(
         modifier = modifier
             .height(56.dp)
@@ -137,22 +140,31 @@ fun SecondaryButton(
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
 
         ) {
-            Text(
-                text,
-                style = Theme.textStyle.label.large,
-                color = textColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Crossfade(
-                targetState = isLoading,
-                animationSpec = tween(durationMillis = 1000), label = "primary button animation"
-            ) { isLoading ->
-                if (isLoading) {
-                    AnimatedLoading(
-                        modifier = Modifier.size(48.dp),
-                        tintColor = Theme.colors.primary
-                    )
+            if (icon != null) {
+                Icon(
+                    painterResource(id =icon),
+                    contentDescription = "icon",
+                    tint = themeColors.primary,
+                    modifier = modifier
+                )
+            } else {
+                Text(
+                    text ?: "",
+                    style = Theme.textStyle.label.large,
+                    color = textColor,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Crossfade(
+                    targetState = isLoading,
+                    animationSpec = tween(durationMillis = 1000), label = "primary button animation"
+                ) { isLoading ->
+                    if (isLoading) {
+                        AnimatedLoading(
+                            modifier = Modifier.size(48.dp),
+                            tintColor = Theme.colors.primary
+                        )
+                    }
                 }
             }
         }
@@ -275,16 +287,20 @@ private fun NormalButtonPreview() {
                 SecondaryButton(
                     text = "Submit",
                     onClick = {},
+                    icon = null
                 )
                 SecondaryButton(
                     text = "Submit",
                     onClick = {},
-                    isEnabled = false
+                    isEnabled = false,
+                    icon = null
                 )
+
                 SecondaryButton(
                     text = "Submit",
                     onClick = {},
-                    isLoading = true
+                    isLoading = true,
+                    icon = null
                 )
             }
             Row(
@@ -330,6 +346,12 @@ private fun NormalButtonPreview() {
                     isEnabled = false
                 )
             }
+            SecondaryButton(
+                text = null,
+                onClick = {},
+                isEnabled = false,
+                icon = R.drawable.download
+            )
         }
     }
 }
