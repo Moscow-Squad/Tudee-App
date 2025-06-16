@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.presentation.designSystem.component.modifier.applyIf
+import com.moscow.tudee.presentation.component.modifier.applyIf
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 

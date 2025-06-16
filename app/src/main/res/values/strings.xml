@@ -10,4 +10,7 @@
     <string name="tasks">Tasks</string>
     <string name="options">Options</string>
     <string name="status_icon">status icon</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 </resources>
