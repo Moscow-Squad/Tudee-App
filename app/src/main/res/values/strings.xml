@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Tudee</string>
+    <string name="text_field_icon">Text Field Icon</string>
+    <string name="divider">divider</string>
 </resources>
