@@ -68,6 +68,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     // Firebase
     implementation(platform(libs.firebase.bom))
+
+    implementation(libs.kotlinx.datetime)
 }
 
 /**
