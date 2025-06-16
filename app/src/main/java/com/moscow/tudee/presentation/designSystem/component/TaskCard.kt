@@ -1,14 +1,25 @@
 package com.moscow.tudee.presentation.designSystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
@@ -20,58 +31,122 @@ fun TaskCard(
     icon: Painter,
     title: String,
     description: String,
+    date: String? = null,
     iconTint: Color = Theme.colors.purpleAccent,
     modifier: Modifier = Modifier,
     priorityChip: @Composable () -> Unit
 ) {
-    BaseTaskCardContent(
-        icon = icon,
-        iconTint = iconTint,
-        title = title,
-        description = description,
-        modifier = modifier,
-        headerContent = {
-            priorityChip()
-        }
-    )
-}
-
-
-@Preview(showBackground = true, widthDp = 330)
-@Composable
-fun TaskCardPreview() {
-    TudeeTheme {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(8.dp)
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(Theme.colors.surfaceHigh)
+            .fillMaxWidth()
+            .padding(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            val icon = painterResource(id = R.drawable.quran_01)
 
-            TaskCard(
-                icon = icon,
-                title = "Organize Study Desk",
-                description = "Review cell structure and functions for tomorrow...",
-                iconTint = Theme.colors.primary,
-                priorityChip = { MediumPriorityChip() }
+            Icon(
+                painter = icon,
+                contentDescription = stringResource(R.string.task_card_icon),
+                tint = iconTint,
+                modifier = Modifier
+                    .size(56.dp)
+                    .padding(12.dp)
             )
 
-            TaskCard(
-                icon = icon,
-                title = "Review Flashcards",
-                description = "Study biology flashcards for 15 minutes",
-                iconTint = Theme.colors.secondary,
-                priorityChip = { HighPriorityChip() }
-            )
+            Spacer(modifier = Modifier.weight(1f))
 
-            TaskCard(
-                icon = icon,
-                title = "Take a break",
-                description = "Go for a walk outside",
-                iconTint = Theme.colors.yellowAccent,
-                priorityChip = { LowPriorityChip() }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                if (date != null) {
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(100))
+                            .background(Theme.colors.surface)
+                            .padding(vertical = 6.dp, horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_calendar_favorite),
+                            contentDescription = stringResource(R.string.calender_icon),
+                            tint = Theme.colors.body,
+                            modifier = Modifier.size(12.dp)
+                        )
+                        Text(
+                            text = date,
+                            style = Theme.textStyle.label.small,
+                            color = Theme.colors.body
+                        )
+                    }
+                }
+                priorityChip()
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = title,
+                style = Theme.textStyle.label.large,
+                color = Theme.colors.body
+            )
+            Text(
+                text = description,
+                style = Theme.textStyle.label.small,
+                color = Theme.colors.hint,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
 }
 
+@Preview(showBackground = true, widthDp = 330)
+@Composable
+fun TaskCardWithoutDatePreview() {
+    TudeeTheme {
+        TaskCard(
+            icon = painterResource(id = R.drawable.ic_quran),
+            title = "Review Flashcards",
+            description = "Study biology flashcards for 15 minutes",
+            iconTint = Theme.colors.secondary
+        ) {
+            PriorityChip(
+                text = "High",
+                backgroundColor = Theme.colors.pinkAccent,
+                icon = painterResource(id = R.drawable.ic_flag)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 330)
+@Composable
+fun TaskCardWithDatePreview() {
+    TudeeTheme {
+        TaskCard(
+            icon = painterResource(id = R.drawable.ic_briefcase),
+            title = "Organize Study Desk",
+            description = "Review cell structure and functions for tomorrow...",
+            date = "03/12/2025",
+            iconTint = Theme.colors.pinkAccent
+        ) {
+            PriorityChip(
+                text = "Medium",
+                backgroundColor = Theme.colors.yellowAccent,
+                icon = painterResource(id = R.drawable.ic_alert)
+            )
+        }
+    }
+}
