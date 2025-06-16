@@ -48,10 +48,10 @@ fun BottomNavBar(
 
             Crossfade(targetState = isSelected) { selected ->
                 NavBarIcon(
-                    filledIconRes   = filledIcon,
-                    outlineIconRes  = outlineIcon,
-                    isSelected      = selected,
-                    onClick         = { onItemSelected(index) },
+                    filledIconRes = filledIcon,
+                    outlineIconRes = outlineIcon,
+                    isSelected = selected,
+                    onClick = { onItemSelected(index) },
                     contentDescription = when (index) {
                         0 -> stringResource(R.string.home)
                         1 -> stringResource(R.string.tasks)
