@@ -1,24 +1,24 @@
 package com.moscow.tudee.data.service
 
+import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.service.TasksServices
-import kotlinx.coroutines.flow.Flow
 
-class TasksServicesImpl: TasksServices {
-    override suspend fun getCategories(): Flow<List<Category>> {
-        TODO("Not yet implemented")
+class TasksServicesImpl(private val categoryDao: CategoryDao) : TasksServices {
+    override suspend fun getCategories(): List<Category>? {
+        return categoryDao.getCategories()
     }
 
     override suspend fun addCategory(category: Category) {
-        TODO("Not yet implemented")
+        categoryDao.addCategory(category)
     }
 
     override suspend fun updateCategory(category: Category) {
-        TODO("Not yet implemented")
+        categoryDao.updateCategory(category)
     }
 
     override suspend fun deleteCategory(categoryId: String) {
-        TODO("Not yet implemented")
+        categoryDao.getCategories()
     }
 
 }
