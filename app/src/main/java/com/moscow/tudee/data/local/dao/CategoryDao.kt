@@ -4,20 +4,20 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.moscow.tudee.domain.entity.Category
+import com.moscow.tudee.data.local.entity.CategoryEntity
 
 
 @Dao
 interface CategoryDao {
     @Query("SELECT * FROM categories_table")
-    suspend fun getCategories(): List<Category>?
+    suspend fun getCategories(): List<CategoryEntity>?
 
     @Insert
-    suspend fun addCategory(category: Category)
+    suspend fun addCategory(category: CategoryEntity)
 
     @Update
-    suspend fun updateCategory(category: Category)
+    suspend fun updateCategory(category: CategoryEntity)
 
     @Query("DELETE FROM categories_table WHERE id = :categoryId")
-    suspend fun deleteCategory(categoryId: String)
+    suspend fun deleteCategory(categoryId: Long)
 }

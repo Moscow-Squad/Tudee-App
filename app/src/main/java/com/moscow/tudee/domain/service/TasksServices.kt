@@ -10,6 +10,6 @@ interface TasksServices {
 
     suspend fun updateCategory(category: Category)
 
-    suspend fun deleteCategory(categoryId: String)
+    suspend fun deleteCategory(categoryId: Long)
 
 }
