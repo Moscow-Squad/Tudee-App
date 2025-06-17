@@ -1,8 +1,28 @@
 package com.moscow.tudee.data.local.mapper
 
+import com.moscow.tudee.data.local.entity.CategoryEntity
 import com.moscow.tudee.data.local.entity.TaskEntity
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import kotlinx.datetime.LocalDateTime
+
+fun CategoryEntity.toCategory(): Category {
+    return Category(
+        id = id,
+        title = title,
+        iconUrl = iconUrl
+    )
+}
+
+const val DUMMY_VALUE = 0L
+fun getRoomEntityFromCategory(category: Category): CategoryEntity {
+    return CategoryEntity(
+        id = DUMMY_VALUE,
+        title = category.title,
+        iconUrl = category.iconUrl
+    )
+}
+
 
 fun TaskEntity.toTask(): Task {
     return Task(

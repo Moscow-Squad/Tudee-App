@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 private const val TUDEE_DATABASE = "tudee_database"
 
-val databaseModule = module {
+val dataModule = module {
     single<TudeeDatabase> {
         Room.databaseBuilder(androidContext(), TudeeDatabase::class.java, TUDEE_DATABASE).build()
     }
@@ -27,6 +27,6 @@ val databaseModule = module {
     }
 
     single<TasksServices> {
-        TasksServicesImpl(get())
+        TasksServicesImpl(get(), get())
     }
 }
