@@ -4,6 +4,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import kotlinx.coroutines.delay
@@ -71,10 +73,11 @@ private fun SwipeBackground(
             .background(backgroundColor)
     ) {
         Icon(
-            modifier = Modifier.minimumInteractiveComponentSize(),
+            modifier = Modifier.padding(end = 12.dp),
             imageVector = ImageVector.vectorResource(icon),
             contentDescription = stringResource(R.string.delete_item),
-            tint = Theme.colors.error
+            tint = Theme.colors.error,
         )
     }
 }
+
