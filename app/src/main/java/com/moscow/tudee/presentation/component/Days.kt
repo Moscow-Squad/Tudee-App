@@ -26,6 +26,7 @@ fun DayItem(
     dayDate: Int,
     isSelected: Boolean,
     onDayClick: () -> Unit,
+    isToday: Boolean = false
 ) {
 
     Column(
@@ -54,7 +55,7 @@ fun DayItem(
     }
 }
 
-@Preview
+@Preview(apiLevel = 33)
 @Composable
 fun PreviewDay() {
     DayItem(
