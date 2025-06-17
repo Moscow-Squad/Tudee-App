@@ -1,19 +1,8 @@
 package com.moscow.tudee.data.local.mapper
 
-import com.moscow.tudee.data.local.entity.CategoryEntity
 import com.moscow.tudee.data.local.entity.TaskEntity
-import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import kotlinx.datetime.LocalDateTime
-
-fun CategoryEntity.toCategory(): Category {
-    return Category(
-        id = id,
-        title = title,
-        iconUrl = iconUrl
-    )
-}
-
 
 fun TaskEntity.toTask(): Task {
     return Task(
@@ -28,6 +17,17 @@ fun TaskEntity.toTask(): Task {
     )
 }
 
+fun Task.toTaskEntity(): TaskEntity {
+    return TaskEntity(
+        id = id ?: 0,
+        title = title,
+        description = description,
+        priority = priority.toString(),
+        categoryId = categoryId,
+        status = status.toString(),
+        date = date.toString()
+    )
+}
 
 private fun getPriorityFromString(priority: String): Task.Priority {
     return when (priority) {
