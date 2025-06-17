@@ -79,7 +79,7 @@ fun TaskDetailsBottomSheet(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                TaskStatusComponent(
+                TaskStatus(
                     modifier = Modifier,
                     status = "In progress",
                     backgroundColor = Theme.colors.purpleVariant,

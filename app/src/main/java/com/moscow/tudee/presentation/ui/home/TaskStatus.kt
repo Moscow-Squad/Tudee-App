@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +21,7 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 
 @Composable
-fun TaskStatusComponent(
+fun TaskStatus(
     modifier: Modifier = Modifier,
     status: String,
     statusColor: Color,
@@ -32,7 +31,7 @@ fun TaskStatusComponent(
 
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(100.dp))
+            .clip(CircleShape)
             .background(backgroundColor)
             .padding(
                 vertical = 6.dp,
@@ -53,9 +52,8 @@ fun TaskStatusComponent(
 
             TudeeText(
                 text = status,
-                style = Theme.textStyle.label.small.copy(
-                    color = statusColor
-                )
+                style = Theme.textStyle.label.small,
+                color = statusColor
             )
         }
     }
@@ -69,7 +67,7 @@ private fun TaskStatusComponentPreview() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        TaskStatusComponent(
+        TaskStatus(
             modifier = Modifier,
             status = "In progress",
             backgroundColor = Theme.colors.purpleVariant,
@@ -77,7 +75,7 @@ private fun TaskStatusComponentPreview() {
             dotColor = Theme.colors.purpleAccent
         )
 
-        TaskStatusComponent(
+        TaskStatus(
             modifier = Modifier,
             status = "Done",
             backgroundColor = Theme.colors.greenVariant,
@@ -85,7 +83,7 @@ private fun TaskStatusComponentPreview() {
             dotColor = Theme.colors.greenAccent
         )
 
-        TaskStatusComponent(
+        TaskStatus(
             modifier = Modifier,
             status = "To do",
             backgroundColor = Theme.colors.yellowVariant,
