@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,10 +25,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
@@ -40,7 +38,7 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     isLoading: Boolean = false,
-    backgroundColor : Brush = SolidColor(Theme.colors.primary),
+    backgroundColor : Brush = Theme.colors.primaryGradient,
     textColor : Color = Theme.colors.onPrimary,
     tintColor : Color = Theme.colors.onPrimary,
 ) {
@@ -49,12 +47,12 @@ fun PrimaryButton(
             .height(56.dp)
             .shadow(
                 elevation = 4.dp,
-                shape = RoundedCornerShape(360.dp),
+                shape = CircleShape,
                 ambientColor = Color(0x1F000000),
                 spotColor = Color(0x1F000000)
             )
-            .clip(RoundedCornerShape(360.dp))
-            .background(brush = backgroundColor, RoundedCornerShape(360.dp))
+            .clip(CircleShape)
+            .background(brush = backgroundColor, CircleShape)
             .clickable(
                 enabled = isEnabled && !isLoading,
                 onClick = onClick
@@ -70,8 +68,6 @@ fun PrimaryButton(
                 text,
                 style = Theme.textStyle.label.large,
                 color = textColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
             )
             Crossfade(
                 targetState = isLoading,
@@ -103,9 +99,9 @@ fun SecondaryButton(
     Box(
         modifier = modifier
             .height(56.dp)
-            .clip(RoundedCornerShape(360.dp))
-            .border(1.dp, themeColors.stroke, RoundedCornerShape(360.dp))
-            .background(Color.Transparent, RoundedCornerShape(360.dp))
+            .clip(CircleShape)
+            .border(1.dp, themeColors.stroke, CircleShape)
+            .background(Color.Transparent, CircleShape)
             .clickable(
                 enabled = isEnabled && !isLoading,
                 onClick = onClick
@@ -130,8 +126,6 @@ fun SecondaryButton(
                     text ?: "",
                     style = Theme.textStyle.label.large,
                     color = textColor,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
                 )
                 Crossfade(
                     targetState = isLoading,
@@ -161,8 +155,8 @@ fun CustomTextButton(
     Box(
         modifier = modifier
             .height(56.dp)
-            .clip(RoundedCornerShape(360.dp))
-            .background(Color.Transparent, RoundedCornerShape(360.dp))
+            .clip(CircleShape)
+            .background(Color.Transparent, CircleShape)
             .padding(horizontal = 24.dp, vertical = 8.dp)
             .clickable(
                 enabled = isEnabled && !isLoading,
@@ -178,8 +172,6 @@ fun CustomTextButton(
                 text,
                 style = Theme.textStyle.label.large,
                 color = textColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
             )
             Crossfade(
                 targetState = isLoading,
