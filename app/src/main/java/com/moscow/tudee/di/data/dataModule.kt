@@ -14,18 +14,21 @@ import org.koin.dsl.module
 private const val TUDEE_DATABASE = "tudee_database"
 
 val dataModule = module {
+
     single<TudeeDatabase> {
-        Room.databaseBuilder(androidContext(), TudeeDatabase::class.java, TUDEE_DATABASE).build()
+        Room.databaseBuilder(
+            androidContext(),
+            TudeeDatabase::class.java,
+            TUDEE_DATABASE
+        ).build()
     }
 
     single<CategoryDao> {
-        Room.databaseBuilder(androidContext(), TudeeDatabase::class.java, TUDEE_DATABASE).build()
-            .categoryDao()
+        get<TudeeDatabase>().categoryDao()
     }
 
     single<TaskDao> {
-        Room.databaseBuilder(androidContext(), TudeeDatabase::class.java, TUDEE_DATABASE).build()
-            .taskDao()
+        get<TudeeDatabase>().taskDao()
     }
 
     single<TasksServices> {
