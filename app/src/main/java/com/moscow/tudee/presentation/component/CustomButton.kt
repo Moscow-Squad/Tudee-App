@@ -104,7 +104,7 @@ fun SecondaryButton(
         modifier = modifier
             .height(56.dp)
             .clip(RoundedCornerShape(360.dp))
-            .border(0.5.dp, themeColors.stroke, RoundedCornerShape(360.dp))
+            .border(1.dp, themeColors.stroke, RoundedCornerShape(360.dp))
             .background(Color.Transparent, RoundedCornerShape(360.dp))
             .clickable(
                 enabled = isEnabled && !isLoading,
