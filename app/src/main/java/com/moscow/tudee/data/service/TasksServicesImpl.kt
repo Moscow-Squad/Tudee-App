@@ -38,8 +38,8 @@ class TasksServicesImpl(
         categoryDao.deleteCategory(categoryId)
     }
 
-    override suspend fun getTaskById(taskId: Long): Task? {
-        return taskDao.getTaskById(taskId)?.toTask()
+    override suspend fun getTaskById(taskId: Long): Task {
+        return taskDao.getTaskById(taskId)?.toTask() ?: throw Exception("task not found")
     }
 
     override suspend fun changeTaskStatus(taskId: Long) {

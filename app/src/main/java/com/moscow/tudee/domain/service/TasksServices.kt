@@ -9,7 +9,7 @@ interface TasksServices {
 
     suspend fun getTasks(): List<Task>
     suspend fun getTasksByDate(date: LocalDate): List<Task>
-    suspend fun getTaskById(taskId: Long): Task?
+    suspend fun getTaskById(taskId: Long): Task
     suspend fun changeTaskStatus(taskId: Long)
     suspend fun addTask(task: Task)
     suspend fun updateTask(task: Task)
