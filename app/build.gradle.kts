@@ -84,6 +84,9 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.bundles.koin)
+
+    //datastore
+    implementation(libs.androidx.datastore.preferences)
 }
 
 /**
