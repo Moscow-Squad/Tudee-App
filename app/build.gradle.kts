@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
     id("jacoco")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -55,8 +56,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.android)
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)
@@ -70,6 +69,21 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.0.0")
+
+
+    implementation(libs.androidx.room.runtime)
+
+    ksp(libs.androidx.room.compiler.v250)
+
+    annotationProcessor(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.room.ktx)
+
+    testImplementation(libs.androidx.room.testing)
+
+    implementation(libs.kotlinx.datetime)
+
+    implementation(libs.bundles.koin)
 }
 
 /**
