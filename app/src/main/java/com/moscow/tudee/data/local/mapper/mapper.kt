@@ -19,7 +19,6 @@ fun TaskEntity.toTask(): Task {
 
 fun Task.toTaskEntity(): TaskEntity {
     return TaskEntity(
-        id = id ?: 0,
         title = title,
         description = description,
         priority = priority.toString(),

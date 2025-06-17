@@ -24,9 +24,6 @@ interface TaskDao {
     @Query("SELECT * FROM tasks_table WHERE SUBSTR(date, 1, 10) = :date")
     suspend fun getTasksByDate(date: String): List<TaskEntity>
 
-    @Query("SELECT * FROM tasks_table WHERE SUBSTR(date, 1, 10) = :todayDate")
-    suspend fun getTasksForToday(todayDate: String): List<TaskEntity>
-
     @Query("SELECT * FROM tasks_table WHERE id = :taskId")
     suspend fun getTaskById(taskId: Long): TaskEntity?
 
