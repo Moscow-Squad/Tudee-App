@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.task.component
+package com.moscow.tudee.presentation.task.calender
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn

@@ -3,6 +3,7 @@ package com.moscow.tudee.presentation.task
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -14,7 +15,9 @@ import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import com.moscow.tudee.presentation.task.component.CalendarStrip
+import com.moscow.tudee.presentation.task.calender.CalendarStrip
+import com.moscow.tudee.presentation.task.calender.Content
+import com.moscow.tudee.presentation.task.calender.Header
 import java.time.LocalDate
 
 @Composable
@@ -81,9 +84,14 @@ fun TaskContent(
     Column(
         Modifier
             .fillMaxSize()
-            .padding(16.dp)
     ) {
-        CalendarStrip(uiState, onDaySelected)
+        Text(
+            text = "Tasks",
+            style = Theme.textStyle.title.large,
+            color = Theme.colors.title
+        )
+        Header()
+        Content()
         Spacer(Modifier.height(16.dp))
         LazyColumn {
             items(tasks) { task ->
