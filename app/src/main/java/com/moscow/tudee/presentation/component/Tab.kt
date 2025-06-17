@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.components
+package com.moscow.tudee.presentation.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.presentation.components.modifier.bottomBorder
+import com.moscow.tudee.presentation.component.modifier.bottomBorder
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 
@@ -46,10 +47,10 @@ data class Tab(val label: String, val count: Int)
 @Composable
 fun Tabs(
     tabs: List<Tab>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selectedTabIndex: Int = 0,
+    onTabClick: (Int) -> Unit = {}
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -63,7 +64,7 @@ fun Tabs(
                 tabLabel = tabData.label,
                 counter = tabData.count.toString(),
                 isSelected = index == selectedTabIndex,
-                onClick = { selectedTabIndex = index }
+                onClick = { onTabClick(index) }
             )
         }
     }
@@ -143,13 +144,19 @@ fun Tab(
 
 @Preview(showBackground = true, apiLevel = 34)
 @Composable
-fun TabPreview() {
+fun TabsPreview() {
+    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+
     val sampleTabs = listOf(
         Tab(label = "In progress", count = 14),
         Tab(label = "To Do", count = 23),
         Tab(label = "Done", count = 58)
     )
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        Tabs(tabs = sampleTabs)
+        Tabs(
+            tabs = sampleTabs,
+            selectedTabIndex = selectedTabIndex,
+            onTabClick = { selectedTabIndex = it }
+        )
     }
 }

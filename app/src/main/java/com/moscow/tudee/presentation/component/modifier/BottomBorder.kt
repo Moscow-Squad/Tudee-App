@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.components.modifier
+package com.moscow.tudee.presentation.component.modifier
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
