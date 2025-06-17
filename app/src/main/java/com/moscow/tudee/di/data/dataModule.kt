@@ -27,6 +27,6 @@ val dataModule = module {
     }
 
     single<TasksServices> {
-        TasksServicesImpl(get())
+        TasksServicesImpl(get(), get())
     }
 }

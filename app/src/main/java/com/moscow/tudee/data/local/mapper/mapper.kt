@@ -37,6 +37,16 @@ fun TaskEntity.toTask(): Task {
     )
 }
 
+fun Task.toTaskEntity(): TaskEntity {
+    return TaskEntity(
+        title = title,
+        description = description,
+        priority = priority.toString(),
+        categoryId = categoryId,
+        status = status.toString(),
+        date = date.toString()
+    )
+}
 
 private fun getPriorityFromString(priority: String): Task.Priority {
     return when (priority) {
