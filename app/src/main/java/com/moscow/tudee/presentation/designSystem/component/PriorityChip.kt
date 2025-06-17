@@ -18,11 +18,11 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @Composable
 fun PriorityChip(
+    modifier: Modifier = Modifier,
+    contentColor: Color = Theme.colors.onPrimary,
     text: String,
     backgroundColor: Color,
     icon: Painter,
-    contentColor: Color = Color.White,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
