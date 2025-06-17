@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.presentation.component.OutlinedIconButton
 import com.moscow.tudee.presentation.component.SecondaryButton
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
@@ -39,9 +40,8 @@ fun TaskDetailsBottomSheet(
 
             TudeeText(
                 text = stringResource(R.string.task_details),
-                style = Theme.textStyle.title.large.copy(
-                    color = Theme.colors.title,
-                )
+                style = Theme.textStyle.title.large,
+                color = Theme.colors.title
             )
 
             Box(
@@ -58,16 +58,14 @@ fun TaskDetailsBottomSheet(
 
             TudeeText(
                 text = "Organize Study Desk",
-                style = Theme.textStyle.title.medium.copy(
-                    color = Theme.colors.title,
-                )
+                style = Theme.textStyle.title.medium,
+                color = Theme.colors.title
             )
 
             TudeeText(
                 text = "Solve all exercises from page 45 to 50 in the textbook, Solve all exercises from page 45 to 50 in the textbook.",
-                style = Theme.textStyle.body.small.copy(
-                    color = Theme.colors.body,
-                )
+                style = Theme.textStyle.body.small,
+                color = Theme.colors.body,
             )
 
             Spacer(
@@ -103,11 +101,18 @@ fun TaskDetailsBottomSheet(
                 modifier = Modifier.padding(top = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                EditButtonComponent()
+                OutlinedIconButton(
+                    icon = R.drawable.ic_pencil_edit,
+                    onClick = {
+                        TODO("move to edit bottom sheet")
+                    }
+                )
 
                 SecondaryButton(
-                    text = stringResource(R.string.move_to,"in progress"),
-                    onClick = {},
+                    text = stringResource(R.string.move_to, "in progress"),
+                    onClick = {
+                        TODO("move to next status")
+                    },
                     modifier = Modifier.weight(1f),
                     icon = null,
                 )

@@ -1,6 +1,8 @@
-package com.moscow.tudee.presentation.ui.home
+package com.moscow.tudee.presentation.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -9,29 +11,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @Composable
-fun EditButtonComponent(
+fun OutlinedIconButton(
     modifier: Modifier = Modifier,
+    @DrawableRes icon: Int,
+    onClick: () -> Unit,
+    iconColor: Color = Theme.colors.primary,
+    strokeColor: Color = Theme.colors.stroke,
 ) {
     Box(
         modifier = modifier
+            .clickable { onClick() }
             .clip(CircleShape)
             .border(
                 width = 1.dp,
-                color = Theme.colors.stroke,
+                color = strokeColor,
                 shape = CircleShape
             )
-            .padding(vertical = 16.dp, horizontal = 24.dp),
-
+            .padding(vertical = 16.dp, horizontal = 24.dp)
     ){
         Icon(
-            painter = painterResource(id = R.drawable.ic_pencil_edit),
-            tint = Theme.colors.primary,
+            painter = painterResource(id = icon),
+            tint = iconColor,
             contentDescription = "edit icon",
             modifier = Modifier.size(24.dp),
         )
