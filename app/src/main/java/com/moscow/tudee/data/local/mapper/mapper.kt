@@ -15,7 +15,7 @@ fun CategoryEntity.toCategory(): Category {
 }
 
 const val DUMMY_VALUE = 0L
-fun getEntityFromCategory(category: Category): CategoryEntity {
+fun getRoomEntityFromCategory(category: Category): CategoryEntity {
     return CategoryEntity(
         id = DUMMY_VALUE,
         title = category.title,
