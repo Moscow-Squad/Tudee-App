@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "481400609546",
+    "project_id": "tudee-b4fb2",
+    "storage_bucket": "tudee-b4fb2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481400609546:android:f8659b213e534b1a5a78f3",
+        "android_client_info": {
+          "package_name": "com.moscow.tudee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSLUM2Lg2WyzAXjM9otzao3ZPc9iMeHNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
