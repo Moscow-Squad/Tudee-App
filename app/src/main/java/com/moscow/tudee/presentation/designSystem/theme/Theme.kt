@@ -4,6 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.compositionLocalOf
 import com.moscow.tudee.presentation.designSystem.color.LocalTudeeColors
 import com.moscow.tudee.presentation.designSystem.color.TudeeColors
 import com.moscow.tudee.presentation.designSystem.color.darkThemeColors
@@ -23,8 +24,9 @@ fun TudeeTheme(
         else -> lightThemeColors
     }
     CompositionLocalProvider(
+        LocalTheme provides darkTheme,
         LocalTudeeColors provides colorScheme,
-        LocalTudeeTextStyle provides DefaultTextStyle
+        LocalTudeeTextStyle provides DefaultTextStyle,
     ) {
         content()
     }
@@ -36,4 +38,9 @@ object Theme {
 
     val textStyle:TudeeTextStyle
         @Composable @ReadOnlyComposable get() = LocalTudeeTextStyle.current
+
+    val isDark: Boolean
+        @Composable get() = LocalTheme.current
 }
+
+val LocalTheme = compositionLocalOf { false }
