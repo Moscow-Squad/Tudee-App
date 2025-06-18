@@ -14,6 +14,15 @@ fun CategoryEntity.toCategory(): Category {
     )
 }
 
+const val DUMMY_VALUE = 0L
+fun getRoomEntityFromCategory(category: Category): CategoryEntity {
+    return CategoryEntity(
+        id = DUMMY_VALUE,
+        title = category.title,
+        iconUrl = category.iconUrl
+    )
+}
+
 
 fun TaskEntity.toTask(): Task {
     return Task(
@@ -28,6 +37,16 @@ fun TaskEntity.toTask(): Task {
     )
 }
 
+fun Task.toTaskEntity(): TaskEntity {
+    return TaskEntity(
+        title = title,
+        description = description,
+        priority = priority.toString(),
+        categoryId = categoryId,
+        status = status.toString(),
+        date = date.toString()
+    )
+}
 
 private fun getPriorityFromString(priority: String): Task.Priority {
     return when (priority) {
