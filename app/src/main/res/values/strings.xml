@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Tudee</string>
+    <string name="text_field_icon">Text Field Icon</string>
+    <string name="divider">divider</string>
     <string name="task_card_icon">task card icon</string>
     <string name="calender_icon">calender icon</string>
     <string name="priority_icon">priority icon</string>
@@ -22,4 +24,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="delete_item">Delete item</string>
+    <string name="are_you_sure_to_continue">Are you sure to continue?</string>
+    <string name="delete">Delete</string>
+    <string name="delete_image">Delete Image</string>
 </resources>

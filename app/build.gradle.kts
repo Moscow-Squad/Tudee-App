@@ -86,6 +86,12 @@ dependencies {
 
     /** Navigation */
     implementation(libs.navigation.compose)
+
+    // For image loading
+    implementation(libs.coil.compose)
+
+    // For image picker (if not already included)
+    implementation(libs.androidx.activity.compose.v180)
 }
 
 /**

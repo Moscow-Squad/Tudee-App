@@ -1,5 +1,6 @@
 package com.moscow.tudee
 
+//import com.moscow.tudee.data.seeder.DataSeeder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
