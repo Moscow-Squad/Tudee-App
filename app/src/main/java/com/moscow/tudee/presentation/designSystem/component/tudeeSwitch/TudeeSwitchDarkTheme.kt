@@ -1,6 +1,5 @@
 package com.moscow.tudee.presentation.designSystem.component.tudeeSwitch
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.TweenSpec
@@ -33,7 +32,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
@@ -44,7 +42,6 @@ import kotlinx.coroutines.launch
 @Stable
 @Composable
 fun TudeeSwitchDarkTheme(
-    modifier: Modifier = Modifier,
     onToggleState: () -> Unit,
     isClickable: Boolean,
     transitionFloatAnimationSpec: TweenSpec<Float>,
