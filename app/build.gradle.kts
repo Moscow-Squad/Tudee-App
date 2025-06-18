@@ -58,6 +58,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ui)
+    implementation(libs.foundation)
+    implementation(libs.androidx.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -83,6 +86,9 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.bundles.koin)
+
+    /** Navigation */
+    implementation(libs.navigation.compose)
 
     // For image loading
     implementation(libs.coil.compose)
