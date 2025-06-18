@@ -44,4 +44,34 @@ class TasksServicesImpl(
     override suspend fun deleteTask(taskId: Long) {
         taskDao.deleteTask(taskId)
     }
+
+    override suspend fun getTasksByCategory(categoryId: Long): List<Task> {
+        return taskDao
+            .getTasksByCategory(categoryId)
+            .map { it.toTask() }
+    }
+
+    override suspend fun getTasksByStatus(status: Task.Status): List<Task> {
+        return taskDao
+            .getTasksByStatus(status.name)
+            .map { it.toTask() }
+    }
+
+    override suspend fun getTasksByDateAndStatus(
+        date: LocalDate,
+        status: Task.Status
+    ): List<Task> {
+        return taskDao
+            .getTasksByDateAndStatus(date.toString(), status.name)
+            .map { it.toTask() }
+    }
+
+    override suspend fun getTasksByDateAndCategory(
+        date: LocalDate,
+        categoryId: Long
+    ): List<Task> {
+        return taskDao
+            .getTasksByDateAndCategory(date.toString(), categoryId)
+            .map { it.toTask() }
+    }
 }

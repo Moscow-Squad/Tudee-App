@@ -18,4 +18,12 @@ interface TasksServices {
     suspend fun updateTask(task: Task)
 
     suspend fun deleteTask(taskId: Long)
+
+    suspend fun getTasksByCategory(categoryId: Long): List<Task>
+
+    suspend fun getTasksByStatus(status: Task.Status): List<Task>
+
+    suspend fun getTasksByDateAndStatus(date: LocalDate, status: Task.Status): List<Task>
+
+    suspend fun getTasksByDateAndCategory(date: LocalDate, categoryId: Long): List<Task>
 }
