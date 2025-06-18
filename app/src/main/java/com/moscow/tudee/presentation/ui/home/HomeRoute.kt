@@ -8,8 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavGraphBuilder
-import com.moscow.tudee.navigation.entry.HomeScreen
-import com.moscow.tudee.navigation.extensions.tudeeComposable
+import com.moscow.tudee.presentation.navigation.entry.HomeScreen
+import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 
 fun NavGraphBuilder.homeRoute() {
 

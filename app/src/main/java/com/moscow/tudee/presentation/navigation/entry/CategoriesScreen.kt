@@ -1,4 +1,4 @@
-package com.moscow.tudee.navigation.entry
+package com.moscow.tudee.presentation.navigation.entry
 
 import kotlinx.serialization.Serializable
 

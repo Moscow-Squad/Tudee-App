@@ -2,9 +2,9 @@ package com.moscow.tudee.presentation.model
 
 import androidx.annotation.DrawableRes
 import com.moscow.tudee.R
-import com.moscow.tudee.navigation.entry.CategoriesScreen
-import com.moscow.tudee.navigation.entry.HomeScreen
-import com.moscow.tudee.navigation.entry.TasksScreen
+import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
+import com.moscow.tudee.presentation.navigation.entry.HomeScreen
+import com.moscow.tudee.presentation.navigation.entry.TasksScreen
 
 enum class BottomNavigationDestination(
     val route: Any,

@@ -1,4 +1,4 @@
-package com.moscow.tudee.navigation.extensions
+package com.moscow.tudee.presentation.navigation.extensions
 
 import android.util.Log
 import androidx.compose.animation.AnimatedContentScope

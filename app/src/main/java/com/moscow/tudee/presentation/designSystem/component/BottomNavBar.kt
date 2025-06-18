@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.moscow.tudee.R
-import com.moscow.tudee.navigation.extensions.navigateSafe
+import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.model.BottomNavigationDestination
