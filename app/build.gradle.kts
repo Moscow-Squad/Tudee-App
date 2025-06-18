@@ -87,6 +87,9 @@ dependencies {
 
     implementation(libs.bundles.koin)
 
+    /** Navigation */
+    implementation(libs.navigation.compose)
+
     // For image loading
     implementation(libs.coil.compose)
 
