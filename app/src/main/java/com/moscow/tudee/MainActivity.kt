@@ -1,5 +1,6 @@
 package com.moscow.tudee
 
+//import com.moscow.tudee.data.seeder.DataSeeder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.moscow.tudee.presentation.designSystem.theme.ThemeState
+import com.moscow.tudee.presentation.navigation.TudeeGraph
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
             }
 
             TudeeTheme(state = themeState) {
-
+               TudeeGraph()
             }
         }
     }
