@@ -10,19 +10,17 @@ fun CategoryEntity.toCategory(): Category {
     return Category(
         id = id,
         title = title,
-        iconUrl = iconUrl
+        iconUrl = iconUrl,
     )
 }
 
-const val DUMMY_VALUE = 0L
-fun getRoomEntityFromCategory(category: Category): CategoryEntity {
+fun Category.toCategoryEntity(): CategoryEntity {
     return CategoryEntity(
-        id = DUMMY_VALUE,
-        title = category.title,
-        iconUrl = category.iconUrl
+        id = id ?: 0L,
+        title = title,
+        iconUrl = iconUrl,
     )
 }
-
 
 fun TaskEntity.toTask(): Task {
     return Task(

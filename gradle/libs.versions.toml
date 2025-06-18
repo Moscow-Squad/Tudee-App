@@ -1,5 +1,7 @@
 [versions]
+activityComposeVersion = "1.8.0"
 agp = "8.10.1"
+coilCompose = "2.4.0"
 firebaseBom = "33.15.0"
 foundationVersion = "1.8.2"
 koinAndroid = "4.0.3"
@@ -24,6 +26,7 @@ koin = "4.0.4"
 ui = "1.8.2"
 
 [libraries]
+androidx-activity-compose-v180 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
@@ -32,6 +35,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomComp
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomCompiler" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundationVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
