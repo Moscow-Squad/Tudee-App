@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,15 +29,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun OnboardingScreen(
     viewModel: SplashViewModel = koinViewModel(),
-    onFinish: () -> Unit
-) {
-    val scope = rememberCoroutineScope()
-    val isDarkMode = isSystemInDarkTheme()
-    val backgroundImage = if (isDarkMode) {
+    onFinish: () -> Unit,
+    backgroundImage: Painter = if (isSystemInDarkTheme()) {
         painterResource(id = R.drawable.background_splash_dark)
     } else {
         painterResource(id = R.drawable.background_splash_light)
     }
+) {
+    val scope = rememberCoroutineScope()
 
     val pages = listOf(
         OnboardingData(
@@ -106,5 +106,6 @@ fun OnboardingScreen(
 @Preview
 @Composable
 fun OnboardingScreenPreview() {
-    OnboardingScreen(onFinish = {})
+    val bg = painterResource(id = R.drawable.background_splash_light)
+    OnboardingScreen(onFinish = {}, backgroundImage = bg)
 }
