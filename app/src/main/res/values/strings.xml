@@ -22,4 +22,5 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="delete_item">Delete item</string>
+    <string name="are_you_sure_to_continue">Are you sure to continue?</string>
 </resources>
