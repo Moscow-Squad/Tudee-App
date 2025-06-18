@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Tudee</string>
+    <string name="text_field_icon">Text Field Icon</string>
+    <string name="divider">divider</string>
     <string name="task_card_icon">task card icon</string>
     <string name="calender_icon">calender icon</string>
     <string name="priority_icon">priority icon</string>
