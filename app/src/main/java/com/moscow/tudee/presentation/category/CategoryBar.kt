@@ -75,7 +75,7 @@ fun CategoryBar(
 
 @Preview(apiLevel = 34)
 @Composable
-fun CategoryBar_Preview() {
+fun CategoryBarPreview() {
     CategoryBar(
         categoryLabel = "Reading Novel"
     )

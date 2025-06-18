@@ -73,7 +73,7 @@ fun CategoriesScreen(
 
 @Preview(showBackground = true, apiLevel = 34, showSystemUi = true)
 @Composable
-fun CategoryScreen_Preview() {
+fun CategoriesScreenPreview() {
     val categories: List<Category> = listOf(
         Category(name = "Education", count = 23, icon = R.drawable.ic_book_open),
         Category(name = "Shopping", count = 4, icon = R.drawable.ic_shopping_cart),
