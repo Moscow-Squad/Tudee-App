@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,13 +13,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.CustomFAB
+import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 
 @Composable
 fun OnboardingItem(
     data: OnboardingData,
-    isLast: Boolean,
     onNext: () -> Unit
 ) {
     Column(
@@ -54,14 +53,14 @@ fun OnboardingItem(
                 verticalArrangement = Arrangement.spacedBy(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
+                TudeeText(
                     text = data.title,
                     style = Theme.textStyle.title.medium,
                     color = colors.title,
                     textAlign = TextAlign.Center,
                     maxLines = 2
                 )
-                Text(
+                TudeeText(
                     text = data.description,
                     style = Theme.textStyle.body.medium,
                     color = colors.body,

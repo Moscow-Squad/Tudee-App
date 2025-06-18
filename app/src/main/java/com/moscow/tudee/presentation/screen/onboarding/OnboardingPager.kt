@@ -31,7 +31,6 @@ fun OnboardingPager(
         ) { page ->
             OnboardingItem(
                 data = pages[page],
-                isLast = page == pages.lastIndex,
                 onNext = {
                     scope.launch {
                         if (page < pages.lastIndex) {

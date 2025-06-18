@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,17 +28,15 @@ import org.koin.androidx.compose.koinViewModel
 fun SplashScreen(
     onNavigateToHome: () -> Unit,
     onNavigateToOnboarding: () -> Unit,
-    viewModel: SplashViewModel = koinViewModel()
-) {
-    val hasSeenOnboarding by viewModel.hasSeenOnboarding.collectAsStateWithLifecycle()
-    val scale = remember { androidx.compose.animation.core.Animatable(0f) }
-
-    val isDarkMode = isSystemInDarkTheme()
-    val backgroundImage = if (isDarkMode) {
+    viewModel: SplashViewModel = koinViewModel(),
+    backgroundImage: Painter = if (isSystemInDarkTheme()) {
         painterResource(id = R.drawable.background_splash_dark)
     } else {
         painterResource(id = R.drawable.background_splash_light)
     }
+) {
+    val hasSeenOnboarding by viewModel.hasSeenOnboarding.collectAsStateWithLifecycle()
+    val scale = remember { androidx.compose.animation.core.Animatable(0f) }
 
     LaunchedEffect(hasSeenOnboarding) {
         if (hasSeenOnboarding != null) {
