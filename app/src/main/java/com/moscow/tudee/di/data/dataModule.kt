@@ -9,6 +9,8 @@ import com.moscow.tudee.data.service.TasksServicesImpl
 import com.moscow.tudee.domain.service.SplashService
 import com.moscow.tudee.domain.service.TasksServices
 import org.koin.android.ext.koin.androidApplication
+import com.moscow.tudee.data.service.TasksServicesImpl
+import com.moscow.tudee.domain.service.TasksServices
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
