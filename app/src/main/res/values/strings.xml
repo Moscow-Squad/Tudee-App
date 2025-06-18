@@ -21,6 +21,7 @@
     <string name="clear">Clear</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="delete_item">Delete item</string>
     <string name="splash_background">background light</string>
     <string name="splash_logo">logo icon\n</string>
     <string name="overwhelmed_with_tasks">Overwhelmed with tasks?</string>

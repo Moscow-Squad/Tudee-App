@@ -1,10 +1,10 @@
 package com.moscow.tudee.di
 
-import com.moscow.tudee.di.data.databaseModule
+import com.moscow.tudee.di.data.dataModule
 import org.koin.dsl.module
 
 val appModule = module {
     includes(
-        databaseModule, presentationModule
+        dataModule, presentationModule
     )
 }
