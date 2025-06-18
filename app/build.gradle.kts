@@ -68,8 +68,7 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     //lottie
-    implementation("com.airbnb.android:lottie-compose:6.0.0")
-
+    implementation(libs.lottie.compose)
 
     implementation(libs.androidx.room.runtime)
 
@@ -84,6 +83,12 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.bundles.koin)
+
+    // For image loading
+    implementation(libs.coil.compose)
+
+    // For image picker (if not already included)
+    implementation(libs.androidx.activity.compose.v180)
 }
 
 /**

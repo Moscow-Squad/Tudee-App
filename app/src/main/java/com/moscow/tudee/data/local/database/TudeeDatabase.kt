@@ -7,7 +7,11 @@ import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.entity.CategoryEntity
 import com.moscow.tudee.data.local.entity.TaskEntity
 
-@Database(entities = [TaskEntity::class, CategoryEntity::class], version = 1)
+@Database(
+    entities = [TaskEntity::class, CategoryEntity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class TudeeDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun categoryDao(): CategoryDao

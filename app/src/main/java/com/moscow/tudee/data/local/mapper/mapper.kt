@@ -10,10 +10,17 @@ fun CategoryEntity.toCategory(): Category {
     return Category(
         id = id,
         title = title,
-        iconUrl = iconUrl
+        iconUrl = iconUrl,
     )
 }
 
+fun Category.toCategoryEntity(): CategoryEntity {
+    return CategoryEntity(
+        id = id ?: 0L,
+        title = title,
+        iconUrl = iconUrl,
+    )
+}
 
 fun TaskEntity.toTask(): Task {
     return Task(
@@ -28,6 +35,16 @@ fun TaskEntity.toTask(): Task {
     )
 }
 
+fun Task.toTaskEntity(): TaskEntity {
+    return TaskEntity(
+        title = title,
+        description = description,
+        priority = priority.toString(),
+        categoryId = categoryId,
+        status = status.toString(),
+        date = date.toString()
+    )
+}
 
 private fun getPriorityFromString(priority: String): Task.Priority {
     return when (priority) {
