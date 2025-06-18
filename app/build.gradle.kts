@@ -83,6 +83,9 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.bundles.koin)
+
+    /** Navigation */
+    implementation(libs.navigation.compose)
 }
 
 /**
