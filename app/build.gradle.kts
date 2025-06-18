@@ -70,7 +70,6 @@ dependencies {
     //lottie
     implementation(libs.lottie.compose)
 
-
     implementation(libs.androidx.room.runtime)
 
     ksp(libs.androidx.room.compiler.v250)

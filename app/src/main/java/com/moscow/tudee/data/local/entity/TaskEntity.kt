@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
     indices = [Index("categoryId")]
 )
 data class TaskEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
     val description: String,
     val priority: String,
