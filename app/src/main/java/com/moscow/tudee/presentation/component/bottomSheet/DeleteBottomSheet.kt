@@ -70,7 +70,7 @@ fun DeleteBottomSheet(
 
         Image(
             painter = painterResource(image),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.delete_image),
             modifier = Modifier
                 .padding(top = 12.dp)
                 .align(Alignment.CenterHorizontally)
@@ -93,7 +93,6 @@ fun DeleteBottomSheet(
 
             SecondaryButton(
                 text = stringResource(R.string.cancel),
-                icon = null,
                 onClick = onDismiss,
                 modifier = Modifier
                     .fillMaxWidth()
