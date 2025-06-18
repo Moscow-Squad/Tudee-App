@@ -21,13 +21,12 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 fun DotsIndicator(
     totalDots: Int,
     selectedIndex: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    dotSpacing: Dp = 10.dp,
+    dotHeight: Dp = 5.dp
 ) {
     val selectedColor = colors.primary
     val unSelectedColor = colors.onPrimaryStroke
-
-    val dotSpacing: Dp = 10.dp
-    val dotHeight: Dp = 5.dp
 
     Row(
         modifier = modifier
@@ -48,6 +47,7 @@ fun DotsIndicator(
     }
 }
 
+
 @Preview
 @Composable
 fun DotsIndicatorPreview() {
@@ -59,7 +59,9 @@ fun DotsIndicatorPreview() {
         DotsIndicator(
             totalDots = 5,
             selectedIndex = 2,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.align(Alignment.Center),
+            dotSpacing = 12.dp,
+            dotHeight = 6.dp
         )
     }
 }
