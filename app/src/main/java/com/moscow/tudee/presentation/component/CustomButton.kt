@@ -113,7 +113,7 @@ fun SecondaryButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     isLoading: Boolean = false,
-    icon: Int?
+    icon: Int? = null
 ) {
     val themeColors = Theme.colors
     val textColor = remember(isEnabled) {

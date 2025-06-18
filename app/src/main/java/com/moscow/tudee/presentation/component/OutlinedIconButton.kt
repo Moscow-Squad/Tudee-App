@@ -26,13 +26,13 @@ fun OutlinedIconButton(
 ) {
     Box(
         modifier = modifier
-            .clickable { onClick() }
             .clip(CircleShape)
             .border(
                 width = 1.dp,
                 color = strokeColor,
                 shape = CircleShape
             )
+            .clickable { onClick() }
             .padding(vertical = 16.dp, horizontal = 24.dp)
     ){
         Icon(

@@ -114,7 +114,6 @@ fun TaskDetailsBottomSheet(
                         TODO("move to next status")
                     },
                     modifier = Modifier.weight(1f),
-                    icon = null,
                 )
             }
 
