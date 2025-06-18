@@ -16,15 +16,15 @@ import com.moscow.tudee.presentation.designSystem.typography.DefaultTextStyle
 
 @Composable
 fun TudeeTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    state: ThemeState = ThemeState(isDark = isSystemInDarkTheme(), onThemeChanged = {}),
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        darkTheme -> darkThemeColors
+        state.isDark -> darkThemeColors
         else -> lightThemeColors
     }
     CompositionLocalProvider(
-        LocalTheme provides darkTheme,
+        LocalThemeState provides state,
         LocalTudeeColors provides colorScheme,
         LocalTudeeTextStyle provides DefaultTextStyle,
     ) {
@@ -36,11 +36,11 @@ object Theme {
     val colors: TudeeColors
         @Composable @ReadOnlyComposable get() = LocalTudeeColors.current
 
-    val textStyle:TudeeTextStyle
+    val textStyle: TudeeTextStyle
         @Composable @ReadOnlyComposable get() = LocalTudeeTextStyle.current
 
-    val isDark: Boolean
-        @Composable get() = LocalTheme.current
+    val state: ThemeState
+        @Composable get() = LocalThemeState.current
 }
 
-val LocalTheme = compositionLocalOf { false }
+val LocalThemeState = compositionLocalOf { ThemeState(false, {}) }

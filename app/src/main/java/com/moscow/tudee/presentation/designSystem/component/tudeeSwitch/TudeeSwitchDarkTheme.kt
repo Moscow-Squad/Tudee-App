@@ -1,8 +1,11 @@
 package com.moscow.tudee.presentation.designSystem.component.tudeeSwitch
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
@@ -33,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.shadow.innerShadow
@@ -45,13 +48,14 @@ fun TudeeSwitchDarkTheme(
     modifier: Modifier = Modifier,
     onToggleState: () -> Unit,
     isClickable: Boolean,
-    transitionFloatAnimationSpec: TweenSpec<Float>
+    transitionFloatAnimationSpec: TweenSpec<Float>,
+    movingCloudySize: Dp
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val moonBiasAlignment = remember {
         Animatable(1f)
     }
 
-    val coroutineScope = rememberCoroutineScope()
 
     val moonAlignment by remember {
         derivedStateOf {
@@ -64,15 +68,15 @@ fun TudeeSwitchDarkTheme(
             .requiredSize(width = 64.dp, height = 36.dp)
             .background(
                 color = Color(0xFF151535),
-                shape = RoundedCornerShape(60.dp)
+                shape = CircleShape
 
             )
             .border(
                 width = 1.dp,
                 color = Theme.colors.stroke.copy(0.12f),
-                shape = RoundedCornerShape(60.dp)
+                shape = CircleShape
             )
-            .clip(RoundedCornerShape(60.dp))
+            .clip(CircleShape)
 
     ) {
         Box(
@@ -133,7 +137,11 @@ fun TudeeSwitchDarkTheme(
             Box(
                 modifier = Modifier
                     .padding(top = 2.dp, start = 9.dp)
-                    .size(8.dp)
+                    .size(movingCloudySize)
+                    .animateContentSize(
+                        animationSpec = tween(800),
+                        alignment = Alignment.TopEnd
+                    )
                     .background(
                         color = Color(0xFFE9EFFF),
                         shape = CircleShape

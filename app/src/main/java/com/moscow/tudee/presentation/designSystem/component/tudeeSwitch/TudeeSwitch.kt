@@ -1,23 +1,32 @@
 package com.moscow.tudee.presentation.designSystem.component.tudeeSwitch
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.moscow.tudee.presentation.designSystem.theme.LocalThemeState
+import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.designSystem.theme.ThemeState
+import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -28,7 +37,7 @@ fun TudeeSwitch(
 ) {
     val transition = updateTransition(
         targetState = isLightTheme,
-        label = "isDay"
+        label = "switchButtonTransition"
     )
 
     val transitionFloatAnimationSpec = remember {
@@ -39,61 +48,136 @@ fun TudeeSwitch(
         tween<Dp>(800, easing = EaseOut)
     }
 
-//    transition.AnimatedContent(
-//        modifier = modifier,
-//        transitionSpec = {
-//            fadeIn(transitionFloatAnimationSpec)  togetherWith  fadeOut(transitionFloatAnimationSpec)
-//        }
-//    ) {
-//        if (it) {
-//            TudeeSwitchLightTheme(
-//                transition = transition,
-//                transitionDpAnimationSpec = transitionDpAnimationSpec,
-//                transitionFloatAnimationSpec = transitionFloatAnimationSpec,
-//                isClickable = isLightTheme,
-//                isLightTheme = isLightTheme,
-//                onToggleState = onToggleState
-//            )
-//        } else {
-//            TudeeSwitchNight(
-//                isClickable = !isLightTheme,
-//                onToggleState = onToggleState,
-//                transitionFloatAnimationSpec = transitionFloatAnimationSpec
-//
-//            )
-//        }
-//    }
+
+    val movingCloudySize by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "movingCloudySize"
+    ) {
+        if (it) 29.dp else 8.dp
+    }
+
+
+    val outerTopCloudSize by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "cloudyOutlierTopDp"
+    ) {
+        if (it) 32.dp
+        else 0.dp
+    }
+
+    val cloudyOutlierBottomDp by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "cloudyOutlierBottomDp"
+    ) {
+        if (it) 0.dp else -(8).dp
+    }
+
+    val movingCloudyPositionX by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "movingCloudyPositionX"
+    ) {
+        if (it) 13.5.dp else (-17).dp
+    }
+
+    val movingCloudyPositionY by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "movingCloudyPositionY"
+    ) {
+        if (it) 0.dp else 4.dp
+    }
+
+
+    val movingSmallCloudySize by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "movingSmallCloudySize"
+    ) {
+        if (it) 16.dp else 0.dp
+    }
+
+    val circleBiasAlignment by remember {
+        derivedStateOf { (if (isLightTheme) Alignment.BottomEnd else Alignment.BottomCenter) as BiasAlignment }
+    }
+
+    val circleHorizontalBias by transition.animateFloat(
+        transitionSpec = {
+            transitionFloatAnimationSpec
+        },
+        label = "horizontalBias"
+    ) {
+        if (it) 1f
+        else -1f
+    }
+    val circleAlignment by remember {
+        derivedStateOf {
+            BiasAlignment(circleHorizontalBias, 1f)
+        }
+    }
+
+    //400
+    val circlePositionX by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "circleSize"
+    ) {
+        if (it) -(14.5).dp else -14.5.dp
+    }
+
+    val circlePositionY by transition.animateDp(
+        transitionSpec = {
+            transitionDpAnimationSpec
+        },
+        label = "circleSize"
+    ) {
+        if (it) 4.dp else 26.dp
+    }
+
+
+    //dark
+
+
 
     Box(modifier) {
-        AnimatedVisibility(
-            modifier = modifier,
-            visible = isLightTheme,
-            enter = fadeIn(transitionFloatAnimationSpec),
-            exit = fadeOut(transitionFloatAnimationSpec),
-            label = "lightTheme"
+        transition.Crossfade(
+            modifier = Modifier,
+            animationSpec = transitionFloatAnimationSpec
         ) {
-            TudeeSwitchLightTheme(
-                transition = transition,
-                transitionDpAnimationSpec = transitionDpAnimationSpec,
-                transitionFloatAnimationSpec = transitionFloatAnimationSpec,
-                isClickable = isLightTheme,
-                isLightTheme = isLightTheme,
-                onToggleState = onToggleState
-            )
-        }
-        AnimatedVisibility(
-            modifier = modifier,
-            visible = !isLightTheme,
-            enter = fadeIn(transitionFloatAnimationSpec),
-            exit = fadeOut(transitionFloatAnimationSpec),
-            label = "darkTheme"
-        ) {
-            TudeeSwitchDarkTheme(
-                isClickable = !isLightTheme,
-                onToggleState = onToggleState,
-                transitionFloatAnimationSpec = transitionFloatAnimationSpec
+            if (it) {
+                TudeeSwitchLightTheme(
+                    transitionFloatAnimationSpec = transitionFloatAnimationSpec,
+                    isClickable = isLightTheme,
+                    onToggleState = onToggleState,
+                    movingCloudySize = movingCloudySize,
+                    outerTopCloudSize = outerTopCloudSize,
+                    cloudyOutlierBottomDp = cloudyOutlierBottomDp,
+                    movingCloudyPositionX = movingCloudyPositionX,
+                    movingCloudyPositionY = movingCloudyPositionY,
+                    movingSmallCloudySize = movingSmallCloudySize,
+                    circleAlignment = circleAlignment,
+                    circlePositionX = circlePositionX,
+                    circlePositionY = circlePositionY
+                )
+            } else {
+                TudeeSwitchDarkTheme(
+                    isClickable = !isLightTheme,
+                    onToggleState = onToggleState,
+                    movingCloudySize = movingCloudySize,
+                    transitionFloatAnimationSpec = transitionFloatAnimationSpec
 
-            )
+                )
+            }
         }
     }
 }
@@ -102,12 +186,27 @@ fun TudeeSwitch(
 @Preview
 @Composable
 private fun TudeeSwitchPreview() {
-    var isDay by remember { mutableStateOf(true) }
+    val isDark = isSystemInDarkTheme()
+    val (isDarkThemeState, onThemeStateChanged) = remember { mutableStateOf(isDark) }
+    val themeState by remember(isDarkThemeState) {
+        derivedStateOf {
+            ThemeState(
+                isDark = isDarkThemeState,
+                onThemeChanged = onThemeStateChanged
+            )
+        }
+    }
 
-    TudeeSwitch(
-        modifier = Modifier.padding(20.dp),
-        isLightTheme = isDay,
-        onToggleState = { isDay = !isDay }
-    )
+    TudeeTheme(themeState) {
+        val localState = Theme.state
 
+        Column(modifier = Modifier) {
+            TudeeSwitch(
+                isLightTheme = localState.isDark,
+                onToggleState = {
+                    localState.onThemeChanged(!localState.isDark)
+                }
+            )
+        }
+    }
 }
