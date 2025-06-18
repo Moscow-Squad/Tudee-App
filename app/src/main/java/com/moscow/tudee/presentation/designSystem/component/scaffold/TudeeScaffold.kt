@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.moscow.tudee.presentation.component.TudeeText
-import com.moscow.tudee.presentation.designSystem.component.BottomNavBar
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 
@@ -73,12 +71,7 @@ fun TudeeScaffold(
                 TudeeScaffold {
                     TudeeScaffold(
                         topBar = {
-                            BottomNavBar(
-                                selectedIndex = 1,
-                                onItemSelected = {  },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            )
+
                         }
                     ) {
                         Column(
@@ -90,11 +83,7 @@ fun TudeeScaffold(
                 }
             },
             bottomBar = {
-                BottomNavBar(
-                    selectedIndex = 0,
-                    onItemSelected = {  },
-                    modifier = Modifier.fillMaxWidth()
-                )
+
             },
             topBar = {
 
