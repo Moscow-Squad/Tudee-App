@@ -84,7 +84,7 @@ fun DeleteBottomSheet(
                 .padding(16.dp)
         ) {
             PrimaryButton(
-                text = "Delete",
+                text = stringResource(R.string.delete),
                 onClick = onDelete,
                 backgroundColor = SolidColor(Theme.colors.errorVariant),
                 textColor = Theme.colors.error,
@@ -92,7 +92,7 @@ fun DeleteBottomSheet(
             )
 
             SecondaryButton(
-                text = "Cancel",
+                text = stringResource(R.string.cancel),
                 icon = null,
                 onClick = onDismiss,
                 modifier = Modifier
