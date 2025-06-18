@@ -6,51 +6,55 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
-
 @Composable
-fun TextField(
+fun TudeeTextField(
+    value: String,
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions,
     singleLine: Boolean,
-    hint:String ,
+    hint: String,
     modifier: Modifier = Modifier,
-    value: String = "",
     startIcon: Painter? = null,
-    size: Int = 24,
-    paddingValues: Int = 16
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
 
-    val borderColor by animateColorAsState(if (isFocused) Theme.colors.primary else Theme.colors.stroke)
-    val iconColor by animateColorAsState(if (value.isEmpty()) Theme.colors.hint else Theme.colors.body)
+    val borderColor by animateColorAsState(
+        targetValue = if (isFocused) Theme.colors.primary else Theme.colors.stroke,
+        label = "BorderColor"
+    )
+
+    val iconColor by animateColorAsState(
+        targetValue = if (value.isEmpty()) Theme.colors.hint else Theme.colors.body,
+        label = "IconColor"
+    )
+
     Box(
         modifier = modifier
             .border(
@@ -58,12 +62,13 @@ fun TextField(
                 color = borderColor,
                 shape = RoundedCornerShape(16.dp)
             )
-            .padding(horizontal = 12.dp, vertical = paddingValues.dp)
+            .padding(horizontal = 12.dp, vertical = if (startIcon != null) 16.dp else 12.dp)
 
     ) {
-        Row(modifier=Modifier
-            .fillMaxWidth()
-            .height(size.dp) ) {
+        Row(
+            modifier = Modifier
+                .matchParentSize()
+        ) {
             if (startIcon != null) {
                 Image(
                     painter = startIcon,
@@ -77,67 +82,76 @@ fun TextField(
                     contentDescription = stringResource(R.string.divider),
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
+
+                TudeeBasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    hint = hint,
+                    keyboardOptions = keyboardOptions,
+                    singleLine = singleLine,
+                    interactionSource = interactionSource,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                )
             }
-            BasicTextField(
-
-                modifier = Modifier.weight(1f).height(size.dp),
-                enabled = true,
-                readOnly = false,
-                singleLine = singleLine,
-                textStyle = Theme.textStyle.body.medium.copy(
-                    color = Theme.colors.body,
-
-                ),
-                cursorBrush = SolidColor(Theme.colors.primary),
-                value = value,
-                interactionSource = interactionSource,
-                keyboardOptions = keyboardOptions,
-                onValueChange = { onValueChange(it) },
-                decorationBox = { innerTextField ->
-                    if (value.isBlank()) {
-                        BasicText(
-                            text = hint,
-                            minLines = 1,
-                            maxLines = 1,
-                            style =  Theme.textStyle.label.medium.copy(
-
-                                color = Theme.colors.hint
-                            ),
-                        )
-                    }
-                }
-            )
         }
-
     }
 }
 
-    @Preview(showBackground = true)
-    @Composable
-    private fun TextFieldPreview() {
-
-        Column (Modifier
-            .fillMaxWidth()
-            .padding(16.dp)){
-
-            Spacer(Modifier.height(150.dp))
-            TextField(
-              {},
-                hint = "Description",
-                singleLine = false, keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ), size = 150
-            )
-            Spacer(Modifier.height(150.dp))
-            TextField(
-               {},
-                singleLine = true,
-                hint = "Full name",
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                startIcon = painterResource(R.drawable.ic_user)
-            )
-
+@Composable
+private fun TudeeBasicTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    hint: String,
+    keyboardOptions: KeyboardOptions,
+    singleLine: Boolean,
+    interactionSource: MutableInteractionSource,
+    modifier: Modifier = Modifier
+) {
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = singleLine,
+        keyboardOptions = keyboardOptions,
+        interactionSource = interactionSource,
+        textStyle = Theme.textStyle.body.medium.copy(
+            color = Theme.colors.body,
+        ),
+        cursorBrush = SolidColor(Theme.colors.primary),
+        modifier = modifier
+    ) { innerTextField ->
+        Box {
+            if (value.isEmpty()) {
+                TudeeText(
+                    text = hint,
+                    color = Theme.colors.hint,
+                    maxLines = 1,
+                    style = Theme.textStyle.label.medium
+                )
+            }
+            innerTextField()
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun TextFieldPreview() {
+
+    var text by remember { mutableStateOf("") }
+
+    TudeeTextField(
+        value = text,
+        onValueChange = { text = it },
+        keyboardOptions = KeyboardOptions.Default,
+        singleLine = true,
+        hint = "Enter your name",
+        startIcon = painterResource(id = R.drawable.ic_user),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    )
+
+}
