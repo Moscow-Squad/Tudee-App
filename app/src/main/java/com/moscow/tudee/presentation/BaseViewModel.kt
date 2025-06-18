@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<T>(
@@ -11,10 +13,10 @@ abstract class BaseViewModel<T>(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(initialState)
-    val uiState: StateFlow<T> = _uiState
+    val uiState: StateFlow<T> = _uiState.asStateFlow()
 
     protected fun updateState(transform: (T) -> T) {
-        _uiState.value = transform(_uiState.value)
+        _uiState.update { transform(it) }
     }
 
     protected fun <R> launchWithResult(
