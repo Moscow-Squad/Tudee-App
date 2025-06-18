@@ -84,6 +84,12 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.bundles.koin)
+
+    // For image loading
+    implementation(libs.coil.compose)
+
+    // For image picker (if not already included)
+    implementation(libs.androidx.activity.compose.v180)
 }
 
 /**

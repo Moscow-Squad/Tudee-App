@@ -20,7 +20,9 @@ val dataModule = module {
             androidContext(),
             TudeeDatabase::class.java,
             TUDEE_DATABASE
-        ).build()
+        )
+        .fallbackToDestructiveMigration(false)
+        .build()
     }
 
     single<CategoryDao> {

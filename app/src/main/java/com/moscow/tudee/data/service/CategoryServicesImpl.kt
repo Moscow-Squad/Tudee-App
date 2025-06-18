@@ -1,8 +1,8 @@
 package com.moscow.tudee.data.service
 
 import com.moscow.tudee.data.local.dao.CategoryDao
-import com.moscow.tudee.data.local.mapper.getRoomEntityFromCategory
 import com.moscow.tudee.data.local.mapper.toCategory
+import com.moscow.tudee.data.local.mapper.toCategoryEntity
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.service.CategoryServices
 
@@ -15,11 +15,11 @@ class CategoryServicesImpl(
     }
 
     override suspend fun addCategory(category: Category) {
-        categoryDao.addCategory(getRoomEntityFromCategory(category))
+        categoryDao.addCategory(category.toCategoryEntity())
     }
 
     override suspend fun updateCategory(category: Category) {
-        categoryDao.updateCategory(getRoomEntityFromCategory(category))
+        categoryDao.updateCategory(category.toCategoryEntity())
     }
 
     override suspend fun deleteCategory(categoryId: Long) {
