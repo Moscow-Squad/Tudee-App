@@ -1,9 +1,12 @@
 package com.moscow.tudee.presentation.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,43 +18,28 @@ import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.home_components.OverviewSection
 import com.moscow.tudee.presentation.component.home_components.TaskList
 import com.moscow.tudee.presentation.component.home_components.TaskListHeader
-import com.moscow.tudee.presentation.designSystem.component.BottomNavBar
 import com.moscow.tudee.presentation.designSystem.component.slider.SliderState
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 
-
 @Composable
 fun HomeScreen() {
-    Scaffold(
-        topBar = {},
-        floatingActionButton = { },
-        bottomBar = { BottomNavBar(0, {}) }
+    HomeContent(
+        SliderState.STAY_WORKING,
+        listOf(),
     )
-    { paddingValues ->
-
-        HomeContent(
-            SliderState.STAY_WORKING,
-            listOf(),
-            paddingValues
-        )
-    }
 }
 
 @Composable
 fun HomeContent(
     sliderState: SliderState,
     tasks: List<TaskDetails>,
-    paddingValues: PaddingValues
 ) {
-
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.colors.surface)
-            .padding(paddingValues)
     ) {
         item {
             Box(
@@ -197,6 +185,6 @@ private fun ShowSmallComponent() {
         )
     )
     TudeeTheme {
-        HomeContent(SliderState.STAY_WORKING, tasks, PaddingValues(0.dp))
+        HomeContent(SliderState.STAY_WORKING, tasks)
     }
 }
