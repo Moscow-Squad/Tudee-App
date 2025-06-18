@@ -1,10 +1,11 @@
 package com.moscow.tudee
 
+//import com.moscow.tudee.data.seeder.DataSeeder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.moscow.tudee.navigation.TudeeNavHost
+import com.moscow.tudee.presentation.navigation.TudeeGraph
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,8 +13,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-//            TudeeNavHost()
+            TudeeTheme {
+               TudeeGraph()
+            }
         }
     }
 }
-

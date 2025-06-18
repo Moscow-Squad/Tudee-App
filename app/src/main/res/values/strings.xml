@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Tudee</string>
+    <string name="text_field_icon">Text Field Icon</string>
+    <string name="divider">divider</string>
     <string name="task_card_icon">task card icon</string>
     <string name="calender_icon">calender icon</string>
     <string name="priority_icon">priority icon</string>
@@ -31,4 +33,7 @@
     <string name="let_s_complete_tasks_and_celebrate_together">Let’s complete tasks and celebrate\ntogether.</string>
     <string name="tudee_will_celebrate_you_on_every_win">Progress is progress.Tudee will\ncelebrate you on for every win, big or\nsmall.</string>
     <string name="skip">Skip</string>
+    <string name="are_you_sure_to_continue">Are you sure to continue?</string>
+    <string name="delete">Delete</string>
+    <string name="delete_image">Delete Image</string>
 </resources>

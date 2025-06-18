@@ -4,16 +4,11 @@ import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.mapper.toTask
 import com.moscow.tudee.data.local.mapper.toTaskEntity
 import com.moscow.tudee.domain.entity.Task
-import com.moscow.tudee.data.local.dao.CategoryDao
-import com.moscow.tudee.data.local.mapper.getRoomEntityFromCategory
-import com.moscow.tudee.data.local.mapper.toCategory
-import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.service.TasksServices
 import kotlinx.datetime.LocalDate
 
 class TasksServicesImpl(
-    private val taskDao: TaskDao,
-    private val categoryDao: CategoryDao
+    private val taskDao: TaskDao
 ) : TasksServices {
     override suspend fun getTasks(): List<Task> {
         return taskDao.getTasks().map { it.toTask() }
@@ -21,21 +16,6 @@ class TasksServicesImpl(
 
     override suspend fun getTasksByDate(date: LocalDate): List<Task> {
         return taskDao.getTasksByDate(date.toString()).map { it.toTask() }
-    }
-    override suspend fun getCategories(): List<Category> {
-        return categoryDao.getCategories().map { it.toCategory() }
-    }
-
-    override suspend fun addCategory(category: Category) {
-        categoryDao.addCategory(getRoomEntityFromCategory(category))
-    }
-
-    override suspend fun updateCategory(category: Category) {
-        categoryDao.updateCategory(getRoomEntityFromCategory(category))
-    }
-
-    override suspend fun deleteCategory(categoryId: Long) {
-        categoryDao.deleteCategory(categoryId)
     }
 
     override suspend fun getTaskById(taskId: Long): Task {
@@ -63,5 +43,35 @@ class TasksServicesImpl(
 
     override suspend fun deleteTask(taskId: Long) {
         taskDao.deleteTask(taskId)
+    }
+
+    override suspend fun getTasksByCategory(categoryId: Long): List<Task> {
+        return taskDao
+            .getTasksByCategory(categoryId)
+            .map { it.toTask() }
+    }
+
+    override suspend fun getTasksByStatus(status: Task.Status): List<Task> {
+        return taskDao
+            .getTasksByStatus(status.name)
+            .map { it.toTask() }
+    }
+
+    override suspend fun getTasksByDateAndStatus(
+        date: LocalDate,
+        status: Task.Status
+    ): List<Task> {
+        return taskDao
+            .getTasksByDateAndStatus(date.toString(), status.name)
+            .map { it.toTask() }
+    }
+
+    override suspend fun getTasksByDateAndCategory(
+        date: LocalDate,
+        categoryId: Long
+    ): List<Task> {
+        return taskDao
+            .getTasksByDateAndCategory(date.toString(), categoryId)
+            .map { it.toTask() }
     }
 }
