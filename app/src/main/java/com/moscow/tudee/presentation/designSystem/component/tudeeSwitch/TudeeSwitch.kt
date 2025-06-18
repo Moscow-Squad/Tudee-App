@@ -2,7 +2,6 @@ package com.moscow.tudee.presentation.designSystem.component.tudeeSwitch
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
@@ -16,14 +15,12 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.presentation.designSystem.theme.LocalThemeState
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.ThemeState
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
@@ -104,10 +101,6 @@ fun TudeeSwitch(
         label = "movingSmallCloudySize"
     ) {
         if (it) 16.dp else 0.dp
-    }
-
-    val circleBiasAlignment by remember {
-        derivedStateOf { (if (isLightTheme) Alignment.BottomEnd else Alignment.BottomCenter) as BiasAlignment }
     }
 
     val circleHorizontalBias by transition.animateFloat(

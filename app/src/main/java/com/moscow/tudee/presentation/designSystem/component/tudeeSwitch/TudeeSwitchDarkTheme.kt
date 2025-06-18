@@ -3,7 +3,6 @@ package com.moscow.tudee.presentation.designSystem.component.tudeeSwitch
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -189,21 +188,6 @@ fun TudeeSwitchDarkTheme(
                         cornersRadius = 4.dp
                     )
             )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun TudeeSwitchNightPreview() {
-    AnimatedContent(
-        targetState = true
-    ) {
-        if (it) {
-//            TudeeSwitchNight(
-//                onToggleState = {},
-//                moonAlignment = sunAlignment
-//            )
         }
     }
 }

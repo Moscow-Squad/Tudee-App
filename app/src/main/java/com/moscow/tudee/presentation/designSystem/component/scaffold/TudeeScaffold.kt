@@ -1,22 +1,26 @@
 package com.moscow.tudee.presentation.designSystem.component.scaffold
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.moscow.tudee.presentation.designSystem.component.tudeeSwitch.TudeeSwitch
+import com.moscow.tudee.presentation.component.TudeeText
+import com.moscow.tudee.presentation.designSystem.component.BottomNavBar
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 
@@ -25,64 +29,80 @@ typealias ComposableCallback = @Composable () -> Unit
 @Composable
 fun TudeeScaffold(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-    bottomBar: ComposableCallback?,
-    topBar: ComposableCallback?,
-    floatingActionButton: ComposableCallback?
+    bottomBar: ComposableCallback? = null,
+    topBar: ComposableCallback? = null,
+    floatingActionButton: ComposableCallback? = null,
+    content: ComposableCallback
 ) {
     Box(modifier.systemBarsPadding()) {
         Column {
-            topBar?.invoke()
+            AnimatedVisibility(
+                visible = topBar != null,
+                enter = slideInVertically(tween(800)) { it },
+                exit = slideOutVertically { -it }
+            ) {
+                topBar?.invoke()
+            }
+
             Box(Modifier.weight(1f)) {
                 content()
-                Box(Modifier.align(Alignment.BottomEnd)) {
-                    floatingActionButton?.invoke()
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = floatingActionButton != null,
+                    enter = scaleIn(),
+                    exit = scaleOut()
+                ) {
+                    Box(Modifier.align(Alignment.BottomEnd)) {
+                        floatingActionButton?.invoke()
+                    }
                 }
             }
-            bottomBar?.invoke()
+
+            AnimatedVisibility(
+                visible = bottomBar != null
+            ) {
+                bottomBar?.invoke()
+            }
         }
     }
 }
 
 @Preview
 @Composable
-private fun TudeeScaffoldPreview() {
+ fun TudeeScaffoldPreview() {
     TudeeTheme {
         TudeeScaffold(
             content = {
-                Column(
-                    Modifier
-                        .fillMaxSize()
-                        .background(Color.Red)
-                ) { TudeeSwitch(isLightTheme = true) { }}
+                TudeeScaffold {
+                    TudeeScaffold(
+                        topBar = {
+                            BottomNavBar(
+                                selectedIndex = 1,
+                                onItemSelected = {  },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
+                    ) {
+                        Column(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.White.copy(0.41f))
+                        ) { TudeeText("Top") }
+                    }
+                }
             },
             bottomBar = {
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .background(Color.Green)
-                ) {
-                    TudeeSwitch(isLightTheme = true) { }
-                }
+                BottomNavBar(
+                    selectedIndex = 0,
+                    onItemSelected = {  },
+                    modifier = Modifier.fillMaxWidth()
+                )
             },
             topBar = {
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .background(Color.Blue)
-                ) {
-                    TudeeSwitch(isLightTheme = true) { }
-                }
+
             },
             floatingActionButton = {
-                Column(
-                    Modifier
-                        .size(50.dp)
-                        .background(Color.Yellow)
-                ) {
-                    TudeeSwitch(isLightTheme = true) { }
-                }
+
             }
         )
     }

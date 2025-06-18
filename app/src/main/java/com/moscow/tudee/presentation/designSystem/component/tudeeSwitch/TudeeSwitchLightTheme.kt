@@ -2,8 +2,6 @@ package com.moscow.tudee.presentation.designSystem.component.tudeeSwitch
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -207,18 +205,4 @@ fun TudeeSwitchLightTheme(
                 )
         )
     }
-}
-
-@Preview
-@Composable
-private fun TudeeSwitchDayPreview() {
-//    TudeeSwitchDay(
-//        onToggleState = {},
-////        moonAlpha = 0f,
-//        isDay = false,
-//        sunAlignment = Alignment.CenterStart,
-//        alpha = 1f,
-//        animateVisibilityScope = this
-//    )
-
 }
