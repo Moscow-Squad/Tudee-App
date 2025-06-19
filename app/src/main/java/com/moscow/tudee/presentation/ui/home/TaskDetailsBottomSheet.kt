@@ -92,7 +92,6 @@ fun TaskDetailsBottomSheet(
                     text = "High",
                     backgroundColor = Theme.colors.greenAccent,
                     icon = painterResource(R.drawable.ic_trade_down),
-                    contentColor = Theme.colors.onPrimary,
                 )
 
             }
