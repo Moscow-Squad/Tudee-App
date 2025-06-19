@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,13 +27,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
 fun TaskCard(
-    iconUrl: String,
+    category: Category,
     title: String,
     description: String,
     modifier: Modifier = Modifier,
@@ -52,9 +56,9 @@ fun TaskCard(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            AsyncImage(
-                model = iconUrl,
+            Image(
+                painter = if (category.isPredefined) painterResource(getPredefinedIconRes(category.title))
+                    else rememberAsyncImagePainter(category.iconUri),
                 contentDescription = stringResource(R.string.task_card_icon),
                 modifier = Modifier
                     .size(56.dp)
@@ -126,7 +130,12 @@ fun TaskCard(
 fun TaskCardWithoutDatePreview() {
     TudeeTheme {
         TaskCard(
-            iconUrl = "",
+            category = Category(
+                id = 1,
+                title = "Study",
+                iconUri = "",
+                isPredefined = true
+            ),
             title = "Review Flashcards",
             description = "Study biology flashcards for 15 minutes",
         ) {
@@ -144,7 +153,12 @@ fun TaskCardWithoutDatePreview() {
 fun TaskCardWithDatePreview() {
     TudeeTheme {
         TaskCard(
-            iconUrl = "",
+            category = Category(
+                id = 1,
+                title = "Study",
+                iconUri = "",
+                isPredefined = true
+            ),
             title = "Organize Study Desk",
             description = "Review cell structure and functions for tomorrow...",
             date = "03/12/2025",
