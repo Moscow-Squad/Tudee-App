@@ -154,7 +154,7 @@ class CategoryServicesImplTest {
         return CategoryEntity(
             id = id,
             title = title,
-            iconUrl = iconUrl,
+            iconUri = iconUrl,
             countOfTasks = countOfTasks
         )
     }
@@ -168,7 +168,7 @@ class CategoryServicesImplTest {
         return Category(
             id = id,
             title = title,
-            iconUrl = iconUrl,
+            iconUri = iconUrl,
             countOfTasks = countOfTasks
         )
     }
