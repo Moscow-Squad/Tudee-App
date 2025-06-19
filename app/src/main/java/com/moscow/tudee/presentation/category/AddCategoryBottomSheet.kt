@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.category
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,75 +31,86 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 
 @Composable
-fun AddCategoryBottomSheet() {
-    TudeeBottomSheet(onDismissRequest = {}) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp)
+fun AddCategoryBottomSheet(
+    onNewCategory: (String) -> Unit = {},
+    onDismissRequest: () -> Unit = {},
+    initialCategoryTitle: String = "",
+    initialHasImage: Boolean = false
+) {
+    var categoryTitle by remember { mutableStateOf(initialCategoryTitle) }
+    var hasImage by remember { mutableStateOf(initialHasImage) }
+
+    TudeeBottomSheet(
+        onDismissRequest = onDismissRequest,
+        contentHorizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            text = "Add new category",
+            style = textStyle.title.large,
+            color = colors.title,
+        )
+
+        TudeeTextField(
+            value = categoryTitle,
+            onValueChange = { categoryTitle = it },
+            keyboardOptions = KeyboardOptions.Default,
+            singleLine = true,
+            hint = "Category Title",
+            startIcon = painterResource(R.drawable.ic_menu_circle_outlined),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp)
+                .height(56.dp)
+        )
+
+        Text(
+            text = "Category image",
+            style = textStyle.title.medium,
+            color = colors.title,
+        )
+
+        Box(
+            modifier = Modifier
+                .background(colors.surface)
+                .padding(top = 8.dp, bottom = 36.dp)
+                .dashedBorder(1.dp, colors.stroke, 16.dp)
+                .clickable {
+                    // TODO: Upload image logic
+                },
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Add new category",
-                style = textStyle.title.large,
-                color = colors.title,
-            )
-
-            TudeeTextField(
-                value = "",
-                onValueChange = {},
-                keyboardOptions = KeyboardOptions.Default,
-                singleLine = true,
-                hint = "Category Title",
-                startIcon = painterResource(R.drawable.ic_menu_circle_outlined),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp)
-                    .height(56.dp)
-            )
-
-            Text(
-                text = "Category image",
-                style = textStyle.title.medium,
-                color = colors.title,
-            )
-
-            Box(
-                modifier = Modifier
-                    .background(colors.surface)
-                    .padding(top = 8.dp, bottom = 36.dp)
-                    .dashedBorder(1.dp, colors.stroke, 16.dp),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = Modifier.padding(32.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.padding(32.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_image_add),
-                        contentDescription = "Add Image",
-                    )
-                    Text(
-                        text = "Upload",
-                        style = textStyle.label.medium,
-                        color = colors.hint,
-                    )
-                }
+                Icon(
+                    painter = painterResource(R.drawable.ic_image_add),
+                    contentDescription = "Add Image",
+                )
+                Text(
+                    text = "Upload",
+                    style = textStyle.label.medium,
+                    color = colors.hint,
+                )
             }
-
-            PrimaryButton(
-                text = "Add",
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-
-            SecondaryButton(
-                text = "Cancel",
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp)
-            )
         }
+
+        PrimaryButton(
+            text = "Add",
+            onClick = { onNewCategory(categoryTitle) },
+            isEnabled = categoryTitle.isNotBlank() && hasImage,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+
+        SecondaryButton(
+            text = "Cancel",
+            onClick = onDismissRequest,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+        )
     }
 }
 
@@ -107,6 +119,8 @@ fun AddCategoryBottomSheet() {
 fun AddCategoryBottomSheetPreview() {
     var show by remember { mutableStateOf(true) }
     if (show) {
-        AddCategoryBottomSheet()
+        AddCategoryBottomSheet(
+            onDismissRequest = {show = false}
+        )
     }
 }
