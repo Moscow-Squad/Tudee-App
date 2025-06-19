@@ -20,7 +20,6 @@ import org.junit.jupiter.api.assertThrows
 class TasksServicesImplTest {
 
     private lateinit var taskDao: TaskDao
-    private lateinit var categoryDao: CategoryDao
     private lateinit var tasksServices: TasksServicesImpl
     private lateinit var categoryDao: CategoryDao
 
