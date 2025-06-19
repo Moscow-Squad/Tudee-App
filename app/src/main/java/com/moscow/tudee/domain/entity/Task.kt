@@ -1,9 +1,8 @@
 package com.moscow.tudee.domain.entity
 import kotlinx.datetime.LocalDateTime
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
-data class Task @OptIn(ExperimentalUuidApi::class) constructor(
+
+data class Task(
     val id: Long? = null,
     val title: String,
     val description: String,

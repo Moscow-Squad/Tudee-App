@@ -1,6 +1,7 @@
 package com.moscow.tudee.di.data
 
 import androidx.room.Room
+import com.moscow.tudee.data.local.DatabaseCallback
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.database.TudeeDatabase
@@ -16,6 +17,7 @@ import org.koin.dsl.module
 private const val TUDEE_DATABASE = "tudee_database"
 
 val dataModule = module {
+    single { listOf("quran", "shopping", "education") }
 
     single<TudeeDatabase> {
         Room.databaseBuilder(
@@ -23,20 +25,16 @@ val dataModule = module {
             TudeeDatabase::class.java,
             TUDEE_DATABASE
         )
-        .fallbackToDestructiveMigration(false)
-        .build()
+            .fallbackToDestructiveMigration(false)
+            .addCallback(DatabaseCallback(get()))
+            .build()
     }
 
-    single<CategoryDao> {
-        get<TudeeDatabase>().categoryDao()
-    }
-
-    single<TaskDao> {
-        get<TudeeDatabase>().taskDao()
-    }
+    single<CategoryDao> { get<TudeeDatabase>().categoryDao() }
+    single<TaskDao> { get<TudeeDatabase>().taskDao() }
 
     single<TasksServices> {
-        TasksServicesImpl(get())
+        TasksServicesImpl(get(), get())
     }
 
     single<CategoryServices> {
