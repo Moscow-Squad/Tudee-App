@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
@@ -84,17 +83,17 @@ fun TudeeTextField(
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
             }
-                TudeeBasicTextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    hint = hint,
-                    keyboardOptions = keyboardOptions,
-                    singleLine = singleLine,
-                    interactionSource = interactionSource,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
+            TudeeBasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                hint = hint,
+                keyboardOptions = keyboardOptions,
+                singleLine = singleLine,
+                interactionSource = interactionSource,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
 
         }
     }
@@ -128,11 +127,10 @@ private fun TudeeBasicTextField(
                     text = hint,
                     color = Theme.colors.hint,
                     maxLines = 1,
-                    style = Theme.textStyle.label.medium,
-
+                    style = Theme.textStyle.label.medium
                 )
-                innerTextField()
             }
+            innerTextField()
         }
     }
 }
@@ -143,16 +141,17 @@ private fun TudeeBasicTextField(
 private fun TextFieldPreview() {
 
     var text by remember { mutableStateOf("") }
+
     TudeeTextField(
         value = text,
-        onValueChange = { text = "it" },
+        onValueChange = { text = it },
         keyboardOptions = KeyboardOptions.Default,
         singleLine = true,
-        hint = "heelo",
+        hint = "Enter your name",
+        startIcon = painterResource(id = R.drawable.ic_user),
         modifier = Modifier
             .fillMaxWidth()
-            .height(65.dp)
-            .padding(top = 16.dp)
+            .height(56.dp)
     )
 
 }

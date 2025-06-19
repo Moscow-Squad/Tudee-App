@@ -5,10 +5,13 @@ import com.moscow.tudee.data.local.DatabaseCallback
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.database.TudeeDatabase
+import com.moscow.tudee.data.service.SplashServiceImpl
 import com.moscow.tudee.data.service.CategoryServicesImpl
 import com.moscow.tudee.data.service.TasksServicesImpl
+import com.moscow.tudee.domain.service.SplashService
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
+import org.koin.android.ext.koin.androidApplication
 import com.moscow.tudee.presentation.screen.home.HomeViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
@@ -40,6 +43,7 @@ val dataModule = module {
     single<CategoryServices> {
         CategoryServicesImpl(get())
     }
+    single<SplashService> { SplashServiceImpl(androidApplication()) }
 
     viewModel { HomeViewModel(get()) }
 }
