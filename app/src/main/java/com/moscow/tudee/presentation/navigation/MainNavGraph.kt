@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
+import com.moscow.tudee.presentation.navigation.entry.TasksScreen
 import com.moscow.tudee.presentation.ui.categories.categoriesRoute
 import com.moscow.tudee.presentation.ui.home.homeRoute
 import com.moscow.tudee.presentation.ui.tasks.tasksRoute
@@ -25,7 +26,11 @@ fun MainNavGraph(
         startDestination = HomeScreen
     )
     {
-        homeRoute()
+        homeRoute(
+            navigateToTaskScreen = {
+                navController.navigate(TasksScreen)
+            }
+        )
 
         tasksRoute()
 
