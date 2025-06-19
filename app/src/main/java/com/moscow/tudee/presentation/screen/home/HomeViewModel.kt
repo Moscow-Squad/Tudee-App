@@ -3,7 +3,6 @@ package com.moscow.tudee.presentation.screen.home
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
-import kotlinx.datetime.LocalDateTime
 
 class HomeViewModel(
     private val tasksServices: TasksServices
@@ -46,22 +45,22 @@ class HomeViewModel(
 
     }
 
-    override fun onAddTask(taskDetails: HomeState.TaskDetails) {
+    override fun addTask(taskDetails: HomeState.TaskDetails) {
         launchWithResult(
             action = {
                 updateState { it.copy(todoTasks = it.todoTasks + taskDetails)}
                 val taskDetails = Task(
-                  title = taskDetails.title,
+                    title = taskDetails.title,
                     description = taskDetails.description,
-                    priority = Task.Priority.valueOf(taskDetails.priority),
+                    priority = Task.Priority.valueOf(taskDetails.priorityName),
                     categoryId=0L,
                     status =
                         when(taskDetails.state){
-                        HomeState.TaskState.DONE -> Task.Status.DONE
-                        HomeState.TaskState.IN_PROGRESS -> Task.Status.IN_PROGRESS
-                        HomeState.TaskState.TODO -> Task.Status.TODO
-                    },
-                     date = taskDetails.date
+                            HomeState.TaskState.DONE -> Task.Status.DONE
+                            HomeState.TaskState.IN_PROGRESS -> Task.Status.IN_PROGRESS
+                            HomeState.TaskState.TODO -> Task.Status.TODO
+                        },
+                    date = taskDetails.date
 
                 )
                 tasksServices.addTask(taskDetails)
@@ -104,7 +103,7 @@ class HomeViewModel(
     }
 
     override fun onPriorityClick(taskPriority: Task.Priority) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(priority = taskPriority.toString())) }
+        updateState { it.copy(selectedTask = it.selectedTask?.copy(priorityName = taskPriority.toString())) }
     }
 
     override fun onTitleChange(newTitle: String) {
@@ -120,15 +119,15 @@ class HomeViewModel(
     }
 
     override fun onDismissEditBottomSheet() {
-        sendEvent(HomeEvent.DismissEditBottomSheet)
+      updateState { it.copy(showEditTaskBottomSheet =false) }
     }
 
     override fun onDismissAddBottomSheet() {
-        sendEvent(HomeEvent.DismissAddBottomSheet)
+        updateState { it.copy(showAddTaskBottomSheet=false) }
     }
 
     override fun onDismissDetailsBottomSheet() {
-        sendEvent(HomeEvent.DismissDetailsBottomSheet)
+        updateState { it.copy(showTaskDetailsBottomSheet =false) }
     }
 
     private fun toggleLoading() {
