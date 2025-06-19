@@ -1,6 +1,7 @@
 package com.moscow.tudee.data.service
 
 import com.google.common.truth.Truth.assertThat
+import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.entity.TaskEntity
 import com.moscow.tudee.domain.entity.Task
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.assertThrows
 class TasksServicesImplTest {
 
     private lateinit var taskDao: TaskDao
+    private lateinit var categoryDao: CategoryDao
     private lateinit var tasksServices: TasksServicesImpl
 
     private val sampleTaskEntity = TaskEntity(
@@ -34,7 +36,8 @@ class TasksServicesImplTest {
     @BeforeEach
     fun setUp() {
         taskDao = mockk()
-        tasksServices = TasksServicesImpl(taskDao)
+        categoryDao = mockk()
+        tasksServices = TasksServicesImpl(taskDao, categoryDao)
 
     }
 
