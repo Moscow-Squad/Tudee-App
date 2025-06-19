@@ -19,25 +19,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 @Composable
 fun TaskCard(
-    icon: Painter,
+    iconUrl: String,
     title: String,
     description: String,
-    date: String? = null,
-    iconTint: Color = Theme.colors.purpleAccent,
     modifier: Modifier = Modifier,
+    date: String? = null,
     priorityChip: @Composable () -> Unit
 ) {
     Column(
@@ -54,10 +53,9 @@ fun TaskCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Icon(
-                painter = icon,
+            AsyncImage(
+                model = iconUrl,
                 contentDescription = stringResource(R.string.task_card_icon),
-                tint = iconTint,
                 modifier = Modifier
                     .size(56.dp)
                     .padding(12.dp)
@@ -128,10 +126,9 @@ fun TaskCard(
 fun TaskCardWithoutDatePreview() {
     TudeeTheme {
         TaskCard(
-            icon = painterResource(id = R.drawable.ic_quran),
+            iconUrl = "",
             title = "Review Flashcards",
             description = "Study biology flashcards for 15 minutes",
-            iconTint = Theme.colors.secondary
         ) {
             PriorityChip(
                 text = "High",
@@ -147,11 +144,10 @@ fun TaskCardWithoutDatePreview() {
 fun TaskCardWithDatePreview() {
     TudeeTheme {
         TaskCard(
-            icon = painterResource(id = R.drawable.ic_briefcase),
+            iconUrl = "",
             title = "Organize Study Desk",
             description = "Review cell structure and functions for tomorrow...",
             date = "03/12/2025",
-            iconTint = Theme.colors.pinkAccent
         ) {
             PriorityChip(
                 text = "Medium",
