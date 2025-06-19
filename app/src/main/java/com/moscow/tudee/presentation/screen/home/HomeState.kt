@@ -14,6 +14,8 @@ data class HomeState(
     val todoTasks: List<TaskDetails> = emptyList(),
     val selectedTask: TaskDetails? = null,
     val categories: List<EditTaskCategory> = emptyList(),
+    val showAddTaskBottomSheet: Boolean = false,
+    val showTaskDetailsBottomSheet:Boolean = false
 ) {
     enum class SliderState {
         STAY_WORKING,
@@ -32,19 +34,20 @@ data class HomeState(
 
     data class TaskDetails(
         val id: Long? = null,
-        val taskIcon: Int,
+        val taskIcon: Int,//String,
         val title: String,
         val description: String,
-        val taskIconTint: Color,
-        val priority: String,
         val priorityName: String,
         val priorityIcon: Int,
         val state: TaskState,
         val date: LocalDateTime=java.time.LocalDateTime.now().toKotlinLocalDateTime()
 
+        val state: Task.Status
     )
 
     enum class TaskState(val labelResInt: Int) {
-        DONE(R.string.done), IN_PROGRESS(R.string.in_progress), TODO(R.string.to_do)
+        DONE(R.string.done),
+        IN_PROGRESS(R.string.in_progress),
+        TODO(R.string.to_do)
     }
 }

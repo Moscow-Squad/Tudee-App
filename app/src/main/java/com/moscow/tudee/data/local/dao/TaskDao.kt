@@ -53,4 +53,12 @@ interface TaskDao {
        AND categoryId = :categoryId
   """)
     suspend fun getTasksByDateAndCategory(date: String, categoryId: Long): List<TaskEntity>
+
+    @Query("""
+    SELECT * 
+      FROM tasks_table 
+     WHERE categoryId = :categoryId 
+       AND status     = :status
+  """)
+    suspend fun getTasksByCategoryAndStatus(categoryId: Long, status: String): List<TaskEntity>
 }

@@ -3,9 +3,10 @@ package com.moscow.tudee.presentation.screen.home
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import kotlinx.datetime.LocalDateTime
 
 class HomeViewModel(
-    private val tasksServices: TasksServices,
+    private val tasksServices: TasksServices
 ) : BaseViewModel<HomeState, HomeEvent>(HomeState()), HomeInteractionListener {
 
     init {
@@ -37,12 +38,12 @@ class HomeViewModel(
     }
 
     override fun onFloatingActionButtonClick() {
-        sendEvent(HomeEvent.ShowAddTaskBottomSheet)
+        updateState { it.copy(showAddTaskBottomSheet = true) }
     }
 
     override fun onTaskClick(taskDetails: HomeState.TaskDetails) {
-        updateState { it.copy(selectedTask = taskDetails) }
-        sendEvent(HomeEvent.ShowTaskDetailsBottomSheet)
+        updateState { it.copy(showTaskDetailsBottomSheet = true ) }
+
     }
 
     override fun onAddTask(taskDetails: HomeState.TaskDetails) {

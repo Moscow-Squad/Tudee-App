@@ -3,26 +3,20 @@ package com.moscow.tudee.presentation.category
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.R
+import com.moscow.tudee.presentation.category.tasks.TasksUiState
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
+import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 
-data class TaskInfo(
-    val icon: Int,
-    val title: String,
-    val description: String,
-    val date: String,
-    val priority: String
-)
 
 @Composable
 fun CategoryScreen(
-    tasks: List<TaskInfo>
+    tasks: List<TasksUiState.TaskUi>
 ) {
     // there is topBar has the Category name  of these tasks "Coding, "Education", ... ??
     // Where are Tabs (In progress, To Do, Done)
@@ -30,14 +24,14 @@ fun CategoryScreen(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(tasks.size) { currentTask ->
+        items(tasks) { currentTask ->
             TaskCard(
-                icon = painterResource(tasks[currentTask].icon),
-                title = tasks[currentTask].title,
-                description = tasks[currentTask].description,
-                date = tasks[currentTask].date,
+                icon = painterResource(currentTask.icon),
+                title = currentTask.title,
+                description = currentTask.description,
+                date = currentTask.date.formattedDate,
             ) {
-                Priority(priority = tasks[currentTask].priority)
+                Priority(priority = currentTask.priority)
             }
         }
     }
@@ -72,80 +66,80 @@ fun Priority(priority: String) {
     }
 }
 
-@Preview(apiLevel = 34)
-@Composable
-fun CategoryScreenPreview() {
-    val tasks: List<TaskInfo> = listOf(
-        TaskInfo(
-            icon = R.drawable.ic_quran,
-            title = "Review Flashcards",
-            description = "Study biology flashcards for 15 minutes",
-            date = "03/12/2025",
-            priority = "High"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_briefcase,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow...",
-            date = "03/12/2025",
-            priority = "Medium"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_quran,
-            title = "Review Flashcards",
-            description = "Study biology flashcards for 15 minutes",
-            date = "03/12/2025",
-            priority = "Low"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_briefcase,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow...",
-            date = "03/12/2025",
-            priority = "High"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_quran,
-            title = "Review Flashcards",
-            description = "Study biology flashcards for 15 minutes",
-            date = "03/12/2025",
-            priority = "High"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_briefcase,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow...",
-            date = "03/12/2025",
-            priority = "Medium"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_quran,
-            title = "Review Flashcards",
-            description = "Study biology flashcards for 15 minutes",
-            date = "03/12/2025",
-            priority = "Medium"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_briefcase,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow...",
-            date = "03/12/2025",
-            priority = "Medium"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_quran,
-            title = "Review Flashcards",
-            description = "Study biology flashcards for 15 minutes",
-            date = "03/12/2025",
-            priority = "Low"
-        ),
-        TaskInfo(
-            icon = R.drawable.ic_briefcase,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow...",
-            date = "03/12/2025",
-            priority = "Medium"
-        ),
-    )
-    CategoryScreen(tasks = tasks)
-}
+//@Preview(apiLevel = 34)
+//@Composable
+//fun CategoryScreenPreview() {
+//    val tasks: List<TasksUiState.TaskUi> = listOf(
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_quran,
+//            title = "Review Flashcards",
+//            description = "Study biology flashcards for 15 minutes",
+//            date = "03/12/2025",
+//            priority = "High"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_briefcase,
+//            title = "Organize Study Desk",
+//            description = "Review cell structure and functions for tomorrow...",
+//            date = "03/12/2025",
+//            priority = "Medium"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_quran,
+//            title = "Review Flashcards",
+//            description = "Study biology flashcards for 15 minutes",
+//            date = "03/12/2025",
+//            priority = "Low"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_briefcase,
+//            title = "Organize Study Desk",
+//            description = "Review cell structure and functions for tomorrow...",
+//            date = "03/12/2025",
+//            priority = "High"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_quran,
+//            title = "Review Flashcards",
+//            description = "Study biology flashcards for 15 minutes",
+//            date = "03/12/2025",
+//            priority = "High"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_briefcase,
+//            title = "Organize Study Desk",
+//            description = "Review cell structure and functions for tomorrow...",
+//            date = "03/12/2025",
+//            priority = "Medium"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_quran,
+//            title = "Review Flashcards",
+//            description = "Study biology flashcards for 15 minutes",
+//            date = "03/12/2025",
+//            priority = "Medium"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_briefcase,
+//            title = "Organize Study Desk",
+//            description = "Review cell structure and functions for tomorrow...",
+//            date = "03/12/2025",
+//            priority = "Medium"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_quran,
+//            title = "Review Flashcards",
+//            description = "Study biology flashcards for 15 minutes",
+//            date = "03/12/2025",
+//            priority = "Low"
+//        ),
+//        TasksUiState.TaskUi(
+//            icon = R.drawable.ic_briefcase,
+//            title = "Organize Study Desk",
+//            description = "Review cell structure and functions for tomorrow...",
+//            date = "03/12/2025",
+//            priority = "Medium"
+//        ),
+//    )
+//    CategoryScreen(tasks = tasks)
+//}

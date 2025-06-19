@@ -14,18 +14,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.moscow.tudee.R
+import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.home_components.OverviewSection
 import com.moscow.tudee.presentation.component.home_components.TaskList
 import com.moscow.tudee.presentation.component.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
-import com.moscow.tudee.presentation.screen.home.HomeState.TaskDetails
-import com.moscow.tudee.presentation.screen.home.HomeState.TaskState
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun HomeScreen(
@@ -35,9 +33,6 @@ fun HomeScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     ObserveAsEvent(viewModel.uiEvent) { event ->
         when (event) {
-            HomeEvent.ShowAddTaskBottomSheet -> TODO()
-            HomeEvent.ShowEditTaskBottomSheet -> TODO()
-            HomeEvent.ShowTaskDetailsBottomSheet -> TODO()
             is HomeEvent.ViewAll -> {
                 navController.navigate(
                     route = TasksScreen
@@ -57,6 +52,8 @@ fun HomeContent(
     interactionListener: HomeInteractionListener
 ) {
     val tasks = uiState.inProgressTasks + uiState.todoTasks + uiState.doneTasks
+
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -78,10 +75,41 @@ fun HomeContent(
                 OverviewSection(uiState.update, tasks)
             }
         }
-        tasks.groupBy { it.state.labelResInt }.entries.forEach {
-            item {
-                TaskListHeader(it.key, it.value.size)
-                TaskList(it.value, {})
+        item{
+            if (tasks.isNotEmpty()) {
+                Task.Status.entries.forEach { state ->
+                    when (state) {
+                        Task.Status.DONE -> {
+                            TaskListHeader(state, uiState.doneTasks.size, {
+                                 interactionListener.onViewAllClick(state)
+                            })
+                            TaskList(uiState.doneTasks, { taskDetails ->
+                                interactionListener.onTaskClick(taskDetails)
+                            })
+                        }
+
+                        Task.Status.IN_PROGRESS -> {
+                            TaskListHeader(state, uiState.inProgressTasks.size, {
+                                 interactionListener.onViewAllClick(state)
+                            })
+                            TaskList(uiState.inProgressTasks, { taskDetails ->
+                                interactionListener.onTaskClick(taskDetails)
+                            })
+                        }
+
+                        Task.Status.TODO -> {
+                            TaskListHeader(state, uiState.todoTasks.size, {
+                                  interactionListener.onViewAllClick(state)
+                            })
+                            TaskList(uiState.todoTasks, { taskDetails ->
+                                interactionListener.onTaskClick(taskDetails)
+                            })
+
+                        }
+                    }
+                }
+            }else{
+                // handle empty State
             }
         }
 
@@ -90,118 +118,12 @@ fun HomeContent(
 }
 
 
-
-
 @Preview
 @Composable
-private fun ShowSmallComponent() {
-    val tasks = listOf(
-        TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Fix Login Bug",
-            description = "Resolve issue with login screen",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "High",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-            state = TaskState.DONE
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Update UI",
-            description = "Redesign the home screen UI",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "Medium",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
+private fun PreviewScreen() {
+    val viewModel: HomeViewModel = koinViewModel()
 
-            state = TaskState.IN_PROGRESS
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Write Unit Tests",
-            description = "Add test coverage to the auth module",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "Low",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-            state = TaskState.TODO
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Fix Login Bug",
-            description = "Resolve issue with login screen",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "High",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-            state = TaskState.DONE
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Update UI",
-            description = "Redesign the home screen UI",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "Medium",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-
-            state = TaskState.IN_PROGRESS
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Write Unit Tests",
-            description = "Add test coverage to the auth module",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "Low",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-            state = TaskState.TODO
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Fix Login Bug",
-            description = "Resolve issue with login screen",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "High",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-            state = TaskState.DONE
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Update UI",
-            description = "Redesign the home screen UI",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "Medium",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-
-            state = TaskState.IN_PROGRESS
-        ), TaskDetails(
-            taskIcon = R.drawable.ic_briefcase,
-            title = "Write Unit Tests",
-            description = "Add test coverage to the auth module",
-            taskIconTint = Theme.colors.pinkAccent,
-            priority = "Low",
-            priorityBackgroundColor = Theme.colors.yellowAccent,
-            priorityIcon = R.drawable.ic_alert,
-            state = TaskState.TODO
-        )
+    HomeScreen(viewModel = viewModel,
+        rememberNavController()
     )
-    TudeeTheme {
-        HomeContent(
-            HomeState(),
-            object : HomeInteractionListener {
-                override fun onFloatingActionButtonClick() {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onTaskClick(taskDetails: TaskDetails) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onAddTask(taskDetails: TaskDetails) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onViewAllClick(taskStatus: Task.Status) {
-                    TODO("Not yet implemented")
-                }
-            }
-        )
-    }
 }
