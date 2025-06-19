@@ -25,7 +25,7 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.TaskDetails
+import com.moscow.tudee.presentation.screen.home.HomeState.TaskDetails
 
 @Composable
 fun TaskListHeader(taskState: Int, taskCount: Int, modifier: Modifier = Modifier) {
@@ -70,11 +70,11 @@ fun TaskList(
                 description = it.description,
                 iconTint = it.taskIconTint
             ) {
-                PriorityChip(
-                    text = it.priority,
-                    backgroundColor = it.priorityBackgroundColor,
-                    icon = painterResource(id = it.priorityIcon)
-                )
+//                PriorityChip(
+//                    text = it.priority,
+//                    //backgroundColor = it.priorityBackgroundColor,
+//                    icon = painterResource(id = it.priorityIcon)
+//                )
             }
         }
 
