@@ -58,31 +58,25 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.ui)
-    implementation(libs.foundation)
-    implementation(libs.androidx.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-    // Firebase
-    implementation(platform(libs.firebase.bom))
-    //lottie
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.bundles.koin)
+    implementation(libs.coil.compose)
     implementation(libs.lottie.compose)
-
     implementation(libs.androidx.room.runtime)
-
-    ksp(libs.androidx.room.compiler.v250)
-
-    annotationProcessor(libs.androidx.room.compiler)
-
     implementation(libs.androidx.room.ktx)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.jupiter.junit.jupiter)
+    ksp(libs.androidx.room.compiler)
 
+    // Test dependencies
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.room.testing)
-
+    
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.bundles.koin)
@@ -90,14 +84,23 @@ dependencies {
     //datastore
     implementation(libs.androidx.datastore.preferences)
 
-    /** Navigation */
-    implementation(libs.navigation.compose)
+    // Android test dependencies
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 
-    // For image loading
+    // Debug dependencies
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    //coil
     implementation(libs.coil.compose)
+    //navigation
+    implementation(libs.navigation.compose)
+}
 
-    // For image picker (if not already included)
-    implementation(libs.androidx.activity.compose.v180)
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 /**
