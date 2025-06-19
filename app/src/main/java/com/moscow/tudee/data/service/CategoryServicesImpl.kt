@@ -3,7 +3,9 @@ package com.moscow.tudee.data.service
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.mapper.toCategory
 import com.moscow.tudee.data.local.mapper.toCategoryEntity
+import com.moscow.tudee.data.local.mapper.toTask
 import com.moscow.tudee.domain.entity.Category
+import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
 
 class CategoryServicesImpl(
@@ -24,5 +26,9 @@ class CategoryServicesImpl(
 
     override suspend fun deleteCategory(categoryId: Long) {
         categoryDao.deleteCategory(categoryId)
+    }
+
+    override suspend fun getCategoryById(categoryId: Long): Category {
+        return categoryDao.getCategoryById(categoryId)?.toCategory() ?: throw Exception("task category found")
     }
 }

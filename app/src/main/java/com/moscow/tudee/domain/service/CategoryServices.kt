@@ -11,4 +11,6 @@ interface CategoryServices {
     suspend fun updateCategory(category: Category)
 
     suspend fun deleteCategory(categoryId: Long)
+
+    suspend fun getCategoryById(categoryId: Long): Category
 }
