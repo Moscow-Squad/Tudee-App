@@ -3,10 +3,9 @@ package com.moscow.tudee.presentation.screen.home
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
-import kotlinx.datetime.LocalDateTime
 
 class HomeViewModel(
-    private val tasksServices: TasksServices
+    private val tasksServices: TasksServices,
 ) : BaseViewModel<HomeState, HomeEvent>(HomeState()), HomeInteractionListener {
 
     init {
@@ -49,11 +48,24 @@ class HomeViewModel(
     override fun onAddTask(taskDetails: HomeState.TaskDetails) {
         launchWithResult(
             action = {
-                val task = tasksServices.getTaskById(taskDetails.id ?: 0)
+                updateState { it.copy(todoTasks = it.todoTasks + taskDetails)}
+                val taskDetails = Task(
+                  title = taskDetails.title,
+                    description = taskDetails.description,
+                    priority = Task.Priority.valueOf(taskDetails.priority),
+                    categoryId=0L,
+                    status =
+                        when(taskDetails.state){
+                        HomeState.TaskState.DONE -> Task.Status.DONE
+                        HomeState.TaskState.IN_PROGRESS -> Task.Status.IN_PROGRESS
+                        HomeState.TaskState.TODO -> Task.Status.TODO
+                    },
+                     date = taskDetails.date
 
-                tasksServices.addTask(task)
-             },
-            onSuccess = { updateState { it.copy(todoTasks = it.todoTasks + taskDetails) } },
+                )
+                tasksServices.addTask(taskDetails)
+            },
+            onSuccess = { sendEvent(HomeEvent.OnDoneClick)},
             onError = { handleHomeError(it) },
             onStart = { toggleLoading() },
             onFinally = { toggleLoading() }
@@ -65,43 +77,57 @@ class HomeViewModel(
     }
 
     override fun onEditTaskClick(taskDetails: HomeState.TaskDetails) {
-        TODO("Not yet implemented")
+        sendEvent(HomeEvent.ShowEditTaskBottomSheet)
     }
 
     override fun onMoveToDoneClick(taskDetails: HomeState.TaskDetails) {
-        TODO("Not yet implemented")
+        val updated = taskDetails.copy(state = HomeState.TaskState.DONE)
+        updateState {
+            it.copy(
+                inProgressTasks = it.inProgressTasks - taskDetails,
+                doneTasks = it.doneTasks + updated
+            )
+        }
+        sendEvent(HomeEvent.OnDoneClick)
     }
 
     override fun onSaveTaskClick(taskDetails: HomeState.TaskDetails) {
-        TODO("Not yet implemented")
+        val updated = taskDetails.copy(state = HomeState.TaskState.DONE)
+        updateState {
+            it.copy(
+                inProgressTasks = it.inProgressTasks - taskDetails,
+                doneTasks = it.doneTasks + updated
+            )
+        }
+        sendEvent(HomeEvent.OnDoneClick)
     }
 
     override fun onPriorityClick(taskPriority: Task.Priority) {
-        TODO("Not yet implemented")
+        updateState { it.copy(selectedTask = it.selectedTask?.copy(priority = taskPriority.toString())) }
     }
 
     override fun onTitleChange(newTitle: String) {
-        TODO("Not yet implemented")
+        updateState { it.copy(selectedTask = it.selectedTask?.copy(title = newTitle)) }
     }
 
     override fun onDescriptionChange(newDescription: String) {
-        TODO("Not yet implemented")
+        updateState { it.copy(selectedTask = it.selectedTask?.copy(description = newDescription)) }
     }
 
-    override fun onDateChange(newDate: LocalDateTime) {
-        TODO("Not yet implemented")
+    override fun onDateChange(newDate: kotlinx.datetime.LocalDateTime) {
+        updateState { it.copy(date = newDate.toString()) }
     }
 
     override fun onDismissEditBottomSheet() {
-        TODO("Not yet implemented")
+        sendEvent(HomeEvent.DismissEditBottomSheet)
     }
 
     override fun onDismissAddBottomSheet() {
-        TODO("Not yet implemented")
+        sendEvent(HomeEvent.DismissAddBottomSheet)
     }
 
     override fun onDismissDetailsBottomSheet() {
-        TODO("Not yet implemented")
+        sendEvent(HomeEvent.DismissDetailsBottomSheet)
     }
 
     private fun toggleLoading() {
