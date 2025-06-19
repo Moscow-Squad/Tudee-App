@@ -13,14 +13,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.home_components.OverviewSection
 import com.moscow.tudee.presentation.component.home_components.TaskList
 import com.moscow.tudee.presentation.component.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.navigation.entry.TasksScreen
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import org.koin.androidx.compose.koinViewModel
 
@@ -49,9 +46,6 @@ fun HomeContent(
     uiState: HomeState,
     interactionListener: HomeInteractionListener
 ) {
-    val tasks = uiState.inProgressTasks + uiState.todoTasks + uiState.doneTasks
-
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -70,44 +64,49 @@ fun HomeContent(
                         .zIndex(0f)
 
                 )
-                OverviewSection(uiState.update, tasks)
+                OverviewSection(
+                    sliderState = uiState.update,
+                    todoTasks = uiState.todoTasks,
+                    inProgressTasks = uiState.inProgressTasks,
+                    doneTasks = uiState.doneTasks
+                )
             }
         }
-        item{
-            if (tasks.isNotEmpty()) {
+        item {
+            if (uiState.todoTasks.isNotEmpty() || uiState.inProgressTasks.isNotEmpty() || uiState.doneTasks.isNotEmpty()) {
                 Task.Status.entries.forEach { state ->
                     when (state) {
                         Task.Status.DONE -> {
                             TaskListHeader(state, uiState.doneTasks.size, {
-                                 interactionListener.onViewAllClick(state)
+                                interactionListener.onViewAllClick(state)
                             })
-                            TaskList(uiState.doneTasks, { taskDetails ->
-                                interactionListener.onTaskClick(taskDetails)
+                            TaskList(uiState.doneTasks, { task ->
+                                interactionListener.onTaskClick(task)
                             })
                         }
 
                         Task.Status.IN_PROGRESS -> {
                             TaskListHeader(state, uiState.inProgressTasks.size, {
-                                 interactionListener.onViewAllClick(state)
+                                interactionListener.onViewAllClick(state)
                             })
-                            TaskList(uiState.inProgressTasks, { taskDetails ->
-                                interactionListener.onTaskClick(taskDetails)
+                            TaskList(uiState.inProgressTasks, { task ->
+                                interactionListener.onTaskClick(task)
                             })
                         }
 
                         Task.Status.TODO -> {
                             TaskListHeader(state, uiState.todoTasks.size, {
-                                  interactionListener.onViewAllClick(state)
+                                interactionListener.onViewAllClick(state)
                             })
-                            TaskList(uiState.todoTasks, { taskDetails ->
-                                interactionListener.onTaskClick(taskDetails)
+                            TaskList(uiState.todoTasks, { task ->
+                                interactionListener.onTaskClick(task)
                             })
 
                         }
                     }
                 }
-            }else{
-                // handle empty State
+            } else {
+                // TODO: handle empty State
             }
         }
 
