@@ -3,15 +3,10 @@ package com.moscow.tudee.data.service
 import com.google.common.truth.Truth.assertThat
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.entity.TaskEntity
-import com.moscow.tudee.data.local.mapper.toTask
-import com.moscow.tudee.data.local.mapper.toTaskEntity
 import com.moscow.tudee.domain.entity.Task
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
