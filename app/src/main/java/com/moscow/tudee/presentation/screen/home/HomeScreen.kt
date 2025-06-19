@@ -38,31 +38,10 @@ fun HomeScreen(
             }
         }
     }
-    HomeContent(
-        uiState.value,
-        viewModel
-    )
-}
-
-
-@Composable
-fun HomeContent(
-    uiState: HomeState,
-    interactionListener: HomeInteractionListener,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .size(100.dp)
-            .background(Color.Yellow)
-            .clickable { interactionListener.onFloatingActionButtonClick() },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "Show Bottom Sheet",
-            color = Color.Black
-        )
-    }
+//    HomeContent(
+//        uiState.value,
+//        viewModel
+//    )
 }
 
 //@Composable

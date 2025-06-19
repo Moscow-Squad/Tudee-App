@@ -17,6 +17,21 @@ class HomeViewModel(
             action = { tasksServices.getTasksByStatus(Task.Status.TODO) },
             onSuccess = { response -> updateState { it.copy(todoTasks = response) } },
             onError = { handleHomeError(it) },
+            onStart = { toggleLoading() },
+            onFinally = { toggleLoading() }
+        )
+        launchWithResult(
+            action = { tasksServices.getTasksByStatus(Task.Status.IN_PROGRESS) },
+            onSuccess = { response -> updateState { it.copy(inProgressTasks = response) } },
+            onError = { handleHomeError(it) },
+            onStart = { toggleLoading() },
+            onFinally = { toggleLoading() }
+        )
+        launchWithResult(
+            action = { tasksServices.getTasksByStatus(Task.Status.DONE) },
+            onSuccess = { response -> updateState { it.copy(doneTasks = response) } },
+            onError = { handleHomeError(it) },
+            onStart = { toggleLoading() },
             onFinally = { toggleLoading() }
         )
     }
