@@ -22,6 +22,7 @@ class TasksServicesImplTest {
     private lateinit var taskDao: TaskDao
     private lateinit var categoryDao: CategoryDao
     private lateinit var tasksServices: TasksServicesImpl
+    private lateinit var categoryDao: CategoryDao
 
     private val sampleTaskEntity = TaskEntity(
         id = 1L,
@@ -35,10 +36,9 @@ class TasksServicesImplTest {
 
     @BeforeEach
     fun setUp() {
-        taskDao = mockk()
-        categoryDao = mockk()
-        tasksServices = TasksServicesImpl(taskDao, categoryDao)
-
+        taskDao = mockk(relaxed = true)
+        categoryDao = mockk(relaxed = true)
+        tasksServices = TasksServicesImpl(taskDao,categoryDao)
     }
 
     @Test
