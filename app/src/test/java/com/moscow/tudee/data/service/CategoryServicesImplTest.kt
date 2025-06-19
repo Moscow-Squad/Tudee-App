@@ -15,7 +15,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import kotlin.String
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CategoryServicesImplTest {
@@ -99,7 +98,52 @@ class CategoryServicesImplTest {
         }
     }
 
+    @Test
+    fun `updateCategory should call DAO`() = runTest {
+        // Given
+        val category = createCategoryDomainEntity(id = null, title = "Updated")
+        val expectedEntity = category.toCategoryEntity()
+        coEvery { categoryDao.updateCategory(any()) } just Runs
 
+        // When
+        categoryServices.updateCategory(category)
+
+        // Then
+        coVerify(exactly = 1) {
+            categoryDao.updateCategory(match {
+                it.id == expectedEntity.id &&
+                        it.title == expectedEntity.title
+            })
+        }
+    }
+
+    @Test
+    fun `updateCategory should handle null id by using zero`() = runTest {
+        // Given
+        val category = createCategoryDomainEntity(id = null, title = "No ID")
+        coEvery { categoryDao.updateCategory(any()) } just Runs
+
+        // When
+        categoryServices.updateCategory(category)
+
+        // Then
+        coVerify {
+            categoryDao.updateCategory(match { it.id == 0L })
+        }
+    }
+
+    @Test
+    fun `deleteCategory should call DAO with correct ID`() = runTest {
+        // Given
+        val categoryId = 99L
+        coEvery { categoryDao.deleteCategory(any()) } just Runs
+
+        // When
+        categoryServices.deleteCategory(categoryId)
+
+        // Then
+        coVerify(exactly = 1) { categoryDao.deleteCategory(categoryId) }
+    }
 
     private fun createCategoryRoomEntity(
         id: Long = 0L,
