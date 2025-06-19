@@ -11,6 +11,7 @@ fun CategoryEntity.toCategory(): Category {
         id = id,
         title = title,
         iconUrl = iconUrl,
+        countOfTasks = countOfTasks
     )
 }
 
@@ -19,6 +20,7 @@ fun Category.toCategoryEntity(): CategoryEntity {
         id = id ?: 0L,
         title = title,
         iconUrl = iconUrl,
+        countOfTasks = countOfTasks
     )
 }
 
