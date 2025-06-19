@@ -9,17 +9,17 @@ interface HomeInteractionListener {
 
     //fun onSwitchColorTheme()
 
-    fun onTaskClick(taskDetails: HomeState.TaskDetails)
+    fun onTaskClick(task: Task)
 
-    fun addTask(taskDetails: HomeState.TaskDetails)
+    fun onAddTask(task: Task)
 
     fun onViewAllClick(taskStatus: Task.Status)
 
-    fun onEditTaskClick(taskDetails: HomeState.TaskDetails)
+    fun onEditTaskClick(task: Task)
 
-    fun onMoveToDoneClick(taskDetails: HomeState.TaskDetails)
+    fun onMoveToDoneClick(task: Task)
 
-    fun onSaveTaskClick(taskDetails: HomeState.TaskDetails)
+    fun onSaveTaskClick(task: Task)
 
     fun onPriorityClick(taskPriority: Task.Priority)
 
@@ -28,6 +28,12 @@ interface HomeInteractionListener {
     fun onDescriptionChange(newDescription: String)
 
     fun onDateChange(newDate: LocalDateTime)
+
+    fun onShowEditBottomSheet()
+
+    fun onShowAddBottomSheet()
+
+    fun onShowDetailsBottomSheet()
 
     fun onDismissEditBottomSheet()
 
