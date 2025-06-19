@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,7 +63,9 @@ fun TaskBottomSheet(
         priority: String,
         category: String
     ) -> Unit,
-    onShowSnackBar: (String) -> Unit = {}
+    onShowSnackBar: (String) -> Unit = {},
+    addSuccessMessage: String = stringResource(R.string.add_task_successfully),
+    editSuccessMessage: String = stringResource(R.string.edited_task_successfully)
 ) {
     if (isVisible) {
         TudeeBottomSheet(
@@ -101,7 +104,10 @@ fun TaskBottomSheet(
                         .verticalScroll(rememberScrollState())
                 ) {
                     TudeeText(
-                        text = if (isEditMode) "Edit task" else "Add new task",
+                        text = if (isEditMode) stringResource(R.string.edit_task)
+                        else stringResource(
+                            R.string.add_new_task
+                        ),
                         color = Theme.colors.title,
                         style = Theme.textStyle.title.large,
                         fontSize = 20.sp
@@ -112,7 +118,7 @@ fun TaskBottomSheet(
                         onValueChange = { taskTitle = it },
                         keyboardOptions = KeyboardOptions.Default,
                         singleLine = true,
-                        hint = "Task title",
+                        hint = stringResource(R.string.task_title),
                         startIcon = painterResource(id = R.drawable.ic_document_outlined),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -125,7 +131,7 @@ fun TaskBottomSheet(
                         onValueChange = { taskDescription = it },
                         keyboardOptions = KeyboardOptions.Default,
                         singleLine = true,
-                        hint = "Description",
+                        hint = stringResource(R.string.description),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
@@ -146,7 +152,7 @@ fun TaskBottomSheet(
                     )
 
                     TudeeText(
-                        "Priority",
+                        stringResource(R.string.priority),
                         color = Theme.colors.title,
                         style = Theme.textStyle.title.medium,
                         fontSize = 18.sp,
@@ -155,7 +161,7 @@ fun TaskBottomSheet(
 
                     Row(modifier = Modifier.padding(top = 8.dp)) {
                         PriorityChip(
-                            text = "High",
+                            text = stringResource(R.string.high),
                             selected = selectedPriority == "High",
                             backgroundColor = Theme.colors.pinkAccent,
                             icon = painterResource(id = R.drawable.ic_flag),
@@ -164,7 +170,7 @@ fun TaskBottomSheet(
                             }
                         )
                         PriorityChip(
-                            text = "Medium",
+                            text = stringResource(R.string.medium),
                             selected = selectedPriority == "Medium",
                             backgroundColor = Theme.colors.yellowAccent,
                             icon = painterResource(id = R.drawable.ic_alert),
@@ -176,7 +182,7 @@ fun TaskBottomSheet(
                                 }
                         )
                         PriorityChip(
-                            text = "Low",
+                            text = stringResource(R.string.low),
                             selected = selectedPriority == "Low",
                             backgroundColor = Theme.colors.greenAccent,
                             icon = painterResource(id = R.drawable.ic_trade_down),
@@ -189,7 +195,7 @@ fun TaskBottomSheet(
                     }
 
                     TudeeText(
-                        "Category",
+                        stringResource(R.string.category),
                         color = Theme.colors.title,
                         style = Theme.textStyle.title.medium,
                         fontSize = 18.sp,
@@ -223,11 +229,12 @@ fun TaskBottomSheet(
 
                 Column(
                     modifier = Modifier
-                        .background(Color.White)
+                        .background(Theme.colors.surfaceHigh)
                         .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 ) {
                     PrimaryButton(
-                        text = if (isEditMode) "Save" else "Add Task",
+                        text = if (isEditMode) stringResource(R.string.save)
+                        else stringResource(R.string.add_task),
                         isEnabled = isFormValid,
                         backgroundColor = if (isFormValid) Theme.colors.primaryGradient
                         else {
@@ -253,9 +260,9 @@ fun TaskBottomSheet(
                             )
 
                             val message = if (isEditMode) {
-                                "Edited task successfully"
+                                editSuccessMessage
                             } else {
-                                "Add task successfully"
+                                addSuccessMessage
                             }
                             onShowSnackBar(message)
                         },
@@ -263,7 +270,7 @@ fun TaskBottomSheet(
                     )
 
                     CustomTextButton(
-                        text = "Cancel",
+                        text = stringResource(R.string.cancel),
                         onClick = { onDismiss() },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -287,7 +294,9 @@ fun AddTaskBottomSheet(
         isEditMode = false,
         onDismiss = onDismiss,
         onSaveTask = onAddTask,
-        onShowSnackBar = onShowSnackBar
+        onShowSnackBar = onShowSnackBar,
+        addSuccessMessage = stringResource(R.string.add_task_successfully),
+        editSuccessMessage = stringResource(R.string.edited_task_successfully)
     )
 }
 
@@ -307,7 +316,9 @@ fun EditTaskBottomSheet(
         initialTaskData = taskData,
         onDismiss = onDismiss,
         onSaveTask = onSaveTask,
-        onShowSnackBar = onShowSnackBar
+        onShowSnackBar = onShowSnackBar,
+        addSuccessMessage = stringResource(R.string.add_task_successfully),
+        editSuccessMessage = stringResource(R.string.edited_task_successfully)
     )
 }
 
@@ -362,7 +373,6 @@ private fun AddEditTaskPreview() {
             onDismiss = { showEditTaskSheet = false },
             onSaveTask = { title, description, date, priority, category ->
                 showEditTaskSheet = false
-                // Handle save task logic
             },
             onShowSnackBar = { message ->
                 snackBarMessage = message
