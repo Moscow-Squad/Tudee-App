@@ -1,6 +1,7 @@
 package com.moscow.tudee.data.service
 
 import com.google.common.truth.Truth.assertThat
+import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.entity.TaskEntity
 import com.moscow.tudee.domain.entity.Task
@@ -20,6 +21,7 @@ class TasksServicesImplTest {
 
     private lateinit var taskDao: TaskDao
     private lateinit var tasksServices: TasksServicesImpl
+    private lateinit var categoryDao: CategoryDao
 
     private val sampleTaskEntity = TaskEntity(
         id = 1L,
@@ -33,8 +35,9 @@ class TasksServicesImplTest {
 
     @BeforeEach
     fun setUp() {
-        taskDao = mockk()
-        tasksServices = TasksServicesImpl(taskDao)
+        taskDao = mockk(relaxed = true)
+        categoryDao = mockk(relaxed = true)
+        tasksServices = TasksServicesImpl(taskDao,categoryDao)
 
     }
 
