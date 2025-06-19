@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.home.TaskState
+import com.moscow.tudee.presentation.screen.home.TaskState
 
 @Composable
 fun OverviewCard(taskState: TaskState, count: Int, modifier: Modifier = Modifier) {

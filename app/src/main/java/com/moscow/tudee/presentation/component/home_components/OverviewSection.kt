@@ -15,10 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.TudeeText
-import com.moscow.tudee.presentation.designSystem.component.slider.SliderState
 import com.moscow.tudee.presentation.designSystem.component.slider.TudeeSlider
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.home.TaskDetails
+import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
+import com.moscow.tudee.presentation.screen.home.TaskDetails
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
