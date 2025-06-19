@@ -35,9 +35,9 @@ class TasksServicesImplTest {
 
     @BeforeEach
     fun setUp() {
-        taskDao = mockk()
-        categoryDao = mockk()
-        tasksServices = TasksServicesImpl(taskDao, categoryDao)
+        taskDao = mockk(relaxed = true)
+        categoryDao = mockk(relaxed = true)
+        tasksServices = TasksServicesImpl(taskDao,categoryDao)
 
     }
 
