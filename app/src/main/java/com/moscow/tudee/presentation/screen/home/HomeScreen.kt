@@ -1,22 +1,29 @@
 package com.moscow.tudee.presentation.screen.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.component.home_components.OverviewSection
+import com.moscow.tudee.presentation.component.home_components.TaskList
+import com.moscow.tudee.presentation.component.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
+import com.moscow.tudee.presentation.screen.home.HomeState.TaskDetails
+import com.moscow.tudee.presentation.screen.home.HomeState.TaskState
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import org.koin.androidx.compose.koinViewModel
 
@@ -38,64 +45,52 @@ fun HomeScreen(
             }
         }
     }
-//    HomeContent(
-//        uiState.value,
-//        viewModel
-//    )
+    HomeContent(
+        uiState.value,
+        viewModel
+    )
 }
 
-//@Composable
-//fun HomeContent(
-//    uiState: HomeState = HomeState(),
-//    interactionListener: HomeInteractionListener
-//) {
-//    LazyColumn(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(Theme.colors.surface)
-//    ) {
-//        item {
-//            Box(
-//                Modifier
-//            ) {
-//                Box(
-//                    Modifier
-//                        .fillMaxWidth()
-//                        .height(170.dp)
-//                        .background(color = Theme.colors.primary)
-//                        .align(Alignment.TopStart)
-//                        .zIndex(0f)
-//
-//                )
-//                OverviewSection(uiState.update, tasks)
-//            }
-//        }
-//        tasks.groupBy { it.state.labelResInt }.entries.forEach {
-//            item {
-//                TaskListHeader(it.key, it.value.size)
-//                TaskList(it.value, {})
-//            }
-//        }
-//
-//    }
-//
-//}
+@Composable
+fun HomeContent(
+    uiState: HomeState,
+    interactionListener: HomeInteractionListener
+) {
+    val tasks = uiState.inProgressTasks + uiState.todoTasks + uiState.doneTasks
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Theme.colors.surface)
+    ) {
+        item {
+            Box(
+                Modifier
+            ) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(170.dp)
+                        .background(color = Theme.colors.primary)
+                        .align(Alignment.TopStart)
+                        .zIndex(0f)
 
+                )
+                OverviewSection(uiState.update, tasks)
+            }
+        }
+        tasks.groupBy { it.state.labelResInt }.entries.forEach {
+            item {
+                TaskListHeader(it.key, it.value.size)
+                TaskList(it.value, {})
+            }
+        }
 
-data class TaskDetails(
-    val taskIcon: Int,
-    val title: String,
-    val description: String,
-    val taskIconTint: Color,
-    val priority: String,
-    val priorityBackgroundColor: Color,
-    val priorityIcon: Int,
-    val state: TaskState
-)
+    }
 
-enum class TaskState(val labelResInt: Int) {
-    DONE(R.string.done), IN_PROGRESS(R.string.in_progress), TODO(R.string.to_do)
 }
+
+
+
 
 @Preview
 @Composable
@@ -188,6 +183,25 @@ private fun ShowSmallComponent() {
         )
     )
     TudeeTheme {
-        //HomeContent(SliderState.STAY_WORKING, tasks)
+        HomeContent(
+            HomeState(),
+            object : HomeInteractionListener {
+                override fun onFloatingActionButtonClick() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onTaskClick(taskDetails: TaskDetails) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onAddTask(taskDetails: TaskDetails) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onViewAllClick(taskStatus: Task.Status) {
+                    TODO("Not yet implemented")
+                }
+            }
+        )
     }
 }

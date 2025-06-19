@@ -6,9 +6,9 @@ interface HomeInteractionListener {
 
     fun onFloatingActionButtonClick()
 
-    fun onTaskClick(task: Task)
+    fun onTaskClick(taskDetails: HomeState.TaskDetails)
 
-    fun onAddTask(task: Task)
+    fun onAddTask(taskDetails: HomeState.TaskDetails)
 
     fun onViewAllClick(taskStatus: Task.Status)
 }

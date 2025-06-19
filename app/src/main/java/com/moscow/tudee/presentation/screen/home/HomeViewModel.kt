@@ -15,21 +15,21 @@ class HomeViewModel(
     private fun loadTasks() {
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.TODO) },
-            onSuccess = { response -> updateState { it.copy(todoTasks = response) } },
+            onSuccess = { response -> updateState { it.copy(todoTasks = response.map { it.toTaskDetails() }) } },
             onError = { handleHomeError(it) },
             onStart = { toggleLoading() },
             onFinally = { toggleLoading() }
         )
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.IN_PROGRESS) },
-            onSuccess = { response -> updateState { it.copy(inProgressTasks = response) } },
+            onSuccess = { response -> updateState { it.copy(inProgressTasks = response.map { it.toTaskDetails() }) } },
             onError = { handleHomeError(it) },
             onStart = { toggleLoading() },
             onFinally = { toggleLoading() }
         )
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.DONE) },
-            onSuccess = { response -> updateState { it.copy(doneTasks = response) } },
+            onSuccess = { response -> updateState { it.copy(doneTasks = response.map { it.toTaskDetails() }) } },
             onError = { handleHomeError(it) },
             onStart = { toggleLoading() },
             onFinally = { toggleLoading() }
@@ -40,15 +40,19 @@ class HomeViewModel(
         sendEvent(HomeEvent.ShowAddTaskBottomSheet)
     }
 
-    override fun onTaskClick(task: Task) {
-        updateState { it.copy(selectedTask = task) }
+    override fun onTaskClick(taskDetails: HomeState.TaskDetails) {
+        updateState { it.copy(selectedTask = taskDetails) }
         sendEvent(HomeEvent.ShowTaskDetailsBottomSheet)
     }
 
-    override fun onAddTask(task: Task) {
+    override fun onAddTask(taskDetails: HomeState.TaskDetails) {
         launchWithResult(
-            action = { tasksServices.addTask(task) },
-            onSuccess = { updateState { it.copy(todoTasks = it.todoTasks + task) } },
+            action = {
+                val task = tasksServices.getTaskById(taskDetails.id ?: 0)
+
+                tasksServices.addTask(task)
+             },
+            onSuccess = { updateState { it.copy(todoTasks = it.todoTasks + taskDetails) } },
             onError = { handleHomeError(it) },
             onStart = { toggleLoading() },
             onFinally = { toggleLoading() }
