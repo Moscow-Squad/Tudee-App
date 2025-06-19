@@ -86,6 +86,10 @@ dependencies {
     // Debug dependencies
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    //coil
+    implementation(libs.coil.compose)
+    //navigation
+    implementation(libs.navigation.compose)
 }
 
 tasks.withType<Test> {

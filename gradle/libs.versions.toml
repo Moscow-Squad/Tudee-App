@@ -24,6 +24,7 @@ mockitoKotlin = "5.4.0"
 kotlinxCoroutinesTest = "1.10.2"
 junitJupiter = "5.11.3"
 junitJupiterVersion = "5.11.3"
+composeNavigation = "2.9.0"
 
 
 [libraries]
@@ -64,7 +65,7 @@ mockk = { group = "io.mockk", name = "mockk", version = "1.13.12" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
-
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 [bundles]
 ktor = ["ktor-client-core", "ktor-client-okhttp", "ktor-serialization-kotlinx-json", "ktor-client-content-negotiation"]
 koin = [
