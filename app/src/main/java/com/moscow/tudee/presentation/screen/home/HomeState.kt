@@ -2,7 +2,8 @@ package com.moscow.tudee.presentation.screen.home
 
 import androidx.compose.ui.graphics.Color
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Task
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 
 data class HomeState(
     val isLoading: Boolean = true,
@@ -38,7 +39,9 @@ data class HomeState(
         val priority: String,
         val priorityName: String,
         val priorityIcon: Int,
-        val state: TaskState
+        val state: TaskState,
+        val date: LocalDateTime=java.time.LocalDateTime.now().toKotlinLocalDateTime()
+
     )
 
     enum class TaskState(val labelResInt: Int) {
