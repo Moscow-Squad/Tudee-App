@@ -1,11 +1,11 @@
 package com.moscow.tudee.data.local
 
-import androidx.room.RoomDatabase.Callback
+import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 class DatabaseCallback(
     private val predefinedTitles: List<String>
-) : Callback() {
+) : RoomDatabase.Callback() {
 
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
@@ -15,9 +15,10 @@ class DatabaseCallback(
                 db.execSQL(
                     """
           INSERT INTO categories_table
-            (title, iconUri, isPredefined)
-          VALUES (?, NULL, 1)
-          """.trimIndent(), arrayOf(title)
+            (title, iconUri, isPredefined, countOfTasks)
+          VALUES (?, NULL, 1, 0)
+          """.trimIndent(),
+                    arrayOf(title)
                 )
             }
             db.setTransactionSuccessful()
