@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,11 +31,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
+import com.moscow.tudee.presentation.designSystem.component.SnackBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 data class TaskData(
@@ -58,7 +61,8 @@ fun TaskBottomSheet(
         date: String,
         priority: String,
         category: String
-    ) -> Unit
+    ) -> Unit,
+    onShowSnackBar: (String) -> Unit = {}
 ) {
     if (isVisible) {
         TudeeBottomSheet(
@@ -247,6 +251,13 @@ fun TaskBottomSheet(
                                 selectedPriority,
                                 selectedCategory
                             )
+
+                            val message = if (isEditMode) {
+                                "Edited task successfully"
+                            } else {
+                                "Add task successfully"
+                            }
+                            onShowSnackBar(message)
                         },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -267,14 +278,16 @@ fun AddTaskBottomSheet(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
     onDismiss: () -> Unit,
-    onAddTask: (String, String, String, String, String) -> Unit
+    onAddTask: (String, String, String, String, String) -> Unit,
+    onShowSnackBar: (String) -> Unit = {}
 ) {
     TaskBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
         isEditMode = false,
         onDismiss = onDismiss,
-        onSaveTask = onAddTask
+        onSaveTask = onAddTask,
+        onShowSnackBar = onShowSnackBar
     )
 }
 
@@ -284,7 +297,8 @@ fun EditTaskBottomSheet(
     isVisible: Boolean,
     taskData: TaskData,
     onDismiss: () -> Unit,
-    onSaveTask: (String, String, String, String, String) -> Unit
+    onSaveTask: (String, String, String, String, String) -> Unit,
+    onShowSnackBar: (String) -> Unit = {}
 ) {
     TaskBottomSheet(
         modifier = modifier,
@@ -292,7 +306,8 @@ fun EditTaskBottomSheet(
         isEditMode = true,
         initialTaskData = taskData,
         onDismiss = onDismiss,
-        onSaveTask = onSaveTask
+        onSaveTask = onSaveTask,
+        onShowSnackBar = onShowSnackBar
     )
 }
 
@@ -301,6 +316,8 @@ fun EditTaskBottomSheet(
 private fun AddEditTaskPreview() {
     var showAddTaskSheet by remember { mutableStateOf(false) }
     var showEditTaskSheet by remember { mutableStateOf(false) }
+    var showSnackBar by remember { mutableStateOf(false) }
+    var snackBarMessage by remember { mutableStateOf("") }
 
     val sampleTaskData = TaskData(
         title = "Sample Task",
@@ -332,7 +349,10 @@ private fun AddEditTaskPreview() {
             onDismiss = { showAddTaskSheet = false },
             onAddTask = { title, description, date, priority, category ->
                 showAddTaskSheet = false
-
+            },
+            onShowSnackBar = { message ->
+                snackBarMessage = message
+                showSnackBar = true
             }
         )
 
@@ -342,8 +362,29 @@ private fun AddEditTaskPreview() {
             onDismiss = { showEditTaskSheet = false },
             onSaveTask = { title, description, date, priority, category ->
                 showEditTaskSheet = false
-
+                // Handle save task logic
+            },
+            onShowSnackBar = { message ->
+                snackBarMessage = message
+                showSnackBar = true
             }
         )
+
+        if (showSnackBar) {
+            SnackBar(
+                icon = painterResource(id = R.drawable.ic_checkmark_badge),
+                message = snackBarMessage,
+                iconBackground = Theme.colors.greenVariant,
+                iconTint = Theme.colors.greenAccent,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+
+            LaunchedEffect(showSnackBar) {
+                if (showSnackBar) {
+                    delay(3000)
+                    showSnackBar = false
+                }
+            }
+        }
     }
 }
