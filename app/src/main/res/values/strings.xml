@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Tudee</string>
+    <string name="overview_card_icon">Overview Card Icon</string>
+    <string name="overview_card_background">overview card background</string>
     <string name="text_field_icon">Text Field Icon</string>
     <string name="divider">divider</string>
     <string name="overview_card_icon">Overview Card Icon</string>
@@ -45,4 +47,5 @@
     <string name="are_you_sure_to_continue">Are you sure to continue?</string>
     <string name="delete">Delete</string>
     <string name="delete_image">Delete Image</string>
+
 </resources>
