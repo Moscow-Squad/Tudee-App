@@ -25,6 +25,7 @@ kotlinxCoroutinesTest = "1.10.2"
 junitJupiter = "5.11.3"
 junitJupiterVersion = "5.11.3"
 composeNavigation = "2.9.0"
+junitJunitJupiter = "5.8.1"
 
 
 [libraries]
@@ -66,6 +67,7 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+junit-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJunitJupiter" }
 [bundles]
 ktor = ["ktor-client-core", "ktor-client-okhttp", "ktor-serialization-kotlinx-json", "ktor-client-content-negotiation"]
 koin = [
