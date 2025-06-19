@@ -36,5 +36,7 @@
     <string name="are_you_sure_to_continue">Are you sure to continue?</string>
     <string name="delete">Delete</string>
     <string name="delete_image">Delete Image</string>
+    <string name="back_button">back button</string>
+    <string name="edit_category_icon">edit category icon</string>
 
 </resources>
