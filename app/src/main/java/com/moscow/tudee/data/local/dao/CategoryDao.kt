@@ -9,6 +9,7 @@ import com.moscow.tudee.data.local.entity.CategoryEntity
 
 @Dao
 interface CategoryDao {
+
     @Query("SELECT * FROM categories_table")
     suspend fun getCategories(): List<CategoryEntity>
 

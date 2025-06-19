@@ -10,7 +10,8 @@ fun CategoryEntity.toCategory(): Category {
     return Category(
         id = id,
         title = title,
-        iconUrl = iconUrl,
+        iconUri = iconUri,
+        isPredefined = isPredefined
     )
 }
 
@@ -18,7 +19,8 @@ fun Category.toCategoryEntity(): CategoryEntity {
     return CategoryEntity(
         id = id ?: 0L,
         title = title,
-        iconUrl = iconUrl,
+        iconUri = iconUri,
+        isPredefined = isPredefined
     )
 }
 
