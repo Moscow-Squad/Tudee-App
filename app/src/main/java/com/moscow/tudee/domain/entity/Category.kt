@@ -6,4 +6,5 @@ data class Category @OptIn(ExperimentalUuidApi::class) constructor(
     val id: Long? = null,
     val title: String,
     val iconUrl: String,
+    val countOfTasks: Int = 0
 )
