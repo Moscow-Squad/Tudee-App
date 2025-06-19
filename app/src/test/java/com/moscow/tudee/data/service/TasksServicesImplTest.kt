@@ -37,7 +37,9 @@ class TasksServicesImplTest {
     fun setUp() {
         taskDao = mockk(relaxed = true)
         categoryDao = mockk(relaxed = true)
+        
         tasksServices = TasksServicesImpl(taskDao, categoryDao)
+
     }
 
 
@@ -473,21 +475,15 @@ class TasksServicesImplTest {
         }
 
     @Test
-    fun `getTasksByDateAndCategory should return empty list when no tasks match date and category criteria`() =
-        runTest {
-            val date = LocalDate(2024, 12, 31)
-            val categoryId = 999L
-            coEvery {
-                taskDao.getTasksByDateAndCategory(
-                    date.toString(),
-                    categoryId
-                )
-            } returns emptyList()
+    fun `getTasksByDateAndCategory should return empty list when no tasks match date and category criteria`() = runTest {
+        val date = LocalDate(2024, 12, 31)
+        val categoryId = 999L
+        coEvery { taskDao.getTasksByDateAndCategory(date.toString(), categoryId) } returns emptyList()
 
-            val result = tasksServices.getTasksByDateAndCategory(date, categoryId)
+        val result = tasksServices.getTasksByDateAndCategory(date, categoryId)
 
-            assertThat(result).isEmpty()
-        }
+        assertThat(result).isEmpty()
+    }
 }
 
 

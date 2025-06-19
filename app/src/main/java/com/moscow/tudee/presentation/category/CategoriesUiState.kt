@@ -13,6 +13,6 @@ data class CategoriesUiState(
         val title: String,
         val isEditable: Boolean,
         val count: Int,
-        val iconUrl: String
+        val iconUri: String
     )
 }

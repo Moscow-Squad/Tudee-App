@@ -12,25 +12,25 @@ import androidx.compose.runtime.remember
 import com.moscow.tudee.presentation.designSystem.theme.ThemeState
 import com.moscow.tudee.presentation.navigation.TudeeGraph
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import com.moscow.tudee.presentation.navigation.TudeeGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val isDark = isSystemInDarkTheme()
-            val (isDarkThemeState, onThemeStateChanged) = remember { mutableStateOf(isDark) }
-            val themeState by remember(isDarkThemeState) {
-                derivedStateOf {
-                    ThemeState(
-                        isDark = isDarkThemeState,
-                        onThemeChanged = onThemeStateChanged
-                    )
+            TudeeTheme {
+                TudeeGraph()
+                val isDark = isSystemInDarkTheme()
+                val (isDarkThemeState, onThemeStateChanged) = remember { mutableStateOf(isDark) }
+                val themeState by remember(isDarkThemeState) {
+                    derivedStateOf {
+                        ThemeState(
+                            isDark = isDarkThemeState,
+                            onThemeChanged = onThemeStateChanged
+                        )
+                    }
                 }
-            }
-
-            TudeeTheme(state = themeState) {
-               TudeeGraph()
             }
         }
     }
