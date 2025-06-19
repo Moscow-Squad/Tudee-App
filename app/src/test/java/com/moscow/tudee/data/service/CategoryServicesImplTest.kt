@@ -80,6 +80,25 @@ class CategoryServicesImplTest {
         assertThat(result).containsExactly(expectedCategory)
     }
 
+    @Test
+    fun `addCategory should handle null id`() = runTest {
+        // Given
+        val category = createCategoryDomainEntity(id = null, title = "New Category")
+        val expectedEntity = category.toCategoryEntity()
+        coEvery { categoryDao.addCategory(any()) } just Runs
+
+        // When
+        categoryServices.addCategory(category)
+
+        // Then
+        coVerify(exactly = 1) {
+            categoryDao.addCategory(match {
+                it.id == expectedEntity.id &&
+                        it.title == expectedEntity.title
+            })
+        }
+    }
+
 
 
     private fun createCategoryRoomEntity(
