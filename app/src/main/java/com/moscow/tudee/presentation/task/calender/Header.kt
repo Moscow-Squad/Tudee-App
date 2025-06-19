@@ -1,4 +1,5 @@
 package com.moscow.tudee.presentation.task.calender
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -14,20 +15,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 @Composable
 fun Header(
-    date : String = "May 2023"
+    date : String
 ) {
     Row (
         modifier = Modifier
-            .padding(horizontal = 16.dp)
             .fillMaxWidth()
+            .background(Theme.colors.surfaceHigh)
+            .padding(horizontal = 16.dp)
         ,
         horizontalArrangement = Arrangement.SpaceBetween
     ){
@@ -35,6 +35,7 @@ fun Header(
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_head_back),
                 contentDescription = "Previous",
+                tint = Theme.colors.body,
                 modifier = Modifier
                     .border(1.dp, Theme.colors.stroke, CircleShape)
                     .padding(10.dp)
@@ -45,13 +46,15 @@ fun Header(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = date,
+                text = date.toString(),
                 style = Theme.textStyle.label.medium,
+                color = Theme.colors.body
                 )
             IconButton(onClick = { }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_head_back),
                     contentDescription = "down",
+                    tint = Theme.colors.body,
                     modifier = Modifier
                         .rotate(270f)
                         .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -63,6 +66,7 @@ fun Header(
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_head_back),
                 contentDescription = "Next",
+                tint = Theme.colors.body,
                 modifier = Modifier
                     .rotate(180f)
                     .border(1.dp, Theme.colors.stroke, CircleShape)
@@ -73,11 +77,4 @@ fun Header(
     }
 }
 
-@Preview(showBackground = true, apiLevel = 33)
-@Composable
-private fun HeaderPreview() {
-    TudeeTheme {
-        Header()
-    }
 
-}
