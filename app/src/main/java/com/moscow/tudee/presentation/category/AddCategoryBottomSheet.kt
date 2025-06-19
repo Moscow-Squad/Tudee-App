@@ -31,72 +31,74 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 
 @Composable
 fun AddCategoryBottomSheet() {
-    Column(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        Text(
-            text = "Add new category",
-            style = textStyle.title.large,
-            color = colors.title,
-        )
-
-        TudeeTextField(
-            value = "",
-            onValueChange = {},
-            keyboardOptions = KeyboardOptions.Default,
-            singleLine = true,
-            hint = "Category Title",
-            startIcon = painterResource(R.drawable.ic_menu_circle_outlined),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp)
-                .height(56.dp)
-        )
-
-        Text(
-            text = "Category image",
-            style = textStyle.title.medium,
-            color = colors.title,
-        )
-
-        Box(
-            modifier = Modifier
-                .background(colors.surface)
-                .padding(top = 8.dp, bottom = 36.dp)
-                .dashedBorder(1.dp, colors.stroke, 16.dp),
-            contentAlignment = Alignment.Center
+    TudeeBottomSheet(onDismissRequest = {}) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(32.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Text(
+                text = "Add new category",
+                style = textStyle.title.large,
+                color = colors.title,
+            )
+
+            TudeeTextField(
+                value = "",
+                onValueChange = {},
+                keyboardOptions = KeyboardOptions.Default,
+                singleLine = true,
+                hint = "Category Title",
+                startIcon = painterResource(R.drawable.ic_menu_circle_outlined),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp)
+                    .height(56.dp)
+            )
+
+            Text(
+                text = "Category image",
+                style = textStyle.title.medium,
+                color = colors.title,
+            )
+
+            Box(
+                modifier = Modifier
+                    .background(colors.surface)
+                    .padding(top = 8.dp, bottom = 36.dp)
+                    .dashedBorder(1.dp, colors.stroke, 16.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_image_add),
-                    contentDescription = "Add Image",
-                )
-                Text(
-                    text = "Upload",
-                    style = textStyle.label.medium,
-                    color = colors.hint,
-                )
+                Column(
+                    modifier = Modifier.padding(32.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_image_add),
+                        contentDescription = "Add Image",
+                    )
+                    Text(
+                        text = "Upload",
+                        style = textStyle.label.medium,
+                        color = colors.hint,
+                    )
+                }
             }
+
+            PrimaryButton(
+                text = "Add",
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+
+            SecondaryButton(
+                text = "Cancel",
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp)
+            )
         }
-
-        PrimaryButton(
-            text = "Add",
-            onClick = {},
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-
-        SecondaryButton(
-            text = "Cancel",
-            onClick = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-        )
     }
 }
 
@@ -105,8 +107,6 @@ fun AddCategoryBottomSheet() {
 fun AddCategoryBottomSheetPreview() {
     var show by remember { mutableStateOf(true) }
     if (show) {
-        TudeeBottomSheet(onDismissRequest = {}) {
-            AddCategoryBottomSheet()
-        }
+        AddCategoryBottomSheet()
     }
 }
