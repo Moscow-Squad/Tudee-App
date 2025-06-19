@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
@@ -57,8 +58,8 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    taskDetails: List<TaskDetails>,
-    onTaskClick: (TaskDetails) -> Unit,
+    taskDetails: List<Task>,
+    onTaskClick: (Task) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
