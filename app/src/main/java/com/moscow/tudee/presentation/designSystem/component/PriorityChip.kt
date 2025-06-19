@@ -1,5 +1,7 @@
 package com.moscow.tudee.presentation.designSystem.component
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,12 +20,25 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @Composable
 fun PriorityChip(
-    modifier: Modifier = Modifier,
-    contentColor: Color = Theme.colors.onPrimary,
     text: String,
-    backgroundColor: Color,
     icon: Painter,
+    modifier: Modifier = Modifier,
+    selected: Boolean = false,
+    backgroundColor: Color,
+    unselectedBackgroundColor: Color = Theme.colors.surfaceLow,
+    selectedContentColor: Color = Theme.colors.onPrimary,
+    unselectedContentColor: Color = Theme.colors.hint,
 ) {
+    val backgroundColor by animateColorAsState(
+        targetValue = if (selected) backgroundColor else unselectedBackgroundColor,
+        animationSpec = tween(durationMillis = 300)
+    )
+
+    val contentColor by animateColorAsState(
+        targetValue = if (selected) selectedContentColor else unselectedContentColor,
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(100.dp))

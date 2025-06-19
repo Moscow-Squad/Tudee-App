@@ -38,5 +38,18 @@
     <string name="are_you_sure_to_continue">Are you sure to continue?</string>
     <string name="delete">Delete</string>
     <string name="delete_image">Delete Image</string>
+    <string name="category">Category</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="priority">Priority</string>
+    <string name="description">Description</string>
+    <string name="task_title">Task title</string>
+    <string name="edit_task">Edit task</string>
+    <string name="add_new_task">Add new task</string>
+    <string name="save">Save</string>
+    <string name="add_task">Add Task</string>
+    <string name="edited_task_successfully">Edited task successfully</string>
+    <string name="add_task_successfully">Add task successfully</string>
 
 </resources>
