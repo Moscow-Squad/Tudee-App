@@ -28,15 +28,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    navController: NavHostController
+    navigateToTaskScreen: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     ObserveAsEvent(viewModel.uiEvent) { event ->
         when (event) {
             is HomeEvent.ViewAll -> {
-                navController.navigate(
-                    route = TasksScreen
-                )
+                navigateToTaskScreen()
             }
         }
     }
@@ -124,6 +122,6 @@ private fun PreviewScreen() {
     val viewModel: HomeViewModel = koinViewModel()
 
     HomeScreen(viewModel = viewModel,
-        rememberNavController()
+        {  }
     )
 }
