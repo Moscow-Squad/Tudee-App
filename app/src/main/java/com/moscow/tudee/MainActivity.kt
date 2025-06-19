@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.moscow.tudee.presentation.navigation.TudeeGraph
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TudeeTheme {
-
+               TudeeGraph()
             }
         }
     }
