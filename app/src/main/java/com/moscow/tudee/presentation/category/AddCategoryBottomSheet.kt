@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -171,6 +172,7 @@ fun AddCategoryBottomSheet(
                                     painter = painterResource(R.drawable.ic_image_add),
                                     contentDescription = "Add Image",
                                 )
+                                Spacer(Modifier.padding(top = 8.dp))
                                 Text(
                                     text = "Upload",
                                     style = textStyle.label.medium,
