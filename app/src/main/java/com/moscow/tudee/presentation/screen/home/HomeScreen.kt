@@ -119,9 +119,7 @@ fun HomeContent(
 @Preview
 @Composable
 private fun PreviewScreen() {
-    val viewModel: HomeViewModel = koinViewModel()
-
-    HomeScreen(viewModel = viewModel,
-        {  }
+    HomeScreen(
+        navigateToTaskScreen = {}
     )
 }

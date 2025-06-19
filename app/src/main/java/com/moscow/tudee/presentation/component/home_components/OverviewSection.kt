@@ -19,8 +19,6 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.slider.TudeeSlider
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
-import com.moscow.tudee.presentation.screen.home.HomeState.TaskDetails
-import com.moscow.tudee.presentation.screen.home.HomeState.TaskState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
