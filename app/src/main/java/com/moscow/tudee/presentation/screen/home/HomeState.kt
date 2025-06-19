@@ -36,7 +36,7 @@ data class HomeState(
         val description: String,
         val taskIconTint: Color,
         val priority: String,
-        val priorityBackgroundColor: Color,
+        val priorityName: String,
         val priorityIcon: Int,
         val state: TaskState
     )
