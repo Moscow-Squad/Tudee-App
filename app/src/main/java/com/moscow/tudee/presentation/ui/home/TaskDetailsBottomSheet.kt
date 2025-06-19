@@ -36,6 +36,8 @@ fun TaskDetailsBottomSheet(
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 24.dp)
         ) {
 
             TudeeText(
@@ -80,7 +82,6 @@ fun TaskDetailsBottomSheet(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TaskStatus(
-                    modifier = Modifier,
                     status = "In progress",
                     backgroundColor = Theme.colors.purpleVariant,
                     statusColor = Theme.colors.purpleAccent,
