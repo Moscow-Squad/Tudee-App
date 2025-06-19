@@ -19,20 +19,13 @@ fun Task.toTaskDetails(): HomeState.TaskDetails {
         Task.Priority.LOW -> R.drawable.ic_trade_down
     }
 
-    val taskState = when (status) {
-        Task.Status.TODO -> HomeState.TaskState.TODO
-        Task.Status.IN_PROGRESS -> HomeState.TaskState.IN_PROGRESS
-        Task.Status.DONE -> HomeState.TaskState.DONE
-    }
     return HomeState.TaskDetails(
         id = id,
         taskIcon = 0,
         title = title,
         description = description,
-        taskIconTint = Color.Gray,
-        priority = priority.name.lowercase().replaceFirstChar { it.uppercase() },
         priorityName = priorityName,
         priorityIcon = priorityIc,
-        state = taskState
+        state = status
     )
 }

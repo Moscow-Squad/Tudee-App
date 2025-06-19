@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
@@ -28,20 +29,28 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState.TaskDetails
 
 @Composable
-fun TaskListHeader(taskState: Int, taskCount: Int, modifier: Modifier = Modifier) {
+fun TaskListHeader(
+    taskState: Status,
+    taskCount: Int,
+    onCountClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier
-
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(top = 24.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ) {
         TudeeText(
-            text = stringResource(taskState),
+            text = when(taskState){
+                Status.IN_PROGRESS -> stringResource(R.string.in_progress)
+                Status.TODO -> stringResource(R.string.to_do)
+                Status.DONE -> stringResource(R.string.done)
+            },
             style = Theme.textStyle.title.large.copy(color = Theme.colors.title),
         )
-        TaskListCount(taskCount)
+        TaskListCount(taskCount, onCountClick)
 
     }
 }
@@ -49,11 +58,13 @@ fun TaskListHeader(taskState: Int, taskCount: Int, modifier: Modifier = Modifier
 @Composable
 fun TaskList(
     taskDetails: List<TaskDetails>,
-    onTaskClick: () -> Unit,
+    onTaskClick: (TaskDetails) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
-        modifier = Modifier.height(230.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(250.dp),
         rows = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -64,17 +75,16 @@ fun TaskList(
             TaskCard(
                 modifier = modifier
                     .width(320.dp)
-                    .clickable { onTaskClick() },
+                    .clickable { onTaskClick(it) },
                 icon = painterResource(it.taskIcon),
                 title = it.title,
                 description = it.description,
-                iconTint = it.taskIconTint
             ) {
-//                PriorityChip(
-//                    text = it.priority,
-//                    //backgroundColor = it.priorityBackgroundColor,
-//                    icon = painterResource(id = it.priorityIcon)
-//                )
+                /*PriorityChip(
+                    text = it.priorityName,
+                    backgroundColor = it.priorityBackgroundColor,
+                    icon = painterResource(id = it.priorityIcon)
+                )*/
             }
         }
 
@@ -83,12 +93,16 @@ fun TaskList(
 }
 
 @Composable
-fun TaskListCount(count: Int, modifier: Modifier = Modifier) {
-
+fun TaskListCount(
+    count: Int,
+    onCountClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier
             .background(color = Theme.colors.surfaceHigh, shape = CircleShape)
-            .padding(vertical = 6.dp, horizontal = 8.dp),
+            .padding(vertical = 6.dp, horizontal = 8.dp)
+            .clickable { onCountClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         TudeeText(

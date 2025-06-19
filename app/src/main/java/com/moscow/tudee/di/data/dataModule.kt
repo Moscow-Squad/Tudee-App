@@ -8,7 +8,9 @@ import com.moscow.tudee.data.service.CategoryServicesImpl
 import com.moscow.tudee.data.service.TasksServicesImpl
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
+import com.moscow.tudee.presentation.screen.home.HomeViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 private const val TUDEE_DATABASE = "tudee_database"
@@ -40,4 +42,6 @@ val dataModule = module {
     single<CategoryServices> {
         CategoryServicesImpl(get())
     }
+
+    viewModel { HomeViewModel(get()) }
 }

@@ -37,27 +37,19 @@ class HomeViewModel(
     }
 
     override fun onFloatingActionButtonClick() {
-        sendEvent(HomeEvent.ShowAddTaskBottomSheet)
+        updateState { it.copy(showAddTaskBottomSheet = true) }
     }
+
 
     override fun onTaskClick(taskDetails: HomeState.TaskDetails) {
-        updateState { it.copy(selectedTask = taskDetails) }
-        sendEvent(HomeEvent.ShowTaskDetailsBottomSheet)
+        updateState { it.copy(showTaskDetailsBottomSheet = true ) }
+
     }
 
-    override fun onAddTask(taskDetails: HomeState.TaskDetails) {
-        launchWithResult(
-            action = {
-                val task = tasksServices.getTaskById(taskDetails.id ?: 0)
-
-                tasksServices.addTask(task)
-             },
-            onSuccess = { updateState { it.copy(todoTasks = it.todoTasks + taskDetails) } },
-            onError = { handleHomeError(it) },
-            onStart = { toggleLoading() },
-            onFinally = { toggleLoading() }
-        )
+    override fun addTask(task: Task) {
+        TODO("Not yet implemented")
     }
+
 
     override fun onViewAllClick(taskStatus: Task.Status) {
         sendEvent(HomeEvent.ViewAll(taskStatus))

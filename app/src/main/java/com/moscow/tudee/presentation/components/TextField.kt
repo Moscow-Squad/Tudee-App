@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
@@ -82,7 +83,7 @@ fun TudeeTextField(
                     contentDescription = stringResource(R.string.divider),
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
-
+            }
                 TudeeBasicTextField(
                     value = value,
                     onValueChange = onValueChange,
@@ -94,7 +95,7 @@ fun TudeeTextField(
                         .weight(1f)
                         .fillMaxHeight()
                 )
-            }
+
         }
     }
 }
@@ -127,10 +128,11 @@ private fun TudeeBasicTextField(
                     text = hint,
                     color = Theme.colors.hint,
                     maxLines = 1,
-                    style = Theme.textStyle.label.medium
+                    style = Theme.textStyle.label.medium,
+
                 )
+                innerTextField()
             }
-            innerTextField()
         }
     }
 }
@@ -141,17 +143,16 @@ private fun TudeeBasicTextField(
 private fun TextFieldPreview() {
 
     var text by remember { mutableStateOf("") }
-
     TudeeTextField(
         value = text,
-        onValueChange = { text = it },
+        onValueChange = { text = "it" },
         keyboardOptions = KeyboardOptions.Default,
         singleLine = true,
-        hint = "Enter your name",
-        startIcon = painterResource(id = R.drawable.ic_user),
+        hint = "heelo",
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(65.dp)
+            .padding(top = 16.dp)
     )
 
 }
