@@ -68,6 +68,8 @@ dependencies {
     testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
     ksp(libs.androidx.room.compiler)
 
     // Test dependencies

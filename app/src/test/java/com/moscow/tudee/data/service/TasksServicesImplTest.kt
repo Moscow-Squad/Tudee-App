@@ -20,8 +20,8 @@ import org.junit.jupiter.api.assertThrows
 class TasksServicesImplTest {
 
     private lateinit var taskDao: TaskDao
-    private lateinit var tasksServices: TasksServicesImpl
     private lateinit var categoryDao: CategoryDao
+    private lateinit var tasksServices: TasksServicesImpl
 
     private val sampleTaskEntity = TaskEntity(
         id = 1L,
@@ -37,8 +37,11 @@ class TasksServicesImplTest {
     fun setUp() {
         taskDao = mockk(relaxed = true)
         categoryDao = mockk(relaxed = true)
-        tasksServices = TasksServicesImpl(taskDao,categoryDao)
+        
+        tasksServices = TasksServicesImpl(taskDao, categoryDao)
+
     }
+
 
     @Test
     fun `should return list of tasks when tasks exist`() = runTest {
@@ -308,24 +311,25 @@ class TasksServicesImplTest {
     }
 
     @Test
-    fun `should throw IllegalArgumentException when mapping getTasksByDate with invalid status`() = runTest {
-        val date = LocalDate.parse("2025-06-18")
-        val badEntity = TaskEntity(
-            id = 6,
-            title = "Bad Status",
-            description = "Bad",
-            priority = Task.Priority.MEDIUM.name,
-            categoryId = 1,
-            status = "UNKNOWN_STATUS",
-            date = "2025-06-18"
-        )
-        coEvery { taskDao.getTasksByDate("2025-06-18") } returns listOf(badEntity)
+    fun `should throw IllegalArgumentException when mapping getTasksByDate with invalid status`() =
+        runTest {
+            val date = LocalDate.parse("2025-06-18")
+            val badEntity = TaskEntity(
+                id = 6,
+                title = "Bad Status",
+                description = "Bad",
+                priority = Task.Priority.MEDIUM.name,
+                categoryId = 1,
+                status = "UNKNOWN_STATUS",
+                date = "2025-06-18"
+            )
+            coEvery { taskDao.getTasksByDate("2025-06-18") } returns listOf(badEntity)
 
-        assertThrows<IllegalArgumentException> {
-            tasksServices.getTasksByDate(date)
+            assertThrows<IllegalArgumentException> {
+                tasksServices.getTasksByDate(date)
+            }
+            coVerify { taskDao.getTasksByDate("2025-06-18") }
         }
-        coVerify { taskDao.getTasksByDate("2025-06-18") }
-    }
 
     @Test
     fun `should propagate exception when updateTaskStatus DAO update fails`() = runTest {
@@ -340,7 +344,12 @@ class TasksServicesImplTest {
             date = "2025-06-18"
         )
         coEvery { taskDao.getTaskById(taskId) } returns entity
-        coEvery { taskDao.updateTaskStatus(taskId, Task.Status.IN_PROGRESS.name) } throws UnsupportedOperationException("update error")
+        coEvery {
+            taskDao.updateTaskStatus(
+                taskId,
+                Task.Status.IN_PROGRESS.name
+            )
+        } throws UnsupportedOperationException("update error")
 
         assertThrows<UnsupportedOperationException> {
             tasksServices.changeTaskStatus(taskId)
@@ -430,28 +439,40 @@ class TasksServicesImplTest {
         }
 
     @Test
-    fun `getTasksByDateAndStatus should return tasks when dao returns task entities for specific date and status`() = runTest {
-        val date = LocalDate(2024, 1, 1)
-        val status = Task.Status.TODO
-        val taskEntities = listOf(sampleTaskEntity)
-        coEvery { taskDao.getTasksByDateAndStatus(date.toString(), status.name) } returns taskEntities
+    fun `getTasksByDateAndStatus should return tasks when dao returns task entities for specific date and status`() =
+        runTest {
+            val date = LocalDate(2024, 1, 1)
+            val status = Task.Status.TODO
+            val taskEntities = listOf(sampleTaskEntity)
+            coEvery {
+                taskDao.getTasksByDateAndStatus(
+                    date.toString(),
+                    status.name
+                )
+            } returns taskEntities
 
-        val result = tasksServices.getTasksByDateAndStatus(date, status)
+            val result = tasksServices.getTasksByDateAndStatus(date, status)
 
-        assertThat(result).hasSize(1)
-    }
+            assertThat(result).hasSize(1)
+        }
 
     @Test
-    fun `getTasksByDateAndCategory should return tasks when dao returns task entities for specific date and category`() = runTest {
-        val date = LocalDate(2024, 1, 1)
-        val categoryId = 1L
-        val taskEntities = listOf(sampleTaskEntity)
-        coEvery { taskDao.getTasksByDateAndCategory(date.toString(), categoryId) } returns taskEntities
+    fun `getTasksByDateAndCategory should return tasks when dao returns task entities for specific date and category`() =
+        runTest {
+            val date = LocalDate(2024, 1, 1)
+            val categoryId = 1L
+            val taskEntities = listOf(sampleTaskEntity)
+            coEvery {
+                taskDao.getTasksByDateAndCategory(
+                    date.toString(),
+                    categoryId
+                )
+            } returns taskEntities
 
-        val result = tasksServices.getTasksByDateAndCategory(date, categoryId)
+            val result = tasksServices.getTasksByDateAndCategory(date, categoryId)
 
-        assertThat(result).hasSize(1)
-    }
+            assertThat(result).hasSize(1)
+        }
 
     @Test
     fun `getTasksByDateAndCategory should return empty list when no tasks match date and category criteria`() = runTest {
@@ -464,3 +485,7 @@ class TasksServicesImplTest {
         assertThat(result).isEmpty()
     }
 }
+
+
+
+
