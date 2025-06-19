@@ -1,12 +1,12 @@
 package com.moscow.tudee
 
+//import com.moscow.tudee.data.seeder.DataSeeder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.moscow.tudee.presentation.navigation.TudeeGraph
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import com.moscow.tudee.presentation.task.TaskScreen
-import com.moscow.tudee.presentation.task.mockViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,11 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TudeeTheme {
-                TaskScreen(
-                    viewModel = mockViewModel()
-                )
+               TudeeGraph()
             }
         }
     }
 }
-
