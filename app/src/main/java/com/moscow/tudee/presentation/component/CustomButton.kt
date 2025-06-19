@@ -13,15 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,14 +25,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import kotlinx.coroutines.delay
 
 @Composable
 fun PrimaryButton(
@@ -46,33 +38,21 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     isLoading: Boolean = false,
-    navButton: Boolean = false,
+    backgroundColor : Brush = Theme.colors.primaryGradient,
+    textColor : Color = Theme.colors.onPrimary,
+    tintColor : Color = Theme.colors.onPrimary,
 ) {
-    val themeColors = Theme.colors
-    val backGroundColor: Brush = remember(isEnabled) {
-        if (!isEnabled)
-            SolidColor(themeColors.disable)
-        else {
-            if (navButton) SolidColor(themeColors.errorVariant) else themeColors.primaryGradient
-        }
-    }
-    val textColor = remember(isEnabled) {
-        if (!isEnabled)
-            themeColors.stroke
-        else
-            if (navButton) themeColors.error else themeColors.onPrimary
-    }
     Box(
         modifier = modifier
             .height(56.dp)
             .shadow(
                 elevation = 4.dp,
-                shape = RoundedCornerShape(360.dp),
+                shape = CircleShape,
                 ambientColor = Color(0x1F000000),
                 spotColor = Color(0x1F000000)
             )
-            .clip(RoundedCornerShape(360.dp))
-            .background(brush = backGroundColor, RoundedCornerShape(360.dp))
+            .clip(CircleShape)
+            .background(brush = backgroundColor, CircleShape)
             .clickable(
                 enabled = isEnabled && !isLoading,
                 onClick = onClick
@@ -88,8 +68,6 @@ fun PrimaryButton(
                 text,
                 style = Theme.textStyle.label.large,
                 color = textColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
             )
             Crossfade(
                 targetState = isLoading,
@@ -98,7 +76,7 @@ fun PrimaryButton(
                 if (isLoading) {
                     AnimatedLoading(
                         modifier = Modifier.size(48.dp),
-                        tintColor = if (navButton) themeColors.error else Theme.colors.onPrimary
+                        tintColor = tintColor
                     )
                 }
             }
@@ -113,21 +91,17 @@ fun SecondaryButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     isLoading: Boolean = false,
-    icon: Int? = null
+    icon: Int? = null,
+    textColor : Color = Theme.colors.primary,
+    tintColor : Color = Theme.colors.primary,
 ) {
     val themeColors = Theme.colors
-    val textColor = remember(isEnabled) {
-        if (!isEnabled)
-            themeColors.stroke
-        else
-            themeColors.primary
-    }
     Box(
         modifier = modifier
             .height(56.dp)
-            .clip(RoundedCornerShape(360.dp))
-            .border(1.dp, themeColors.stroke, RoundedCornerShape(360.dp))
-            .background(Color.Transparent, RoundedCornerShape(360.dp))
+            .clip(CircleShape)
+            .border(1.dp, themeColors.stroke, CircleShape)
+            .background(Color.Transparent, CircleShape)
             .clickable(
                 enabled = isEnabled && !isLoading,
                 onClick = onClick
@@ -152,8 +126,6 @@ fun SecondaryButton(
                     text ?: "",
                     style = Theme.textStyle.label.large,
                     color = textColor,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
                 )
                 Crossfade(
                     targetState = isLoading,
@@ -162,7 +134,7 @@ fun SecondaryButton(
                     if (isLoading) {
                         AnimatedLoading(
                             modifier = Modifier.size(48.dp),
-                            tintColor = Theme.colors.primary
+                            tintColor = tintColor
                         )
                     }
                 }
@@ -177,21 +149,14 @@ fun CustomTextButton(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     isLoading: Boolean = false,
-    navTextButton: Boolean = false,
+    textColor : Color = Theme.colors.primary,
+    tintColor : Color = Theme.colors.primary,
 ) {
-    val themeColors = Theme.colors
-    val textColor = remember(isEnabled) {
-        if (!isEnabled)
-            themeColors.disable
-        else {
-            if (navTextButton) themeColors.error else themeColors.primary
-        }
-    }
     Box(
         modifier = modifier
             .height(56.dp)
-            .clip(RoundedCornerShape(360.dp))
-            .background(Color.Transparent, RoundedCornerShape(360.dp))
+            .clip(CircleShape)
+            .background(Color.Transparent, CircleShape)
             .padding(horizontal = 24.dp, vertical = 8.dp)
             .clickable(
                 enabled = isEnabled && !isLoading,
@@ -207,8 +172,6 @@ fun CustomTextButton(
                 text,
                 style = Theme.textStyle.label.large,
                 color = textColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
             )
             Crossfade(
                 targetState = isLoading,
@@ -217,7 +180,7 @@ fun CustomTextButton(
                 if (loading) {
                     AnimatedLoading(
                         modifier = Modifier.size(48.dp),
-                        tintColor = if (navTextButton) Theme.colors.error else Theme.colors.primary
+                        tintColor = tintColor
                     )
                 }
             }
@@ -250,11 +213,6 @@ private fun NormalButtonPreview() {
                     onClick = {},
                     isLoading = true
                 )
-                PrimaryButton(
-                    text = "Submit",
-                    onClick = {},
-                    isEnabled = false
-                )
             }
             Row(
                 modifier = Modifier.padding(10.dp),
@@ -264,20 +222,32 @@ private fun NormalButtonPreview() {
                 PrimaryButton(
                     text = "Submit",
                     onClick = {},
-                    navButton = true,
+                    textColor = Theme.colors.error,
+                    tintColor = Theme.colors.error,
+                    backgroundColor = SolidColor(Theme.colors.errorVariant)
+                )
+                PrimaryButton(
+                    text = "Submit",
+                    onClick = {},
+                    textColor = Theme.colors.error,
+                    tintColor = Theme.colors.error,
+                    backgroundColor = SolidColor(Theme.colors.errorVariant),
                     isLoading = true
                 )
-                PrimaryButton(
-                    text = "Submit",
-                    onClick = {},
-                    navButton = true,
-                )
-                PrimaryButton(
-                    text = "Submit",
-                    onClick = {},
-                    navButton = true,
-                    isEnabled = false
-                )
+
+            }
+            Row(
+                modifier = Modifier.padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+            PrimaryButton(
+                text = "Submit",
+                onClick = {},
+                textColor = Theme.colors.stroke,
+                backgroundColor = SolidColor(Theme.colors.disable),
+                isEnabled = false
+            )
             }
             Row(
                 modifier = Modifier.padding(10.dp),
@@ -287,20 +257,17 @@ private fun NormalButtonPreview() {
                 SecondaryButton(
                     text = "Submit",
                     onClick = {},
-                    icon = null
                 )
                 SecondaryButton(
                     text = "Submit",
                     onClick = {},
                     isEnabled = false,
-                    icon = null
+                    textColor = Theme.colors.stroke,
                 )
-
                 SecondaryButton(
                     text = "Submit",
                     onClick = {},
                     isLoading = true,
-                    icon = null
                 )
             }
             Row(
@@ -315,6 +282,7 @@ private fun NormalButtonPreview() {
             CustomTextButton(
                 text = "Submit",
                 onClick = {},
+                textColor = Theme.colors.stroke,
                 isEnabled = false
             )
             CustomTextButton(
@@ -331,18 +299,21 @@ private fun NormalButtonPreview() {
             CustomTextButton(
                 text = "Submit",
                 onClick = {},
-                navTextButton = true,
+                isLoading = true,
+                textColor = Theme.colors.error,
+                tintColor = Theme.colors.error,
             )
             CustomTextButton(
                 text = "Submit",
                 onClick = {},
-                navTextButton = true,
-                isLoading = true
+                isEnabled = false,
+                textColor = Theme.colors.error,
+                tintColor = Theme.colors.error,
             )
                 CustomTextButton(
                     text = "Submit",
                     onClick = {},
-                    navTextButton = true,
+                    textColor = Theme.colors.stroke,
                     isEnabled = false
                 )
             }
@@ -355,22 +326,5 @@ private fun NormalButtonPreview() {
         }
     }
 }
-@Preview(showBackground = true, apiLevel = 33)
-@Composable
-fun PrimaryButtonAnimatedPreview() {
-    var isLoading by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        delay(1500)
-        isLoading = true
-    }
-
-    TudeeTheme {
-        PrimaryButton(
-            onClick = {},
-            text = "Submit",
-            isLoading = isLoading
-        )
-    }
-}
 

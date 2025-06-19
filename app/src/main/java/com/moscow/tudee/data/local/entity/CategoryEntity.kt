@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class CategoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val title: String,
-    val iconUrl: String
+    val iconUri: String,
+    val isPredefined: Boolean = false,
+    val countOfTasks: Int = 0
 )
