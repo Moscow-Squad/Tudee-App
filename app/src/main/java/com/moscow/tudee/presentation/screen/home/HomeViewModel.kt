@@ -3,6 +3,7 @@ package com.moscow.tudee.presentation.screen.home
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import kotlinx.datetime.LocalDateTime
 
 class HomeViewModel(
     private val tasksServices: TasksServices
@@ -61,6 +62,46 @@ class HomeViewModel(
 
     override fun onViewAllClick(taskStatus: Task.Status) {
         sendEvent(HomeEvent.ViewAll(taskStatus))
+    }
+
+    override fun onEditTaskClick(taskDetails: HomeState.TaskDetails) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onMoveToDoneClick(taskDetails: HomeState.TaskDetails) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSaveTaskClick(taskDetails: HomeState.TaskDetails) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onPriorityClick(taskPriority: Task.Priority) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onTitleChange(newTitle: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDescriptionChange(newDescription: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDateChange(newDate: LocalDateTime) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDismissEditBottomSheet() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDismissAddBottomSheet() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDismissDetailsBottomSheet() {
+        TODO("Not yet implemented")
     }
 
     private fun toggleLoading() {
