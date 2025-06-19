@@ -78,6 +78,13 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.room.testing)
+    
+    implementation(libs.kotlinx.datetime)
+
+    implementation(libs.bundles.koin)
+
+    //datastore
+    implementation(libs.androidx.datastore.preferences)
 
     // Android test dependencies
     androidTestImplementation(libs.androidx.junit)
