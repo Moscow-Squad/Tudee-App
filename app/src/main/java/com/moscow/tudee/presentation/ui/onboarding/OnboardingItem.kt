@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.screen.onboarding
+package com.moscow.tudee.presentation.ui.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

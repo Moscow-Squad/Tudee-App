@@ -2,6 +2,8 @@
     <string name="app_name">Tudee</string>
     <string name="text_field_icon">Text Field Icon</string>
     <string name="divider">divider</string>
+    <string name="overview_card_icon">Overview Card Icon</string>
+    <string name="overview_card_background">overview card background</string>
     <string name="task_card_icon">task card icon</string>
     <string name="calender_icon">calender icon</string>
     <string name="priority_icon">priority icon</string>
@@ -23,6 +25,13 @@
     <string name="clear">Clear</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="overview">Overview</string>
+    <string name="calendar_icon">Calendar Icon</string>
+    <string name="right_arrow">right arrow</string>
+    <string name="done">Done</string>
+    <string name="in_progress">In progress</string>
+    <string name="to_do">To-Do</string>
+    <string name="today">today, %1$s</string>
     <string name="delete_item">Delete item</string>
     <string name="splash_background">background light</string>
     <string name="splash_logo">logo icon\n</string>

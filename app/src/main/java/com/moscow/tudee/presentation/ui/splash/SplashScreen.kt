@@ -1,5 +1,6 @@
-package com.moscow.tudee.presentation.screen.splash
+package com.moscow.tudee.presentation.ui.splash
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
-import com.moscow.tudee.presentation.viewmodel.SplashViewModel
+import com.moscow.tudee.presentation.ui.splash.viewmodel.SplashViewModel
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -28,15 +29,17 @@ import org.koin.androidx.compose.koinViewModel
 fun SplashScreen(
     onNavigateToHome: () -> Unit,
     onNavigateToOnboarding: () -> Unit,
-    viewModel: SplashViewModel = koinViewModel(),
-    backgroundImage: Painter = if (isSystemInDarkTheme()) {
+    viewModel: SplashViewModel = koinViewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val hasSeenOnboarding = state.hasSeenOnboarding
+    val backgroundImage: Painter = if (isSystemInDarkTheme()) {
         painterResource(id = R.drawable.background_splash_dark)
     } else {
         painterResource(id = R.drawable.background_splash_light)
     }
-) {
-    val hasSeenOnboarding by viewModel.hasSeenOnboarding.collectAsStateWithLifecycle()
-    val scale = remember { androidx.compose.animation.core.Animatable(0f) }
+
+    val scale = remember { Animatable(0f) }
 
     LaunchedEffect(hasSeenOnboarding) {
         if (hasSeenOnboarding != null) {

@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.screen.onboarding
+package com.moscow.tudee.presentation.ui.onboarding
 
 data class OnboardingData(
     val imageRes: Int,

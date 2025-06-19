@@ -1,6 +1,6 @@
 package com.moscow.tudee.di
 
-import com.moscow.tudee.presentation.viewmodel.SplashViewModel
+import com.moscow.tudee.presentation.ui.splash.viewmodel.SplashViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.screen.onboarding
+package com.moscow.tudee.presentation.ui.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,21 +22,22 @@ import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
-import com.moscow.tudee.presentation.viewmodel.SplashViewModel
+import com.moscow.tudee.presentation.ui.splash.viewmodel.SplashViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OnboardingScreen(
     viewModel: SplashViewModel = koinViewModel(),
-    onFinish: () -> Unit,
-    backgroundImage: Painter = if (isSystemInDarkTheme()) {
+    onFinish: () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+
+    val backgroundImage: Painter = if (isSystemInDarkTheme()) {
         painterResource(id = R.drawable.background_splash_dark)
     } else {
         painterResource(id = R.drawable.background_splash_light)
     }
-) {
-    val scope = rememberCoroutineScope()
 
     val pages = listOf(
         OnboardingData(
@@ -107,5 +108,5 @@ fun OnboardingScreen(
 @Composable
 fun OnboardingScreenPreview() {
     val bg = painterResource(id = R.drawable.background_splash_light)
-    OnboardingScreen(onFinish = {}, backgroundImage = bg)
+    OnboardingScreen(onFinish = {})
 }
