@@ -55,28 +55,6 @@ class CategoryViewModel(
         }
     }
 
-
-//    override fun onInProgressTabClick() {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onToDoTabClick() {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onDoneTabClick() {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onEditButtonClicked() {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onSaveButtonClicked(category: CategoriesUiState.CategoryUi) {
-//        TODO("Not yet implemented")
-//    }
-
-
     override fun onAddCategory(category: CategoriesUiState.CategoryUi) {
         viewModelScope.launch {
             runCatching {
