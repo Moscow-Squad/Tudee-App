@@ -15,6 +15,7 @@ data class HomeState(
     val selectedTask: TaskDetails? = null,
     val categories: List<EditTaskCategory> = emptyList(),
     val showAddTaskBottomSheet: Boolean = false,
+    val showEditTaskBottomSheet: Boolean = false,
     val showTaskDetailsBottomSheet:Boolean = false
 ) {
     enum class SliderState {
@@ -42,7 +43,6 @@ data class HomeState(
         val state: TaskState,
         val date: LocalDateTime=java.time.LocalDateTime.now().toKotlinLocalDateTime()
 
-        val state: Task.Status
     )
 
     enum class TaskState(val labelResInt: Int) {
