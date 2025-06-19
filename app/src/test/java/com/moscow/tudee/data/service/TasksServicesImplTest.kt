@@ -42,6 +42,7 @@ class TasksServicesImplTest {
         tasksServices = TasksServicesImpl(taskDao)
 
     }
+
     @Test
     fun `should return list of tasks when tasks exist`() = runTest {
         val taskEntity = TaskEntity(
@@ -468,5 +469,5 @@ class TasksServicesImplTest {
 }
 
 
-}
+
 
