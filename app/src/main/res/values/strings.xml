@@ -25,6 +25,8 @@
     <string name="clear">Clear</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="task_details">Task details</string>
+    <string name="move_to">Move to %s</string>
     <string name="overview">Overview</string>
     <string name="calendar_icon">Calendar Icon</string>
     <string name="right_arrow">right arrow</string>

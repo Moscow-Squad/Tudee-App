@@ -3,10 +3,8 @@ package com.moscow.tudee.presentation.component.bottomSheet
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -22,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,11 +31,6 @@ fun TudeeBottomSheet(
     contentHorizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     onDismissRequest: (() -> Unit)?,
     scrimColor: Color = Color.Black.copy(alpha = 0.5f),
-    contentPadding: PaddingValues = PaddingValues(
-        start = 16.dp,
-        end = 16.dp,
-        bottom = 24.dp
-    ),
     content: @Composable ColumnScope.() -> Unit,
 ) {
 
@@ -59,7 +51,6 @@ fun TudeeBottomSheet(
             modifier =
                 modifier
                     .fillMaxWidth()
-                    .padding(paddingValues = contentPadding)
         ) {
             content()
         }
