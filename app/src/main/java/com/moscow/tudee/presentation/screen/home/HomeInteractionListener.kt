@@ -11,7 +11,7 @@ interface HomeInteractionListener {
 
     fun onTaskClick(taskDetails: HomeState.TaskDetails)
 
-    fun addTask(task: Task)
+    fun addTask(taskDetails: HomeState.TaskDetails)
 
     fun onViewAllClick(taskStatus: Task.Status)
 
