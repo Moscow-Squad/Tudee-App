@@ -21,4 +21,10 @@ interface CategoryDao {
 
     @Query("DELETE FROM categories_table WHERE id = :categoryId")
     suspend fun deleteCategory(categoryId: Long)
+
+    @Query("UPDATE categories_table SET countOfTasks = countOfTasks + 1 WHERE id = :categoryId")
+    suspend fun incrementTaskCount(categoryId: Long)
+
+    @Query("UPDATE categories_table SET countOfTasks = countOfTasks - 1 WHERE id = :categoryId")
+    suspend fun decrementTaskCount(categoryId: Long)
 }

@@ -33,8 +33,11 @@ val dataModule = module {
     single<CategoryDao> { get<TudeeDatabase>().categoryDao() }
     single<TaskDao> { get<TudeeDatabase>().taskDao() }
 
-    single<CategoryServices> { CategoryServicesImpl(get()) }
-    single<TasksServices> { TasksServicesImpl(get()) }
+    single<TasksServices> {
+        TasksServicesImpl(get(), get())
+    }
 
-    viewModel { CategoryViewModel(get()) }
+    single<CategoryServices> {
+        CategoryServicesImpl(get())
+    }
 }

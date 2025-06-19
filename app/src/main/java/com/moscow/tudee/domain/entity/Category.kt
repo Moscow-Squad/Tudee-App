@@ -6,5 +6,6 @@ data class Category @OptIn(ExperimentalUuidApi::class) constructor(
     val id: Long? = null,
     val title: String,
     val iconUri: String,
-    val isPredefined: Boolean = false
+    val isPredefined: Boolean = false,
+    val countOfTasks: Int = 0
 )
