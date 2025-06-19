@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.category
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -51,6 +53,10 @@ fun AddCategoryBottomSheet(
     onEditImage: () -> Unit,
     onDeleteCategory: () -> Unit
 ) {
+    val isEnabled = remember {
+        categoryTitle.isNotBlank() && image != null
+    }
+
     TudeeBottomSheet(
         onDismissRequest = onDismissRequest,
         contentHorizontalAlignment = Alignment.Start,
@@ -75,12 +81,17 @@ fun AddCategoryBottomSheet(
                     color = colors.title,
                 )
 
-                Text(
-                    modifier = Modifier.clickable(onClick = onDeleteCategory),
-                    text = "Delete",
-                    style = textStyle.label.large,
-                    color = colors.error,
-                )
+                AnimatedVisibility(
+                    visible = image != null
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .clickable(onClick = onDeleteCategory),
+                        text = "Delete",
+                        style = textStyle.label.large,
+                        color = colors.error,
+                    )
+                }
             }
 
             TudeeTextField(
@@ -130,7 +141,7 @@ fun AddCategoryBottomSheet(
                                     .clip(RoundedCornerShape(16.dp))
                             ) {
                                 Image(
-                                    modifier = Modifier.size(112.dp,113.dp),
+                                    modifier = Modifier.size(112.dp, 113.dp),
                                     painter = image!!,
                                     contentScale = ContentScale.Crop,
                                     contentDescription = "Category Image",
@@ -151,7 +162,11 @@ fun AddCategoryBottomSheet(
                                 )
                             }
                         } else {
-                            Column {
+                            Column(
+                                modifier = Modifier.padding(32.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_image_add),
                                     contentDescription = "Add Image",
@@ -177,7 +192,9 @@ fun AddCategoryBottomSheet(
             PrimaryButton(
                 text = "Add",
                 onClick = { onNewCategory(categoryTitle) },
-                isEnabled = categoryTitle.isNotBlank() && image != null,
+                isEnabled = isEnabled,
+                backgroundColor = if (isEnabled) colors.primaryGradient else Brush.linearGradient(listOf(colors.disable, colors.disable)),
+                textColor = if (isEnabled) colors.onPrimary.copy(0.87f) else colors.stroke.copy(0.12f),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 12.dp)
