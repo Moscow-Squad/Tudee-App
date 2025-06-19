@@ -3,6 +3,7 @@ package com.moscow.tudee.presentation.screen.home
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import kotlinx.datetime.LocalDateTime
 
 class HomeViewModel(
     private val tasksServices: TasksServices
@@ -15,24 +16,24 @@ class HomeViewModel(
     private fun loadTasks() {
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.TODO) },
-            onSuccess = { response -> updateState { it.copy(todoTasks = response.map { it.toTaskDetails() }) } },
+            onSuccess = { response -> updateState { it.copy(todoTasks = response.map { it }) } },
             onError = { handleHomeError(it) },
-            onStart = { toggleLoading() },
-            onFinally = { toggleLoading() }
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
         )
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.IN_PROGRESS) },
-            onSuccess = { response -> updateState { it.copy(inProgressTasks = response.map { it.toTaskDetails() }) } },
+            onSuccess = { response -> updateState { it.copy(inProgressTasks = response.map { it }) } },
             onError = { handleHomeError(it) },
-            onStart = { toggleLoading() },
-            onFinally = { toggleLoading() }
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
         )
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.DONE) },
-            onSuccess = { response -> updateState { it.copy(doneTasks = response.map { it.toTaskDetails() }) } },
+            onSuccess = { response -> updateState { it.copy(doneTasks = response.map { it }) } },
             onError = { handleHomeError(it) },
-            onStart = { toggleLoading() },
-            onFinally = { toggleLoading() }
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
         )
     }
 
@@ -40,35 +41,27 @@ class HomeViewModel(
         updateState { it.copy(showAddTaskBottomSheet = true) }
     }
 
-    override fun onTaskClick(taskDetails: HomeState.TaskDetails) {
-        updateState { it.copy(showTaskDetailsBottomSheet = true ) }
-
+    override fun onTaskClick(task: Task) {
+        updateState { it.copy(showTaskDetailsBottomSheet = true) }
+        updateState { it.copy(selectedTask = task) }
     }
 
-    override fun addTask(taskDetails: HomeState.TaskDetails) {
+    override fun onAddTask(task: Task) {
         launchWithResult(
             action = {
-                updateState { it.copy(todoTasks = it.todoTasks + taskDetails)}
-                val taskDetails = Task(
-                    title = taskDetails.title,
-                    description = taskDetails.description,
-                    priority = Task.Priority.valueOf(taskDetails.priorityName),
-                    categoryId=0L,
-                    status =
-                        when(taskDetails.state){
-                            HomeState.TaskState.DONE -> Task.Status.DONE
-                            HomeState.TaskState.IN_PROGRESS -> Task.Status.IN_PROGRESS
-                            HomeState.TaskState.TODO -> Task.Status.TODO
-                        },
-                    date = taskDetails.date
-
-                )
-                tasksServices.addTask(taskDetails)
+                tasksServices.addTask(task)
             },
-            onSuccess = { sendEvent(HomeEvent.OnDoneClick)},
+            onSuccess = {
+                updateState {
+                    it.copy(
+                        showAddTaskBottomSheet = false,
+                        todoTasks = it.todoTasks + task
+                    )
+                }
+            },
             onError = { handleHomeError(it) },
-            onStart = { toggleLoading() },
-            onFinally = { toggleLoading() }
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
         )
     }
 
@@ -76,34 +69,56 @@ class HomeViewModel(
         sendEvent(HomeEvent.ViewAll(taskStatus))
     }
 
-    override fun onEditTaskClick(taskDetails: HomeState.TaskDetails) {
-        sendEvent(HomeEvent.ShowEditTaskBottomSheet)
+    override fun onEditTaskIconClick(task: Task) {
+        updateState { it.copy(showEditTaskBottomSheet = true) }
     }
 
-    override fun onMoveToDoneClick(taskDetails: HomeState.TaskDetails) {
-        val updated = taskDetails.copy(state = HomeState.TaskState.DONE)
-        updateState {
-            it.copy(
-                inProgressTasks = it.inProgressTasks - taskDetails,
-                doneTasks = it.doneTasks + updated
-            )
-        }
-        sendEvent(HomeEvent.OnDoneClick)
+    override fun onMoveTaskClick(task: Task) {
+        val updated = task.copy(
+            status = when (task.status) {
+                Task.Status.TODO -> Task.Status.IN_PROGRESS
+                Task.Status.IN_PROGRESS -> Task.Status.DONE
+                Task.Status.DONE -> Task.Status.TODO
+            }
+        )
+
+        launchWithResult(
+            action = { tasksServices.updateTask(updated) },
+            onSuccess = {
+                updateState {
+                    it.copy(
+                        showTaskDetailsBottomSheet = false,
+                        inProgressTasks =
+                            if (task.status == Task.Status.IN_PROGRESS) it.inProgressTasks - task else it.inProgressTasks + task,
+                        doneTasks = if (task.status == Task.Status.IN_PROGRESS) it.doneTasks + task else it.doneTasks,
+                        todoTasks = if (task.status == Task.Status.IN_PROGRESS) it.todoTasks else it.todoTasks - task
+                    )
+                }
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
-    override fun onSaveTaskClick(taskDetails: HomeState.TaskDetails) {
-        val updated = taskDetails.copy(state = HomeState.TaskState.DONE)
-        updateState {
-            it.copy(
-                inProgressTasks = it.inProgressTasks - taskDetails,
-                doneTasks = it.doneTasks + updated
-            )
-        }
-        sendEvent(HomeEvent.OnDoneClick)
+    override fun onSaveEditTaskClick(task: Task) {
+        launchWithResult(
+            action = { tasksServices.updateTask(task) },
+            onSuccess = {
+                updateState {
+                    it.copy(
+                        showEditTaskBottomSheet = false
+                    )
+                }
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
     override fun onPriorityClick(taskPriority: Task.Priority) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(priorityName = taskPriority.toString())) }
+        updateState { it.copy(selectedTask = it.selectedTask?.copy(priority = taskPriority)) }
     }
 
     override fun onTitleChange(newTitle: String) {
@@ -114,24 +129,40 @@ class HomeViewModel(
         updateState { it.copy(selectedTask = it.selectedTask?.copy(description = newDescription)) }
     }
 
-    override fun onDateChange(newDate: kotlinx.datetime.LocalDateTime) {
-        updateState { it.copy(date = newDate.toString()) }
+    override fun onDateChange(newDate: LocalDateTime) {
+        updateState { it.copy(selectedTask = it.selectedTask?.copy(date = newDate)) }
+    }
+
+    override fun onShowAddBottomSheet() {
+        updateState { it.copy(showAddTaskBottomSheet = true) }
+    }
+
+    override fun onShowEditBottomSheet() {
+        updateState { it.copy(showEditTaskBottomSheet = true) }
+    }
+
+    override fun onShowDetailsBottomSheet() {
+        updateState { it.copy(showTaskDetailsBottomSheet = true) }
     }
 
     override fun onDismissEditBottomSheet() {
-      updateState { it.copy(showEditTaskBottomSheet =false) }
+        updateState { it.copy(showEditTaskBottomSheet = false) }
     }
 
     override fun onDismissAddBottomSheet() {
-        updateState { it.copy(showAddTaskBottomSheet=false) }
+        updateState { it.copy(showAddTaskBottomSheet = false) }
     }
 
     override fun onDismissDetailsBottomSheet() {
-        updateState { it.copy(showTaskDetailsBottomSheet =false) }
+        updateState { it.copy(showTaskDetailsBottomSheet = false) }
     }
 
-    private fun toggleLoading() {
-        updateState { it.copy(isLoading = !it.isLoading) }
+    private fun startLoading() {
+        updateState { it.copy(isLoading = true) }
+    }
+
+    private fun endLoading() {
+        updateState { it.copy(isLoading = false) }
     }
 
     private fun handleHomeError(throwable: Throwable) {

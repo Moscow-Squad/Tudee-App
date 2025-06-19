@@ -15,11 +15,11 @@ interface HomeInteractionListener {
 
     fun onViewAllClick(taskStatus: Task.Status)
 
-    fun onEditTaskClick(task: Task)
+    fun onEditTaskIconClick(task: Task)
 
-    fun onMoveToDoneClick(task: Task)
+    fun onMoveTaskClick(task: Task)
 
-    fun onSaveTaskClick(task: Task)
+    fun onSaveEditTaskClick(task: Task)
 
     fun onPriorityClick(taskPriority: Task.Priority)
 
@@ -29,9 +29,9 @@ interface HomeInteractionListener {
 
     fun onDateChange(newDate: LocalDateTime)
 
-    fun onShowEditBottomSheet()
-
     fun onShowAddBottomSheet()
+
+    fun onShowEditBottomSheet()
 
     fun onShowDetailsBottomSheet()
 
