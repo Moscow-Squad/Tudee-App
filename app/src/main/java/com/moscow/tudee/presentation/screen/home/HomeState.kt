@@ -2,7 +2,8 @@ package com.moscow.tudee.presentation.screen.home
 
 import androidx.compose.ui.graphics.Color
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Task
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 
 data class HomeState(
     val isLoading: Boolean = true,
@@ -14,6 +15,7 @@ data class HomeState(
     val selectedTask: TaskDetails? = null,
     val categories: List<EditTaskCategory> = emptyList(),
     val showAddTaskBottomSheet: Boolean = false,
+    val showEditTaskBottomSheet: Boolean = false,
     val showTaskDetailsBottomSheet:Boolean = false
 ) {
     enum class SliderState {
@@ -38,7 +40,9 @@ data class HomeState(
         val description: String,
         val priorityName: String,
         val priorityIcon: Int,
-        val state: Task.Status
+        val state: TaskState,
+        val date: LocalDateTime=java.time.LocalDateTime.now().toKotlinLocalDateTime()
+
     )
 
     enum class TaskState(val labelResInt: Int) {
