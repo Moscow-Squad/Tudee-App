@@ -51,6 +51,37 @@ class CategoryServicesImplTest {
         assertThat(result).containsExactlyElementsIn(expectedCategories)
     }
 
+    @Test
+    fun `getCategories should return empty list when DAO returns empty list`() = runTest {
+        // Given
+        coEvery { categoryDao.getCategories() } returns emptyList()
+
+        // When
+        val result = categoryServices.getCategories()
+
+        // Then
+        coVerify(exactly = 1) { categoryDao.getCategories() }
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `getCategories should return single item when DAO returns single item`() = runTest {
+        // Given
+        val categoryEntity = createCategoryRoomEntity(id = 3, title = "Single Category")
+        val expectedCategory = createCategoryDomainEntity(id = 3, title = "Single Category")
+
+        coEvery { categoryDao.getCategories() } returns listOf(categoryEntity)
+
+        // When
+        val result = categoryServices.getCategories()
+
+        // Then
+        coVerify(exactly = 1) { categoryDao.getCategories() }
+        assertThat(result).containsExactly(expectedCategory)
+    }
+
+
+
     private fun createCategoryRoomEntity(
         id: Long = 0L,
         title: String = "Education",
