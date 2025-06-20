@@ -21,13 +21,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.HomeState.TaskDetails
 
 @Composable
 fun TaskListHeader(
@@ -58,7 +58,8 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    taskDetails: List<Task>,
+    tasks: List<Task>,
+    getCategory: (taskId: Long) -> Category,
     onTaskClick: (Task) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -72,20 +73,20 @@ fun TaskList(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-        items(taskDetails) {
+        items(tasks) { task ->
             TaskCard(
                 modifier = modifier
                     .width(320.dp)
-                    .clickable { onTaskClick(it) },
-                icon = painterResource(it.taskIcon),
-                title = it.title,
-                description = it.description,
+                    .clickable { onTaskClick(task) },
+                category = getCategory(task.id ?: 0L),
+                title = task.title,
+                description = task.description,
             ) {
-                /*PriorityChip(
-                    text = it.priorityName,
-                    backgroundColor = it.priorityBackgroundColor,
-                    icon = painterResource(id = it.priorityIcon)
-                )*/
+                PriorityChip(
+                    text = task.priority.getText(),
+                    backgroundColor = task.priority.getBackground(),
+                    icon = painterResource(id = task.priority.getIcon())
+                )
             }
         }
 
