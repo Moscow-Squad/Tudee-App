@@ -11,7 +11,7 @@ fun CategoryEntity.toCategory(): Category {
     return Category(
         id = id,
         title = title,
-        iconUri = iconUri,
+        iconUri = iconUri ?: "",
         isPredefined = isPredefined,
         countOfTasks = countOfTasks
     )
@@ -38,20 +38,20 @@ fun TaskEntity.toTask(): Task {
         date = if (date.contains("T")) {
             LocalDateTime.parse(date)
         } else {
-            LocalDateTime.parse("${date}T00:00:00") 
+            LocalDateTime.parse("${date}T00:00:00")
         }
     )
 }
 
 fun Task.toTaskEntity(): TaskEntity {
     return TaskEntity(
-        id = id ?: 0, 
+        id = id ?: 0,
         title = title,
         description = description,
         priority = priority.toString(),
         categoryId = categoryId,
         status = status.toString(),
-        date = date.toString().substringBefore("T") 
+        date = date.toString().substringBefore("T")
     )
 }
 
