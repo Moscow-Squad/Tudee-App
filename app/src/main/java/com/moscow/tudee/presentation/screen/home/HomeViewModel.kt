@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.screen.home
 
+import android.util.Log
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
@@ -22,6 +23,7 @@ class HomeViewModel(
         launchWithResult(
             action = { categoryServices.getCategories() },
             onSuccess = { response ->
+                Log.e("BLA", response.toString())
                 updateState { it.copy(categories = response) }
             },
             onError = { handleHomeError(it) },
@@ -34,6 +36,7 @@ class HomeViewModel(
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.TODO) },
             onSuccess = { response ->
+                Log.e("BLA", response.toString())
                 getCategoryAndSaveTasks(response)
             },
             onError = { handleHomeError(it) },
@@ -43,6 +46,7 @@ class HomeViewModel(
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.IN_PROGRESS) },
             onSuccess = { response ->
+                Log.e("BLA", response.toString())
                 getCategoryAndSaveTasks(response)
             },
             onError = { handleHomeError(it) },
@@ -52,6 +56,7 @@ class HomeViewModel(
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.DONE) },
             onSuccess = { response ->
+                Log.e("BLA", response.toString())
                 getCategoryAndSaveTasks(response)
             },
             onError = { handleHomeError(it) },

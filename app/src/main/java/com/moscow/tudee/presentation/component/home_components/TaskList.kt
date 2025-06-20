@@ -86,7 +86,8 @@ fun TaskList(
                 PriorityChip(
                     text = task.priority.getText(),
                     backgroundColor = task.priority.getColor(),
-                    icon = painterResource(id = task.priority.getIcon())
+                    icon = painterResource(id = task.priority.getIcon()),
+                    selected = true
                 )
             }
         }

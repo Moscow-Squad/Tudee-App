@@ -29,8 +29,8 @@ import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState
-import com.moscow.tudee.presentation.screen.home.getColor
 import com.moscow.tudee.presentation.screen.home.getBackgroundColor
+import com.moscow.tudee.presentation.screen.home.getColor
 import com.moscow.tudee.presentation.screen.home.getIcon
 import com.moscow.tudee.presentation.screen.home.getText
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
@@ -121,6 +121,11 @@ fun TaskDetailsBottomSheet(
             }
 
             if (task.status != Task.Status.DONE) {
+                val movedToStatus = when (task.status) {
+                    Task.Status.TODO -> Task.Status.IN_PROGRESS
+                    Task.Status.IN_PROGRESS -> Task.Status.DONE
+                    Task.Status.DONE -> Task.Status.TODO
+                }
                 Row(
                     modifier = Modifier.padding(top = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -133,7 +138,8 @@ fun TaskDetailsBottomSheet(
                     )
 
                     SecondaryButton(
-                        text = stringResource(R.string.move_to, task.status.getText()),
+
+                        text = stringResource(R.string.move_to, movedToStatus.getText()),
                         onClick = {
                             onMoveClick()
                         },
