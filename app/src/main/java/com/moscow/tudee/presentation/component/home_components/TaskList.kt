@@ -28,6 +28,7 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.screen.home.HomeState
 import com.moscow.tudee.presentation.screen.home.getBackground
 import com.moscow.tudee.presentation.screen.home.getIcon
 import com.moscow.tudee.presentation.screen.home.getText
@@ -61,9 +62,8 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    tasks: List<Task>,
-    getCategory: (taskId: Long) -> Category,
-    onTaskClick: (Task) -> Unit,
+    tasks: List<HomeState.HomeTask>,
+    onTaskClick: (HomeState.HomeTask) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(

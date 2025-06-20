@@ -66,9 +66,9 @@ fun HomeContent(
                 )
                 OverviewSection(
                     sliderState = uiState.update,
-                    todoTasks = uiState.todoTasks,
-                    inProgressTasks = uiState.inProgressTasks,
-                    doneTasks = uiState.doneTasks
+                    todoTasks = uiState.todoTasks.map { it.toTask() },
+                    inProgressTasks = uiState.inProgressTasks.map { it.toTask() },
+                    doneTasks = uiState.doneTasks.map { it.toTask() }
                 )
             }
         }
@@ -85,9 +85,6 @@ fun HomeContent(
                                 onTaskClick = { task ->
                                     interactionListener.onTaskClick(task)
                                 },
-                                getCategory = { categoryId ->
-                                    interactionListener.getCategoryById(categoryId)
-                                }
                             )
                         }
 
@@ -100,9 +97,6 @@ fun HomeContent(
                                 onTaskClick = { task ->
                                     interactionListener.onTaskClick(task)
                                 },
-                                getCategory = { categoryId ->
-                                    interactionListener.getCategoryById(categoryId)
-                                }
                             )
                         }
 
@@ -115,9 +109,6 @@ fun HomeContent(
                                 onTaskClick = { task ->
                                     interactionListener.onTaskClick(task)
                                 },
-                                getCategory = { categoryId ->
-                                    interactionListener.getCategoryById(categoryId)
-                                }
                             )
 
                         }
