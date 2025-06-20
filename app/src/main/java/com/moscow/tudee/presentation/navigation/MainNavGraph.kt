@@ -9,7 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
+import com.moscow.tudee.presentation.navigation.entry.TasksScreen
 import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
+import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
 import com.moscow.tudee.presentation.ui.categories.categoriesRoute
 import com.moscow.tudee.presentation.ui.home.homeRoute
 import com.moscow.tudee.presentation.ui.tasks.tasksRoute
@@ -30,7 +32,13 @@ fun MainNavGraph(
     {
         homeRoute(
             appBar = appBar,
-            isBottomNavigationVisible = isBottomNavigationVisible
+            isBottomNavigationVisible = isBottomNavigationVisible,
+            navigateToTaskScreen = {
+                navController.navigateSafe(
+                    route = TasksScreen,
+                    builder = {}
+                )
+            }
         )
 
         tasksRoute(

@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.presentation.designSystem.component.BottomNavBar
 import com.moscow.tudee.presentation.designSystem.component.topbar.TudeeAppBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.designSystem.theme.ThemeState
 import com.moscow.tudee.presentation.model.BottomNavigationDestination
 import com.moscow.tudee.presentation.navigation.MainNavGraph
 
