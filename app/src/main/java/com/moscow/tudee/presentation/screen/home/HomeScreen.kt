@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.screen.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,11 +14,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.home_components.OverviewSection
 import com.moscow.tudee.presentation.component.home_components.TaskList
 import com.moscow.tudee.presentation.component.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import org.koin.androidx.compose.koinViewModel
 
@@ -119,6 +122,19 @@ fun HomeContent(
             }
         }
 
+    }
+
+    if (uiState.showTaskDetailsBottomSheet) {
+        TaskDetailsBottomSheet(
+            task = uiState.selectedTask!!,
+            onDismiss = { interactionListener.onDismissDetailsBottomSheet() },
+            onEditClick = {
+                interactionListener.onEditTaskIconClick(uiState.selectedTask)
+            },
+            onMoveClick = {
+                interactionListener.onMoveTaskClick(uiState.selectedTask)
+            }
+        )
     }
 
 }
