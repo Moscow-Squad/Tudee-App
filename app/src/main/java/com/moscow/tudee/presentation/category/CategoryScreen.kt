@@ -25,14 +25,14 @@ fun CategoryScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(tasks) { currentTask ->
-            TaskCard(
-                iconUrl = painterResource(currentTask.icon),
-                title = currentTask.title,
-                description = currentTask.description,
-                date = currentTask.date.formattedDate,
-            ) {
-                Priority(priority = currentTask.priority)
-            }
+//            TaskCard(
+//                iconUrl = painterResource(currentTask.icon),
+//                title = currentTask.title,
+//                description = currentTask.description,
+//                date = currentTask.date.formattedDate,
+//            ) {
+//                Priority(priority = currentTask.priority)
+//            }
         }
     }
 }
