@@ -1,7 +1,5 @@
 package com.moscow.tudee.presentation.task
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
@@ -29,7 +26,6 @@ import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
@@ -175,16 +171,4 @@ fun TaskScreen(
             }
         } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
     }
-}
-
-@Preview(apiLevel = 33, showBackground = true, uiMode = UI_MODE_NIGHT_NO)
-@Preview(apiLevel = 33, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-private fun TaskScreenPreview() {
-    TudeeTheme {
-        TaskScreen(
-            viewModel = mockViewModel()
-        )
-    }
-
 }
