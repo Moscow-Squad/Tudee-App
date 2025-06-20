@@ -9,10 +9,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavGraphBuilder
 import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
+import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 
-fun NavGraphBuilder.categoriesRoute() {
+fun NavGraphBuilder.categoriesRoute(
+    appBar: (TudeeAppBar) -> Unit,
+    isBottomNavigationVisible: (Boolean) -> Unit,
+) {
     tudeeComposable<CategoriesScreen>{
+        appBar(CategoriesScreen.appBar)
+        isBottomNavigationVisible(CategoriesScreen.isBottomNavigationVisible)
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

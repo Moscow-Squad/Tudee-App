@@ -28,9 +28,10 @@ import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 @Composable
 fun TudeeSwitch(
     modifier: Modifier = Modifier,
-    isLightTheme: Boolean,
-    onToggleState: () -> Unit
 ) {
+    val themeState = Theme.state
+    val isLightTheme = !themeState.isDark
+
     val transition = updateTransition(
         targetState = isLightTheme,
         label = "switchButtonTransition"
@@ -150,7 +151,9 @@ fun TudeeSwitch(
                 TudeeSwitchLightTheme(
                     transitionFloatAnimationSpec = transitionFloatAnimationSpec,
                     isClickable = isLightTheme,
-                    onToggleState = onToggleState,
+                    onToggleState = {
+                        themeState.onThemeChanged(isLightTheme)
+                    },
                     movingCloudySize = movingCloudySize,
                     outerTopCloudSize = outerTopCloudSize,
                     cloudyOutlierBottomDp = cloudyOutlierBottomDp,
@@ -164,7 +167,9 @@ fun TudeeSwitch(
             } else {
                 TudeeSwitchDarkTheme(
                     isClickable = !isLightTheme,
-                    onToggleState = onToggleState,
+                    onToggleState = {
+                        themeState.onThemeChanged(isLightTheme)
+                    },
                     movingCloudySize = movingCloudySize,
                     transitionFloatAnimationSpec = transitionFloatAnimationSpec
 
@@ -194,10 +199,6 @@ private fun TudeeSwitchPreview() {
 
         Column(modifier = Modifier) {
             TudeeSwitch(
-                isLightTheme = localState.isDark,
-                onToggleState = {
-                    localState.onThemeChanged(!localState.isDark)
-                }
             )
         }
     }

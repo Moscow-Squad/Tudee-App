@@ -90,3 +90,7 @@ val DefaultTextStyle = TudeeTextStyle(
         )
     )
 )
+
+val CherryBomb = FontFamily(
+    Font(R.font.cherry_bomb_one_regular , FontWeight.Normal)
+)

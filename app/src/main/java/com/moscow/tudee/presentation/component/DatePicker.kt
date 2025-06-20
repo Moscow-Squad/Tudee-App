@@ -117,8 +117,8 @@ fun DatePickerModal(
 fun TudeeDatePickerTextField(
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
-    hint: String = "",
     modifier: Modifier = Modifier,
+    hint: String = "",
     startIcon: Painter? = null,
     dateFormat: String = "dd-MM-yyyy"
 ) {

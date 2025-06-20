@@ -19,18 +19,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TudeeTheme {
-                TudeeGraph()
-                val isDark = isSystemInDarkTheme()
-                val (isDarkThemeState, onThemeStateChanged) = remember { mutableStateOf(isDark) }
-                val themeState by remember(isDarkThemeState) {
-                    derivedStateOf {
-                        ThemeState(
-                            isDark = isDarkThemeState,
-                            onThemeChanged = onThemeStateChanged
-                        )
-                    }
+            val isDark = isSystemInDarkTheme()
+            val (isDarkThemeState, onThemeStateChanged) = remember { mutableStateOf(isDark) }
+            val themeState by remember(isDarkThemeState) {
+                derivedStateOf {
+                    ThemeState(
+                        isDark = isDarkThemeState,
+                        onThemeChanged = onThemeStateChanged
+                    )
                 }
+            }
+            TudeeTheme(state = themeState) {
+                TudeeGraph()
             }
         }
     }

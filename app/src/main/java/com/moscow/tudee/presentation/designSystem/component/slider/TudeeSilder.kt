@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.typography.DefaultTextStyle
+import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
 
 @Composable
 fun TudeeSlider(

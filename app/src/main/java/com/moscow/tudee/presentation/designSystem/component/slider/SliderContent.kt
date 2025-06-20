@@ -3,6 +3,7 @@ package com.moscow.tudee.presentation.designSystem.component.slider
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.moscow.tudee.R
+import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
 
 sealed class SliderContent(
     @StringRes val title: Int,
