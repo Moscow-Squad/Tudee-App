@@ -6,6 +6,7 @@ import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 
 class HomeViewModel(
     private val tasksServices: TasksServices,
@@ -125,6 +126,19 @@ class HomeViewModel(
     }
 
     override fun onFloatingActionButtonClick() {
+        updateState {
+            it.copy(
+                selectedTask = HomeState.HomeTask(
+                    id = null,
+                    title = "",
+                    description = "",
+                    priority = Task.Priority.LOW,
+                    status = Task.Status.TODO,
+                    category = null,
+                    date = java.time.LocalDateTime.now().toKotlinLocalDateTime()
+                )
+            )
+        }
         updateState { it.copy(showAddTaskBottomSheet = true) }
     }
 

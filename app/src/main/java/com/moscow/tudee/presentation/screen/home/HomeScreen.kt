@@ -16,6 +16,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.EditTaskBottomSheet
 import com.moscow.tudee.presentation.component.home_components.OverviewSection
 import com.moscow.tudee.presentation.component.home_components.TaskList
@@ -190,6 +191,40 @@ fun HomeContent(
         )
     }
 
+    if (uiState.showAddTaskBottomSheet) {
+        AddTaskBottomSheet(
+            modifier = Modifier,
+            isVisible = true,
+            taskTitle = uiState.selectedTask!!.title,
+            onTaskTitleChange = {
+                interactionListener.onTitleChange(it)
+            },
+            taskDescription = uiState.selectedTask.description,
+            onTaskDescriptionChange = {
+                interactionListener.onDescriptionChange(it)
+            },
+            selectedPriority = uiState.selectedTask.priority,
+            onPrioritySelected = {
+                interactionListener.onPriorityClick(it)
+            },
+            categories = uiState.categories,
+            selectedCategory = uiState.selectedTask.category!!,
+            onCategorySelected = {
+                interactionListener.onCategoryClick(it)
+            },
+            selectedDate = uiState.selectedTask.date.asLong(),
+            onDateSelected = {
+                interactionListener.onDateChange(uiState.selectedTask.date)
+            },
+            onDismiss = {
+                interactionListener.onDismissAddBottomSheet()
+            },
+            onSaveTask = {
+                interactionListener.onAddTask(uiState.selectedTask)
+            }
+
+        )
+    }
 }
 
 
