@@ -15,6 +15,7 @@ import org.koin.android.ext.koin.androidApplication
 import com.moscow.tudee.presentation.screen.home.HomeViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 private const val TUDEE_DATABASE = "tudee_database"
@@ -66,6 +67,4 @@ val dataModule = module {
         CategoryServicesImpl(get())
     }
     single<SplashService> { SplashServiceImpl(androidApplication()) }
-
-    viewModel { HomeViewModel(get()) }
 }
