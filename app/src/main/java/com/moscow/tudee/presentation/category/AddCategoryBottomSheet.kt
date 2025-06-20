@@ -60,8 +60,7 @@ fun AddCategoryBottomSheet(
 
     TudeeBottomSheet(
         onDismissRequest = onDismissRequest,
-        contentHorizontalAlignment = Alignment.Start,
-        contentPadding = PaddingValues()
+        contentHorizontalAlignment = Alignment.Start
     ) {
         Column(
             Modifier
