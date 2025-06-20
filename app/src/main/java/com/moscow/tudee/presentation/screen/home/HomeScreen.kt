@@ -80,27 +80,45 @@ fun HomeContent(
                             TaskListHeader(state, uiState.doneTasks.size, {
                                 interactionListener.onViewAllClick(state)
                             })
-                            TaskList(uiState.doneTasks, { task ->
-                                interactionListener.onTaskClick(task)
-                            })
+                            TaskList(
+                                tasks = uiState.doneTasks,
+                                onTaskClick = { task ->
+                                    interactionListener.onTaskClick(task)
+                                },
+                                getCategory = { categoryId ->
+                                    interactionListener.getCategoryById(categoryId)
+                                }
+                            )
                         }
 
                         Task.Status.IN_PROGRESS -> {
                             TaskListHeader(state, uiState.inProgressTasks.size, {
                                 interactionListener.onViewAllClick(state)
                             })
-                            TaskList(uiState.inProgressTasks, { task ->
-                                interactionListener.onTaskClick(task)
-                            })
+                            TaskList(
+                                tasks = uiState.inProgressTasks,
+                                onTaskClick = { task ->
+                                    interactionListener.onTaskClick(task)
+                                },
+                                getCategory = { categoryId ->
+                                    interactionListener.getCategoryById(categoryId)
+                                }
+                            )
                         }
 
                         Task.Status.TODO -> {
                             TaskListHeader(state, uiState.todoTasks.size, {
                                 interactionListener.onViewAllClick(state)
                             })
-                            TaskList(uiState.todoTasks, { task ->
-                                interactionListener.onTaskClick(task)
-                            })
+                            TaskList(
+                                tasks = uiState.todoTasks,
+                                onTaskClick = { task ->
+                                    interactionListener.onTaskClick(task)
+                                },
+                                getCategory = { categoryId ->
+                                    interactionListener.getCategoryById(categoryId)
+                                }
+                            )
 
                         }
                     }
