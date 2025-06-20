@@ -58,10 +58,19 @@ fun Task.Status.getText(): String {
 }
 
 @Composable
-fun Task.Status.getColor(): Color {
+fun Task.Status.getBackgroundColor(): Color {
     return when (this) {
         Task.Status.TODO -> Theme.colors.yellowVariant
         Task.Status.IN_PROGRESS -> Theme.colors.purpleVariant
         Task.Status.DONE -> Theme.colors.greenVariant
+    }
+}
+
+@Composable
+fun Task.Status.getColor(): Color {
+    return when (this) {
+        Task.Status.TODO -> Theme.colors.yellowAccent
+        Task.Status.IN_PROGRESS -> Theme.colors.purpleAccent
+        Task.Status.DONE -> Theme.colors.greenAccent
     }
 }
