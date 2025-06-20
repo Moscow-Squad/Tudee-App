@@ -28,7 +28,7 @@ fun Priority.getText(): String {
 }
 
 @Composable
-fun Priority.getBackground(): Color {
+fun Priority.getColor(): Color {
     return when (this) {
         Priority.HIGH -> Theme.colors.pinkAccent
         Priority.MEDIUM -> Theme.colors.yellowAccent
@@ -58,7 +58,7 @@ fun Task.Status.getText(): String {
 }
 
 @Composable
-fun Task.Status.getBackground(): Color {
+fun Task.Status.getColor(): Color {
     return when (this) {
         Task.Status.TODO -> Theme.colors.yellowVariant
         Task.Status.IN_PROGRESS -> Theme.colors.purpleVariant

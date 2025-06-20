@@ -27,7 +27,7 @@ import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState
-import com.moscow.tudee.presentation.screen.home.getBackground
+import com.moscow.tudee.presentation.screen.home.getColor
 import com.moscow.tudee.presentation.screen.home.getIcon
 import com.moscow.tudee.presentation.screen.home.getText
 
@@ -85,7 +85,7 @@ fun TaskList(
             ) {
                 PriorityChip(
                     text = task.priority.getText(),
-                    backgroundColor = task.priority.getBackground(),
+                    backgroundColor = task.priority.getColor(),
                     icon = painterResource(id = task.priority.getIcon())
                 )
             }
