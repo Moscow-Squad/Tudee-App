@@ -6,6 +6,7 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 
@@ -17,6 +18,14 @@ class HomeViewModel(
     init {
         loadCategories()
         loadTasks()
+    }
+    private fun calculateSliderState(todo: Int, inProgress: Int, done: Int): SliderState {
+        val total = todo + inProgress + done
+        return when {
+            total == 0 ->  SliderState.NOTHING_ON_YOUR_LIST
+            done == total -> SliderState.TADAA
+            else -> SliderState.STAY_WORKING
+        }
     }
 
     private fun loadCategories() {
@@ -83,52 +92,36 @@ class HomeViewModel(
         task: Task,
         response: Category
     ) {
-        updateState {
-            when (task.status) {
-                Task.Status.TODO -> {
-                    it.copy(
-                        todoTasks = it.todoTasks + HomeState.HomeTask(
-                            id = task.id,
-                            title = task.title,
-                            description = task.description,
-                            priority = task.priority,
-                            status = task.status,
-                            date = task.date,
-                            category = response
-                        )
-                    )
-                }
+        updateState { state ->
+            val newTask = HomeState.HomeTask(
+                id = task.id,
+                title = task.title,
+                description = task.description,
+                priority = task.priority,
+                status = task.status,
+                date = task.date,
+                category = response
+            )
 
-                Task.Status.IN_PROGRESS -> {
-                    it.copy(
-                        inProgressTasks = it.inProgressTasks + HomeState.HomeTask(
-                            id = task.id,
-                            title = task.title,
-                            description = task.description,
-                            priority = task.priority,
-                            status = task.status,
-                            date = task.date,
-                            category = response
-                        )
-                    )
-                }
+            val newTodoTasks = if (task.status == Task.Status.TODO) state.todoTasks + newTask else state.todoTasks
+            val newInProgressTasks = if (task.status == Task.Status.IN_PROGRESS) state.inProgressTasks + newTask else state.inProgressTasks
+            val newDoneTasks = if (task.status == Task.Status.DONE) state.doneTasks + newTask else state.doneTasks
 
-                Task.Status.DONE -> {
-                    it.copy(
-                        doneTasks = it.doneTasks + HomeState.HomeTask(
-                            id = task.id,
-                            title = task.title,
-                            description = task.description,
-                            priority = task.priority,
-                            status = task.status,
-                            date = task.date,
-                            category = response
-                        )
-                    )
-                }
-            }
+            val newSliderState = calculateSliderState(
+                newTodoTasks.size,
+                newInProgressTasks.size,
+                newDoneTasks.size
+            )
+
+            state.copy(
+                todoTasks = newTodoTasks,
+                inProgressTasks = newInProgressTasks,
+                doneTasks = newDoneTasks,
+                update = newSliderState
+            )
         }
     }
+
 
     override fun onFloatingActionButtonClick() {
         updateState {
