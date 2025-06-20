@@ -68,6 +68,8 @@ dependencies {
     testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.jupiter.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
     ksp(libs.androidx.room.compiler)
 
     // Test dependencies
@@ -76,6 +78,13 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.room.testing)
+    
+    implementation(libs.kotlinx.datetime)
+
+    implementation(libs.bundles.koin)
+
+    //datastore
+    implementation(libs.androidx.datastore.preferences)
 
     // Android test dependencies
     androidTestImplementation(libs.androidx.junit)

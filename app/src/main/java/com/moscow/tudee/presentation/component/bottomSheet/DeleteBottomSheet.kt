@@ -43,11 +43,6 @@ fun DeleteBottomSheet(
 ) {
     TudeeBottomSheet(
         onDismissRequest = onDismiss,
-        contentPadding = PaddingValues(
-            start = 0.dp,
-            end = 0.dp,
-            bottom = 0.dp
-        ),
         modifier = modifier
     ) {
         TudeeText(

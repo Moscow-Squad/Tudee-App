@@ -53,6 +53,5 @@ fun TudeeGraph(
         )
 
         mainRoute()
-
     }
 }

@@ -80,4 +80,13 @@ class TasksServicesImpl(
             .getTasksByDateAndCategory(date.toString(), categoryId)
             .map { it.toTask() }
     }
+
+    override suspend fun getTasksByCategoryAndStatus(
+        categoryId: Long,
+        status: Task.Status
+    ): List<Task> {
+        return taskDao
+            .getTasksByCategoryAndStatus(categoryId, status.name)
+            .map { it.toTask() }
+    }
 }

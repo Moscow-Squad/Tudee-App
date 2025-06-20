@@ -9,6 +9,7 @@ import com.moscow.tudee.data.local.entity.CategoryEntity
 
 @Dao
 interface CategoryDao {
+
     @Query("SELECT * FROM categories_table")
     suspend fun getCategories(): List<CategoryEntity>
 
@@ -26,4 +27,7 @@ interface CategoryDao {
 
     @Query("UPDATE categories_table SET countOfTasks = countOfTasks - 1 WHERE id = :categoryId")
     suspend fun decrementTaskCount(categoryId: Long)
+
+    @Query("SELECT * FROM categories_table WHERE id = :categoryId")
+    suspend fun getCategoryById(categoryId: Long): CategoryEntity?
 }

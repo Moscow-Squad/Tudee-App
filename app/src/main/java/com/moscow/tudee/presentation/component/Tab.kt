@@ -47,9 +47,9 @@ data class Tab(val label: String, val count: Int)
 @Composable
 fun Tabs(
     tabs: List<Tab>,
+    onTabClick: (Int) -> Unit ,
     modifier: Modifier = Modifier,
     selectedTabIndex: Int = 0,
-    onTabClick: (Int) -> Unit = {}
 ) {
     Row(
         modifier = modifier

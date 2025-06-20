@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.TudeeText
-import com.moscow.tudee.presentation.designSystem.component.slider.SliderState
 import com.moscow.tudee.presentation.designSystem.component.slider.TudeeSlider
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.home.TaskDetails
+import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
@@ -29,7 +29,9 @@ import java.util.Locale
 @Composable
 fun OverviewSection(
     sliderState: SliderState,
-    tasks: List<TaskDetails>,
+    todoTasks: List<Task>,
+    inProgressTasks: List<Task>,
+    doneTasks: List<Task>,
     modifier: Modifier = Modifier
 ) {
     val todayDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
@@ -50,7 +52,7 @@ fun OverviewSection(
                 .padding(top = 8.dp)
         )
 
-        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 6.dp))
+        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 12.dp))
 
         TudeeText(
             text = stringResource(R.string.overview),
@@ -66,10 +68,22 @@ fun OverviewSection(
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            tasks.groupBy { it.state }.entries.forEach {
-                OverviewCard(it.key, it.value.count(), modifier = Modifier.weight(1f))
+
+            Task.Status.entries.forEach { status ->
+                val tasks = when (status) {
+                    Task.Status.TODO -> todoTasks
+                    Task.Status.IN_PROGRESS -> inProgressTasks
+                    Task.Status.DONE -> doneTasks
+                }
+
+                if (tasks.isNotEmpty()) {
+                    val tasksForEachState = tasks.filter { it.status == status }
+                    OverviewCard(status, tasksForEachState.count(), modifier = Modifier.weight(1f))
+
+                } else {
+                    OverviewCard(status, 0, modifier = Modifier.weight(1f))
+                }
             }
         }
     }
 }
-
