@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -92,7 +91,7 @@ fun TaskScreen(
             onDownClick = viewModel::showDatePicker
         )
         LazyRow(
-            state = LazyListState(),
+            state = lazyListState,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .background(Theme.colors.surfaceHigh)
