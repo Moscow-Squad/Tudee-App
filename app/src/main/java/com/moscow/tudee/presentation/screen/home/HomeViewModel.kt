@@ -13,7 +13,20 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(HomeState()), HomeInteractionListener {
 
     init {
+        loadCategories()
         loadTasks()
+    }
+
+    private fun loadCategories() {
+        launchWithResult(
+            action = { categoryServices.getCategories() },
+            onSuccess = { response ->
+                updateState { it.copy(categories = response) }
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
     private fun loadTasks() {
@@ -202,6 +215,10 @@ class HomeViewModel(
 
     override fun onDateChange(newDate: LocalDateTime) {
         updateState { it.copy(selectedTask = it.selectedTask?.copy(date = newDate)) }
+    }
+
+    override fun onCategoryClick(category: Category) {
+        updateState { it.copy(selectedTask = it.selectedTask?.copy(category = category)) }
     }
 
     override fun onShowAddBottomSheet() {
