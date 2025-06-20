@@ -22,7 +22,7 @@ class HomeViewModel(
     private fun calculateSliderState(todo: Int, inProgress: Int, done: Int): SliderState {
         val total = todo + inProgress + done
         return when {
-            total == 0 ->  SliderState.NOTHING_ON_YOUR_LIST
+            total == 0 ->  SliderState.ZERO_PROGRESS
             done == total -> SliderState.TADAA
             else -> SliderState.STAY_WORKING
         }
