@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
@@ -33,4 +34,16 @@ fun Priority.getBackground(): Color {
         Priority.MEDIUM -> Theme.colors.yellowAccent
         Priority.LOW -> Theme.colors.greenAccent
     }
+}
+
+fun HomeState.HomeTask.toTask(): Task {
+    return Task(
+        id = id,
+        title = title,
+        description = description,
+        priority = priority,
+        categoryId = category!!.id!!,
+        status = status,
+        date = date
+    )
 }

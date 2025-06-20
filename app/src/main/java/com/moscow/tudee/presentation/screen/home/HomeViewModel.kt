@@ -115,14 +115,7 @@ class HomeViewModel(
         launchWithResult(
             action = {
                 tasksServices.addTask(
-                    Task(
-                        title = task.title,
-                        description = task.description,
-                        priority = task.priority,
-                        categoryId = task.category!!.id!!,
-                        status = Task.Status.TODO,
-                        date = task.date
-                    )
+                    task.toTask()
                 )
             },
             onSuccess = {
@@ -158,15 +151,7 @@ class HomeViewModel(
 
         launchWithResult(
             action = { tasksServices.updateTask(
-                Task(
-                    id = updated.id,
-                    title = updated.title,
-                    description = updated.description,
-                    priority = updated.priority,
-                    categoryId = updated.category!!.id!!,
-                    status = updated.status,
-                    date = updated.date
-                )
+                updated.toTask()
             ) },
             onSuccess = {
                 updateState {
@@ -188,15 +173,7 @@ class HomeViewModel(
     override fun onSaveEditTaskClick(task: HomeState.HomeTask) {
         launchWithResult(
             action = { tasksServices.updateTask(
-                Task(
-                    id = task.id,
-                    title = task.title,
-                    description = task.description,
-                    priority = task.priority,
-                    categoryId = task.category!!.id!!,
-                    status = task.status,
-                    date = task.date
-                )
+                task.toTask()
             ) },
             onSuccess = {
                 updateState {
