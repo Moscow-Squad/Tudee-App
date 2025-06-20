@@ -26,7 +26,7 @@ fun CategoryScreen(
     ) {
         items(tasks) { currentTask ->
             TaskCard(
-                icon = painterResource(currentTask.icon),
+                iconUrl = painterResource(currentTask.icon),
                 title = currentTask.title,
                 description = currentTask.description,
                 date = currentTask.date.formattedDate,
