@@ -47,3 +47,21 @@ fun HomeState.HomeTask.toTask(): Task {
         date = date
     )
 }
+
+@Composable
+fun Task.Status.getText(): String {
+    return when (this) {
+        Task.Status.TODO -> stringResource(R.string.to_do)
+        Task.Status.IN_PROGRESS -> stringResource(R.string.in_progress)
+        Task.Status.DONE -> stringResource(R.string.done)
+    }
+}
+
+@Composable
+fun Task.Status.getBackground(): Color {
+    return when (this) {
+        Task.Status.TODO -> Theme.colors.yellowVariant
+        Task.Status.IN_PROGRESS -> Theme.colors.purpleVariant
+        Task.Status.DONE -> Theme.colors.greenVariant
+    }
+}
