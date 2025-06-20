@@ -9,11 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavGraphBuilder
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
+import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 
-fun NavGraphBuilder.homeRoute() {
+fun NavGraphBuilder.homeRoute(
+    appBar: (TudeeAppBar) -> Unit,
+    isBottomNavigationVisible: (Boolean) -> Unit,
+) {
 
     tudeeComposable<HomeScreen> {
+        appBar(HomeScreen.appBar)
+        isBottomNavigationVisible(HomeScreen.isBottomNavigationVisible)
+
         Column(
             modifier = Modifier
                 .fillMaxSize(),
