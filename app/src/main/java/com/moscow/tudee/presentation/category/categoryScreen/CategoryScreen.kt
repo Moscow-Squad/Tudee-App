@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.ObserveAsEvent
+import com.moscow.tudee.presentation.category.categoryScreen.component.AddCategoryBottomSheet
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
@@ -112,11 +113,9 @@ fun CategoryContent(
         }
         Button(onClick = { categoriesInteractionListener.onShowAddCategoryBottomSheet() }) {
             if (uiState.isAddCategoryBottomSheetShow)
-                DeleteBottomSheet(
-                    title = "Add Category",
-                    onDelete = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
-                    onDismiss = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
-                    description = "Are you sure you want to add a new category?",
+                AddCategoryBottomSheet(
+                    onNewCategory = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
+                    onDismissRequest = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
                 )
         }
     }
