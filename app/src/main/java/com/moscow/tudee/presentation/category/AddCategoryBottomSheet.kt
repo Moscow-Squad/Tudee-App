@@ -199,7 +199,7 @@ fun AddCategoryBottomSheet(
                 textColor = if (isEnabled) colors.onPrimary.copy(0.87f) else colors.stroke.copy(0.12f),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp)
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp)
             )
 
             SecondaryButton(
@@ -207,7 +207,7 @@ fun AddCategoryBottomSheet(
                 onClick = onDismissRequest,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp)
+                    .padding(vertical = 12.dp, horizontal = 16.dp)
             )
         }
     }
