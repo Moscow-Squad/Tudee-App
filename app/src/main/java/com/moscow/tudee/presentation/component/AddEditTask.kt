@@ -61,6 +61,7 @@ fun TaskBottomSheet(
     selectedDate: Long?,
     onDateSelected: (Long) -> Unit,
     onDismiss: () -> Unit,
+    onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {},
     addSuccessMessage: String = stringResource(R.string.add_task_successfully),
     editSuccessMessage: String = stringResource(R.string.edited_task_successfully)
@@ -207,7 +208,6 @@ fun TaskBottomSheet(
                                 label = categoryLabel,
                                 count = 10,
                                 selected = selectedCategory.id == category.id,
-                                iconTint = Theme.colors.purpleAccent,
                                 modifier = Modifier.clickable {
                                     onCategorySelected(category)
                                 }
@@ -240,13 +240,7 @@ fun TaskBottomSheet(
                             Theme.colors.stroke
                         },
                         onClick = {
-                            onSaveTask(
-                                taskTitle,
-                                taskDescription,
-                                selectedDate?.toString() ?: "",
-                                selectedPriority,
-                                selectedCategory
-                            )
+                            onSaveTask()
 
                             val message = if (isEditMode) {
                                 editSuccessMessage
@@ -273,16 +267,39 @@ fun TaskBottomSheet(
 fun AddTaskBottomSheet(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
+    taskTitle: String,
+    onTaskTitleChange: (String) -> Unit,
+    taskDescription: String,
+    onTaskDescriptionChange: (String) -> Unit,
+    selectedPriority: Priority,
+    onPrioritySelected: (Priority) -> Unit,
+    categories: List<Category>,
+    selectedCategory: Category,
+    onCategorySelected: (Category) -> Unit,
+    selectedDate: Long?,
+    onDateSelected: (Long) -> Unit,
     onDismiss: () -> Unit,
-    onAddTask: (String, String, String, String, String) -> Unit,
-    onShowSnackBar: (String) -> Unit = {}
+    onSaveTask: () -> Unit,
+    onShowSnackBar: (String) -> Unit = {},
+
 ) {
     TaskBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
         isEditMode = false,
+        taskTitle = taskTitle,
+        onTaskTitleChange = onTaskTitleChange,
+        taskDescription = taskDescription,
+        onTaskDescriptionChange = onTaskDescriptionChange,
+        selectedPriority = selectedPriority,
+        onPrioritySelected = onPrioritySelected,
+        categories = categories,
+        selectedCategory = selectedCategory,
+        onCategorySelected = onCategorySelected,
+        selectedDate = selectedDate,
+        onDateSelected = onDateSelected,
         onDismiss = onDismiss,
-        onSaveTask = onAddTask,
+        onSaveTask = onSaveTask,
         onShowSnackBar = onShowSnackBar,
         addSuccessMessage = stringResource(R.string.add_task_successfully),
         editSuccessMessage = stringResource(R.string.edited_task_successfully)
@@ -293,97 +310,40 @@ fun AddTaskBottomSheet(
 fun EditTaskBottomSheet(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
-    taskData: TaskData,
+    taskTitle: String,
+    onTaskTitleChange: (String) -> Unit,
+    taskDescription: String,
+    onTaskDescriptionChange: (String) -> Unit,
+    selectedPriority: Priority,
+    onPrioritySelected: (Priority) -> Unit,
+    categories: List<Category>,
+    selectedCategory: Category,
+    onCategorySelected: (Category) -> Unit,
+    selectedDate: Long?,
+    onDateSelected: (Long) -> Unit,
     onDismiss: () -> Unit,
-    onSaveTask: (String, String, String, String, String) -> Unit,
+    onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {}
 ) {
     TaskBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
         isEditMode = true,
-        initialTaskData = taskData,
+        taskTitle = taskTitle,
+        onTaskTitleChange = onTaskTitleChange,
+        taskDescription = taskDescription,
+        onTaskDescriptionChange = onTaskDescriptionChange,
+        selectedPriority = selectedPriority,
+        onPrioritySelected = onPrioritySelected,
+        categories = categories,
+        selectedCategory = selectedCategory,
+        onCategorySelected = onCategorySelected,
+        selectedDate = selectedDate,
+        onDateSelected = onDateSelected,
         onDismiss = onDismiss,
         onSaveTask = onSaveTask,
         onShowSnackBar = onShowSnackBar,
         addSuccessMessage = stringResource(R.string.add_task_successfully),
         editSuccessMessage = stringResource(R.string.edited_task_successfully)
     )
-}
-
-@Preview
-@Composable
-private fun AddEditTaskPreview() {
-    var showAddTaskSheet by remember { mutableStateOf(false) }
-    var showEditTaskSheet by remember { mutableStateOf(false) }
-    var showSnackBar by remember { mutableStateOf(false) }
-    var snackBarMessage by remember { mutableStateOf("") }
-
-    val sampleTaskData = TaskData(
-        title = "Sample Task",
-        description = "This is a sample task description",
-        date = System.currentTimeMillis(),
-        priority = "High",
-        category = "Category 1"
-    )
-
-    Box(Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            PrimaryButton(
-                text = "Add Task",
-                onClick = { showAddTaskSheet = true }
-            )
-
-            PrimaryButton(
-                text = "Edit Task",
-                onClick = { showEditTaskSheet = true },
-                modifier = Modifier.padding(top = 16.dp)
-            )
-        }
-
-        AddTaskBottomSheet(
-            isVisible = showAddTaskSheet,
-            onDismiss = { showAddTaskSheet = false },
-            onAddTask = { title, description, date, priority, category ->
-                showAddTaskSheet = false
-            },
-            onShowSnackBar = { message ->
-                snackBarMessage = message
-                showSnackBar = true
-            }
-        )
-
-        EditTaskBottomSheet(
-            isVisible = showEditTaskSheet,
-            taskData = sampleTaskData,
-            onDismiss = { showEditTaskSheet = false },
-            onSaveTask = { title, description, date, priority, category ->
-                showEditTaskSheet = false
-            },
-            onShowSnackBar = { message ->
-                snackBarMessage = message
-                showSnackBar = true
-            }
-        )
-
-        if (showSnackBar) {
-            SnackBar(
-                icon = painterResource(id = R.drawable.ic_checkmark_badge),
-                message = snackBarMessage,
-                iconBackground = Theme.colors.greenVariant,
-                iconTint = Theme.colors.greenAccent,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-
-            LaunchedEffect(showSnackBar) {
-                if (showSnackBar) {
-                    delay(3000)
-                    showSnackBar = false
-                }
-            }
-        }
-    }
 }
