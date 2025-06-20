@@ -1,27 +1,27 @@
 package com.moscow.tudee.presentation.ui.categories
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.toRoute
+import com.moscow.tudee.presentation.category.categoryScreen.CategoryScreen
+import com.moscow.tudee.presentation.category.categoryTasks.CategoryTasksScreen
 import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
+import com.moscow.tudee.presentation.navigation.entry.CategoryTasks
+
 import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 
-fun NavGraphBuilder.categoriesRoute() {
+fun NavGraphBuilder.categoriesRoute(
+    navigateToCategoryTasks: (Long) -> Unit
+) {
     tudeeComposable<CategoriesScreen>{
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Categories Screen",
-                fontWeight = FontWeight.Bold
-            )
-        }
+        CategoryScreen(navigateToCategoryTasks = navigateToCategoryTasks)
+    }
+}
+
+fun NavGraphBuilder.categoriesTasksRoute(
+
+) {
+    tudeeComposable<CategoryTasks>{
+        val args = it.toRoute<CategoryTasks>()
+        CategoryTasksScreen (args.categoryId)
     }
 }

@@ -7,9 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.moscow.tudee.presentation.navigation.entry.CategoryTasks
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
+import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
 import com.moscow.tudee.presentation.ui.categories.categoriesRoute
+import com.moscow.tudee.presentation.ui.categories.categoriesTasksRoute
 import com.moscow.tudee.presentation.ui.home.homeRoute
 import com.moscow.tudee.presentation.ui.tasks.tasksRoute
 
@@ -29,7 +32,16 @@ fun MainNavGraph(
 
         tasksRoute()
 
-        categoriesRoute()
+        categoriesRoute(
+            navigateToCategoryTasks = {categoryID->
+                navController.navigateSafe(
+                    route =  CategoryTasks(categoryID),
+                    builder = {}
+                )
+            }
+        )
 
+        categoriesTasksRoute()
     }
 }
+
