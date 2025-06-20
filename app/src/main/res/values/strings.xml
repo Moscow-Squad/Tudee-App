@@ -25,6 +25,8 @@
     <string name="clear">Clear</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="task_details">Task details</string>
+    <string name="move_to">Move to %s</string>
     <string name="overview">Overview</string>
     <string name="calendar_icon">Calendar Icon</string>
     <string name="right_arrow">right arrow</string>
@@ -45,6 +47,8 @@
     <string name="are_you_sure_to_continue">Are you sure to continue?</string>
     <string name="delete">Delete</string>
     <string name="delete_image">Delete Image</string>
+    <string name="back_button">back button</string>
+    <string name="edit_category_icon">edit category icon</string>
     <string name="category">Category</string>
     <string name="low">Low</string>
     <string name="medium">Medium</string>

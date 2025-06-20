@@ -23,12 +23,12 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 fun PriorityChip(
     text: String,
     icon: Painter,
+    modifier: Modifier = Modifier,
     selected: Boolean = false,
     backgroundColor: Color,
     unselectedBackgroundColor: Color = Theme.colors.surfaceLow,
     selectedContentColor: Color = Theme.colors.onPrimary,
     unselectedContentColor: Color = Theme.colors.hint,
-    modifier: Modifier = Modifier
 ) {
     val backgroundColor by animateColorAsState(
         targetValue = if (selected) backgroundColor else unselectedBackgroundColor,
