@@ -116,7 +116,7 @@ fun TudeeSwitchLightTheme(
                 .offset {
                     IntOffset(x = circlePositionX.roundToPx(), y = circlePositionY.roundToPx())
                 }
-                .background(Theme.colors.surfaceHigh, CircleShape)
+                .background(Color.White, CircleShape)
                 .size(
                     width = 14.dp,
                     height = 16.dp
