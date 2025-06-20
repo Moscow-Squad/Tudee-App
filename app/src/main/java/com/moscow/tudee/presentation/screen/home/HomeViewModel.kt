@@ -1,12 +1,15 @@
 package com.moscow.tudee.presentation.screen.home
 
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
 import kotlinx.datetime.LocalDateTime
 
 class HomeViewModel(
-    private val tasksServices: TasksServices
+    private val tasksServices: TasksServices,
+    private val categoryServices: CategoryServices
 ) : BaseViewModel<HomeState, HomeEvent>(HomeState()), HomeInteractionListener {
 
     init {
@@ -16,40 +19,111 @@ class HomeViewModel(
     private fun loadTasks() {
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.TODO) },
-            onSuccess = { response -> updateState { it.copy(todoTasks = response.map { it }) } },
+            onSuccess = { response ->
+                getCategoryAndSaveTasks(response)
+            },
             onError = { handleHomeError(it) },
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.IN_PROGRESS) },
-            onSuccess = { response -> updateState { it.copy(inProgressTasks = response.map { it }) } },
+            onSuccess = { response ->
+                getCategoryAndSaveTasks(response)
+            },
             onError = { handleHomeError(it) },
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
         launchWithResult(
             action = { tasksServices.getTasksByStatus(Task.Status.DONE) },
-            onSuccess = { response -> updateState { it.copy(doneTasks = response.map { it }) } },
+            onSuccess = { response ->
+                getCategoryAndSaveTasks(response)
+            },
             onError = { handleHomeError(it) },
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
     }
 
+    private fun getCategoryAndSaveTasks(tasks: List<Task>) {
+        tasks.forEach { task ->
+            launchWithResult(
+                action = { categoryServices.getCategoryById(task.categoryId) },
+                onSuccess = { response ->
+                    updateState {
+                        when (task.status) {
+                            Task.Status.TODO -> {
+                                it.copy(
+                                    todoTasks = it.todoTasks + HomeState.HomeTask(
+                                        id = task.id,
+                                        title = task.title,
+                                        description = task.description,
+                                        priority = task.priority,
+                                        status = task.status,
+                                        date = task.date,
+                                        category = response
+                                    )
+                                )
+                            }
+                            Task.Status.IN_PROGRESS -> {
+                                it.copy(
+                                    inProgressTasks = it.inProgressTasks + HomeState.HomeTask(
+                                        id = task.id,
+                                        title = task.title,
+                                        description = task.description,
+                                        priority = task.priority,
+                                        status = task.status,
+                                        date = task.date,
+                                        category = response
+                                    )
+                                )
+                            }
+                            Task.Status.DONE -> {
+                                it.copy(
+                                    doneTasks = it.doneTasks + HomeState.HomeTask(
+                                        id = task.id,
+                                        title = task.title,
+                                        description = task.description,
+                                        priority = task.priority,
+                                        status = task.status,
+                                        date = task.date,
+                                        category = response
+                                    )
+                                )
+                            }
+                        }
+                    }
+                },
+                onError = { handleHomeError(it) },
+                onStart = { startLoading() },
+                onFinally = { endLoading() }
+            )
+        }
+    }
+
     override fun onFloatingActionButtonClick() {
         updateState { it.copy(showAddTaskBottomSheet = true) }
     }
 
-    override fun onTaskClick(task: Task) {
+    override fun onTaskClick(task: HomeState.HomeTask) {
         updateState { it.copy(showTaskDetailsBottomSheet = true) }
         updateState { it.copy(selectedTask = task) }
     }
 
-    override fun onAddTask(task: Task) {
+    override fun onAddTask(task: HomeState.HomeTask) {
         launchWithResult(
             action = {
-                tasksServices.addTask(task)
+                tasksServices.addTask(
+                    Task(
+                        title = task.title,
+                        description = task.description,
+                        priority = task.priority,
+                        categoryId = task.category!!.id!!,
+                        status = Task.Status.TODO,
+                        date = task.date
+                    )
+                )
             },
             onSuccess = {
                 updateState {
@@ -69,11 +143,11 @@ class HomeViewModel(
         sendEvent(HomeEvent.ViewAll(taskStatus))
     }
 
-    override fun onEditTaskIconClick(task: Task) {
+    override fun onEditTaskIconClick(task: HomeState.HomeTask) {
         updateState { it.copy(showEditTaskBottomSheet = true) }
     }
 
-    override fun onMoveTaskClick(task: Task) {
+    override fun onMoveTaskClick(task: HomeState.HomeTask) {
         val updated = task.copy(
             status = when (task.status) {
                 Task.Status.TODO -> Task.Status.IN_PROGRESS
@@ -83,7 +157,17 @@ class HomeViewModel(
         )
 
         launchWithResult(
-            action = { tasksServices.updateTask(updated) },
+            action = { tasksServices.updateTask(
+                Task(
+                    id = updated.id,
+                    title = updated.title,
+                    description = updated.description,
+                    priority = updated.priority,
+                    categoryId = updated.category!!.id!!,
+                    status = updated.status,
+                    date = updated.date
+                )
+            ) },
             onSuccess = {
                 updateState {
                     it.copy(
@@ -101,9 +185,19 @@ class HomeViewModel(
         )
     }
 
-    override fun onSaveEditTaskClick(task: Task) {
+    override fun onSaveEditTaskClick(task: HomeState.HomeTask) {
         launchWithResult(
-            action = { tasksServices.updateTask(task) },
+            action = { tasksServices.updateTask(
+                Task(
+                    id = task.id,
+                    title = task.title,
+                    description = task.description,
+                    priority = task.priority,
+                    categoryId = task.category!!.id!!,
+                    status = task.status,
+                    date = task.date
+                )
+            ) },
             onSuccess = {
                 updateState {
                     it.copy(
