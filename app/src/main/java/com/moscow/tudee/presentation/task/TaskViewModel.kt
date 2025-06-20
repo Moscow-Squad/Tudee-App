@@ -13,9 +13,10 @@ import kotlinx.datetime.*
 
 open class TaskViewModel(
     private val taskService: TasksServices
-) : ViewModel(){
+) : ViewModel(), TaskScreenInteractionListener {
 
-    private val today: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    private val today: LocalDate =
+        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
     private val _uiState = MutableStateFlow(TaskUiState())
     open val uiState: StateFlow<TaskUiState> = _uiState.asStateFlow()
 
@@ -35,7 +36,7 @@ open class TaskViewModel(
         updateMonth(today)
     }
 
-    fun selectDate(date: LocalDate) {
+    override fun selectDate(date: LocalDate) {
         viewModelScope.launch {
             val tasksForDate = taskService.getTasksByDate(date)
             _uiState.update {
@@ -48,7 +49,7 @@ open class TaskViewModel(
         }
     }
 
-    fun selectStatus(status: Task.Status) {
+    override fun selectStatus(status: Task.Status) {
         val currentState = _uiState.value
         val filtered = filterTasksByStatus(currentState.allTasksForSelectedDate, status)
 
@@ -59,25 +60,38 @@ open class TaskViewModel(
             )
         }
     }
-    fun deleteTask(task: Task) {
+
+    override fun deleteTask(task: Task) {
         viewModelScope.launch {
-            task.id?.let { taskService.deleteTask(it) }
+            runCatching {
+                task.id?.let { taskService.deleteTask(it) }
+            }.onSuccess {
+                _uiState.update {
+                    it.copy(showDeletedTaskNotification = true, isTaskDeleted = true)
+                }
+            }.onFailure {
+                _uiState.update {
+                    it.copy(showDeletedTaskNotification = true, isTaskDeleted = false)
+                }
+            }
         }
     }
 
-    fun previousMonth() {
+    override fun previousMonth() {
         val current = _uiState.value
-        val newDate = LocalDate(current.currentYear, current.currentMonth, 1).minus(DatePeriod(months = 1))
+        val newDate =
+            LocalDate(current.currentYear, current.currentMonth, 1).minus(DatePeriod(months = 1))
         updateMonth(newDate)
     }
 
-    fun nextMonth() {
+    override fun nextMonth() {
         val current = _uiState.value
-        val newDate = LocalDate(current.currentYear, current.currentMonth, 1).plus(DatePeriod(months = 1))
+        val newDate =
+            LocalDate(current.currentYear, current.currentMonth, 1).plus(DatePeriod(months = 1))
         updateMonth(newDate)
     }
 
-    fun updateMonthFromPicker(epochMillis: Long?) {
+    override fun updateMonthFromPicker(epochMillis: Long?) {
         dismissDatePicker()
         epochMillis?.let {
             val instant = Instant.fromEpochMilliseconds(it)
@@ -99,7 +113,7 @@ open class TaskViewModel(
     }
 
     private fun generateMonthDays(year: Int, month: Int): List<LocalDate> {
-        val firstDay = LocalDate(year, month,1)
+        val firstDay = LocalDate(year, month, 1)
         val daysInMonth = firstDay.month.length(isLeapYear(year))
         return List(daysInMonth) { index ->
             firstDay.plus(DatePeriod(days = index))

@@ -16,7 +16,7 @@ data class TaskUiState(
     val tasksForSelectedState: List<Task> = emptyList(),
     val currentMonth: Month =  Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).month,
     val currentYear: Int = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year,
-    val monthDays: List<LocalDate> = emptyList()
+    val monthDays: List<LocalDate> = emptyList(),
+    val showDeletedTaskNotification: Boolean = false,
+    val isTaskDeleted: Boolean? = null
 )
-
-

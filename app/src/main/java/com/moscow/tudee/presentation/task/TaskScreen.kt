@@ -1,5 +1,7 @@
 package com.moscow.tudee.presentation.task
 
+import SwipeToDeleteItem
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +14,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +28,7 @@ import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.DayItem
 import com.moscow.tudee.presentation.component.Tab
 import com.moscow.tudee.presentation.component.Tabs
+import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
@@ -67,11 +74,21 @@ fun TaskScreen(
             onDismiss = viewModel::dismissDatePicker
         )
     }
-    val currentMonthYear = uiState.currentMonth.getDisplayName(TextStyle.FULL, Locale.getDefault()) + ", ${uiState.currentYear}"
+    val currentMonthYear = uiState.currentMonth.getDisplayName(
+        TextStyle.FULL,
+        Locale.getDefault()
+    ) + ", ${uiState.currentYear}"
     val lazyListState = rememberLazyListState()
     val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
     val todayIndex = uiState.monthDays.indexOfFirst { it == today }
-    val isAtStart = lazyListState.firstVisibleItemIndex == 0
+    val isAtStart by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex == 0
+        }
+    }
+
+    var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
+
     LaunchedEffect(uiState.monthDays) {
         if (todayIndex != -1) {
             lazyListState.animateScrollToItem(todayIndex)
@@ -141,28 +158,44 @@ fun TaskScreen(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
             ) {
                 items(uiState.tasksForSelectedState) { task ->
-                    TaskCard(
-                        icon = when (task.priority) {
-                            Task.Priority.HIGH -> painterResource(id = R.drawable.ic_quran)
-                            Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_briefcase)
-                            Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
-                        },
-                        title = task.title,
-                        description = task.description,
-                        iconTint = Theme.colors.secondary
-                    ) {
-                        PriorityChip(
-                            text = task.priority.name.lowercase()
-                                .replaceFirstChar { it.uppercase() },
-                            backgroundColor = when (task.priority) {
-                                Task.Priority.HIGH -> Theme.colors.pinkAccent
-                                Task.Priority.MEDIUM -> Theme.colors.yellowAccent
-                                Task.Priority.LOW -> Theme.colors.greenAccent
-                            },
+                    SwipeToDeleteItem(onDelete = { selectedTaskToDelete = task }) {
+                        TaskCard(
                             icon = when (task.priority) {
-                                Task.Priority.HIGH -> painterResource(id = R.drawable.ic_flag)
-                                Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
+                                Task.Priority.HIGH -> painterResource(id = R.drawable.ic_quran)
+                                Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_briefcase)
                                 Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
+                            },
+                            title = task.title,
+                            description = task.description,
+                            iconTint = Theme.colors.secondary
+                        ) {
+                            PriorityChip(
+                                text = task.priority.name.lowercase()
+                                    .replaceFirstChar { it.uppercase() },
+                                backgroundColor = when (task.priority) {
+                                    Task.Priority.HIGH -> Theme.colors.pinkAccent
+                                    Task.Priority.MEDIUM -> Theme.colors.yellowAccent
+                                    Task.Priority.LOW -> Theme.colors.greenAccent
+                                },
+                                icon = when (task.priority) {
+                                    Task.Priority.HIGH -> painterResource(id = R.drawable.ic_flag)
+                                    Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
+                                    Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
+                                }
+                            )
+                        }
+                    }
+                }
+                item {
+                    AnimatedVisibility(
+                        visible = selectedTaskToDelete != null
+                    ) {
+                        DeleteBottomSheet(
+                            title = "Delete task",
+                            description = "Are you sure to continue?",
+                            onDelete = { selectedTaskToDelete?.let { viewModel.deleteTask(it) } },
+                            onDismiss = {
+                                selectedTaskToDelete = null
                             }
                         )
                     }
