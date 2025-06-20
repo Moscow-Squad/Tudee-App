@@ -64,54 +64,63 @@ class HomeViewModel(
             launchWithResult(
                 action = { categoryServices.getCategoryById(task.categoryId) },
                 onSuccess = { response ->
-                    updateState {
-                        when (task.status) {
-                            Task.Status.TODO -> {
-                                it.copy(
-                                    todoTasks = it.todoTasks + HomeState.HomeTask(
-                                        id = task.id,
-                                        title = task.title,
-                                        description = task.description,
-                                        priority = task.priority,
-                                        status = task.status,
-                                        date = task.date,
-                                        category = response
-                                    )
-                                )
-                            }
-                            Task.Status.IN_PROGRESS -> {
-                                it.copy(
-                                    inProgressTasks = it.inProgressTasks + HomeState.HomeTask(
-                                        id = task.id,
-                                        title = task.title,
-                                        description = task.description,
-                                        priority = task.priority,
-                                        status = task.status,
-                                        date = task.date,
-                                        category = response
-                                    )
-                                )
-                            }
-                            Task.Status.DONE -> {
-                                it.copy(
-                                    doneTasks = it.doneTasks + HomeState.HomeTask(
-                                        id = task.id,
-                                        title = task.title,
-                                        description = task.description,
-                                        priority = task.priority,
-                                        status = task.status,
-                                        date = task.date,
-                                        category = response
-                                    )
-                                )
-                            }
-                        }
-                    }
+                    saveCategory(task, response)
                 },
                 onError = { handleHomeError(it) },
                 onStart = { startLoading() },
                 onFinally = { endLoading() }
             )
+        }
+    }
+
+    private fun saveCategory(
+        task: Task,
+        response: Category
+    ) {
+        updateState {
+            when (task.status) {
+                Task.Status.TODO -> {
+                    it.copy(
+                        todoTasks = it.todoTasks + HomeState.HomeTask(
+                            id = task.id,
+                            title = task.title,
+                            description = task.description,
+                            priority = task.priority,
+                            status = task.status,
+                            date = task.date,
+                            category = response
+                        )
+                    )
+                }
+
+                Task.Status.IN_PROGRESS -> {
+                    it.copy(
+                        inProgressTasks = it.inProgressTasks + HomeState.HomeTask(
+                            id = task.id,
+                            title = task.title,
+                            description = task.description,
+                            priority = task.priority,
+                            status = task.status,
+                            date = task.date,
+                            category = response
+                        )
+                    )
+                }
+
+                Task.Status.DONE -> {
+                    it.copy(
+                        doneTasks = it.doneTasks + HomeState.HomeTask(
+                            id = task.id,
+                            title = task.title,
+                            description = task.description,
+                            priority = task.priority,
+                            status = task.status,
+                            date = task.date,
+                            category = response
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -150,7 +159,21 @@ class HomeViewModel(
     }
 
     override fun onEditTaskIconClick(task: HomeState.HomeTask) {
+        updateState { it.copy(selectedTask = task) }
+        getCategory(task)
         updateState { it.copy(showEditTaskBottomSheet = true) }
+    }
+
+    private fun getCategory(task: HomeState.HomeTask) {
+        launchWithResult(
+            action = { categoryServices.getCategoryById(task.category!!.id!!) },
+            onSuccess = { response ->
+                updateState { it.copy(selectedTask = task.copy(category = response)) }
+                },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
     override fun onMoveTaskClick(task: HomeState.HomeTask) {

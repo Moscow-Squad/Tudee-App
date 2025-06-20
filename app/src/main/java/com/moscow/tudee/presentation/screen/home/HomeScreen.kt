@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.screen.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.EditTaskBottomSheet
 import com.moscow.tudee.presentation.component.home_components.OverviewSection
@@ -21,7 +23,9 @@ import com.moscow.tudee.presentation.component.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDateTime
 
 
 @Composable
@@ -52,16 +56,21 @@ fun HomeContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.colors.surface)
-//            .clickable { interactionListener.onTaskClick(
-//                HomeState.HomeTask(
-//                    id = 1,
-//                    title = "Organize Study Desk",
-//                    description = "Solve all exercises from page 45 to 50 in the textbook, Solve all exercises from page 45 to 50 in the textbook.",
-//                    priority = Task.Priority.HIGH,
-//                    status = Task.Status.IN_PROGRESS,
-//                    date = LocalDateTime.now().toKotlinLocalDateTime(),
-//                )
-//            ) } // TODO: Remove
+            .clickable { interactionListener.onTaskClick(
+                HomeState.HomeTask(
+                    id = 1,
+                    title = "Organize Study Desk",
+                    description = "Solve all exercises from page 45 to 50 in the textbook, Solve all exercises from page 45 to 50 in the textbook.",
+                    priority = Task.Priority.HIGH,
+                    status = Task.Status.IN_PROGRESS,
+                    category = Category(
+                        id = 1,
+                        title = "Study",
+                        iconUri = ""
+                    ),
+                    date = LocalDateTime.now().toKotlinLocalDateTime(),
+                )
+            ) } // TODO: Remove
     ) {
         item {
             Box(
