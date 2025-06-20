@@ -131,22 +131,22 @@ fun NewCategoryContent(tasks: List<Task>, modifier: Modifier = Modifier) {
 
         ) {
             items(tasks) {
-                TaskCard(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 4.dp)
-                        .clickable { },
-                    icon = painterResource(R.drawable.ic_developer),
-                    title = it.title,
-                    description = it.description,
-                    date = it.date.date.toString()
-                ) {
-                    PriorityChip(
-                        text = it.priority.name,
-                        backgroundColor = it.priority.getPriorityBackground(),
-                        icon = painterResource(id = R.drawable.ic_alert/*it.priority.ordinal*/)
-                    )
-                }
+//                TaskCard(
+//                    modifier = modifier
+//                        .fillMaxWidth()
+//                        .padding(bottom = 4.dp)
+//                        .clickable { },
+//                    icon = painterResource(R.drawable.ic_developer),
+//                    title = it.title,
+//                    description = it.description,
+//                    date = it.date.date.toString()
+//                ) {
+//                    PriorityChip(
+//                        text = it.priority.name,
+//                        backgroundColor = it.priority.getPriorityBackground(),
+//                        icon = painterResource(id = R.drawable.ic_alert/*it.priority.ordinal*/)
+//                    )
+//                }
             }
 
         }
