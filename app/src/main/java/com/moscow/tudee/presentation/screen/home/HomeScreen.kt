@@ -57,21 +57,6 @@ fun HomeContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.colors.surface)
-            .clickable { interactionListener.onTaskClick(
-                HomeState.HomeTask(
-                    id = 1,
-                    title = "Organize Study Desk",
-                    description = "Solve all exercises from page 45 to 50 in the textbook, Solve all exercises from page 45 to 50 in the textbook.",
-                    priority = Task.Priority.HIGH,
-                    status = Task.Status.IN_PROGRESS,
-                    category = Category(
-                        id = 1,
-                        title = "Study",
-                        iconUri = ""
-                    ),
-                    date = LocalDateTime.now().toKotlinLocalDateTime(),
-                )
-            ) } // TODO: Remove
     ) {
         item {
             Box(
