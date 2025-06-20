@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.screen.home
 
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import kotlinx.datetime.LocalDateTime
 
@@ -28,6 +29,8 @@ interface HomeInteractionListener {
     fun onDescriptionChange(newDescription: String)
 
     fun onDateChange(newDate: LocalDateTime)
+
+    fun onCategoryClick(category: Category)
 
     fun onShowAddBottomSheet()
 

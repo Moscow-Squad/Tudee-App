@@ -8,6 +8,7 @@ import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun Priority.getText(): String {
@@ -73,4 +74,9 @@ fun Task.Status.getColor(): Color {
         Task.Status.IN_PROGRESS -> Theme.colors.purpleAccent
         Task.Status.DONE -> Theme.colors.greenAccent
     }
+}
+
+fun LocalDateTime.asLong(): Long {
+    // TODO
+    return 0L
 }
