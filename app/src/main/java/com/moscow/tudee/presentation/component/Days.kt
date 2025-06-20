@@ -34,6 +34,7 @@ fun DayItem(
             .clip(RoundedCornerShape(16.dp))
             .applyIf(isSelected) { background(colors.primaryGradient) }
             .applyIf(!isSelected) { background(colors.surface) }
+            .applyIf(isToday){background(colors.primaryGradient)}
             .clickable(onClick = onDayClick)
             .width(56.dp)
             .wrapContentHeight()
@@ -43,13 +44,13 @@ fun DayItem(
     ) {
         Text(
             text = "$dayDate",
-            color = if (isSelected) colors.onPrimary else colors.body,
+            color = if (isSelected || isToday) colors.onPrimary else colors.body,
             style = textStyle.title.medium,
 
             )
         Text(
             text = day,
-            color = if (isSelected) colors.onPrimaryCaption else colors.hint,
+            color = if (isSelected || isToday) colors.onPrimaryCaption else colors.hint,
             style = textStyle.body.small,
         )
     }

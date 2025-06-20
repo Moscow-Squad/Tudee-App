@@ -1,4 +1,5 @@
-package com.moscow.tudee.presentation.task.calender
+package com.moscow.tudee.presentation.task.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,17 +22,21 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @Composable
 fun Header(
-    date : String
+    date: String,
+    onBackClick: () -> Unit = {},
+    onNextClick: () -> Unit = {},
+    onDownClick: () -> Unit = {},
 ) {
-    Row (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Theme.colors.surfaceHigh)
-            .padding(horizontal = 16.dp)
-        ,
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        IconButton(onClick = { }) {
+    ) {
+        IconButton(onClick = {
+            onBackClick()
+        }) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_head_back),
                 contentDescription = "Previous",
@@ -46,11 +51,13 @@ fun Header(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = date.toString(),
+                text = date,
                 style = Theme.textStyle.label.medium,
                 color = Theme.colors.body
-                )
-            IconButton(onClick = { }) {
+            )
+            IconButton(onClick = {
+                onDownClick()
+            }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_head_back),
                     contentDescription = "down",
@@ -62,7 +69,9 @@ fun Header(
                 )
             }
         }
-        IconButton(onClick = { }) {
+        IconButton(onClick = {
+            onNextClick()
+        }) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_head_back),
                 contentDescription = "Next",
