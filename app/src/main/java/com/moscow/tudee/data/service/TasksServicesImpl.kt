@@ -1,5 +1,6 @@
 package com.moscow.tudee.data.service
 
+import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.mapper.toTask
 import com.moscow.tudee.data.local.mapper.toTaskEntity
@@ -8,7 +9,8 @@ import com.moscow.tudee.domain.service.TasksServices
 import kotlinx.datetime.LocalDate
 
 class TasksServicesImpl(
-    private val taskDao: TaskDao
+    private val taskDao: TaskDao,
+    private val categoryDao: CategoryDao
 ) : TasksServices {
     override suspend fun getTasks(): List<Task> {
         return taskDao.getTasks().map { it.toTask() }
@@ -35,6 +37,7 @@ class TasksServicesImpl(
 
     override suspend fun addTask(task: Task) {
         taskDao.addTask(task.toTaskEntity())
+        categoryDao.incrementTaskCount(task.categoryId)
     }
 
     override suspend fun updateTask(task: Task) {
@@ -42,7 +45,10 @@ class TasksServicesImpl(
     }
 
     override suspend fun deleteTask(taskId: Long) {
+        val existing = taskDao.getTaskById(taskId)
+            ?: throw Exception("task not found")
         taskDao.deleteTask(taskId)
+        categoryDao.decrementTaskCount(existing.categoryId)
     }
 
     override suspend fun getTasksByCategory(categoryId: Long): List<Task> {
@@ -72,6 +78,15 @@ class TasksServicesImpl(
     ): List<Task> {
         return taskDao
             .getTasksByDateAndCategory(date.toString(), categoryId)
+            .map { it.toTask() }
+    }
+
+    override suspend fun getTasksByCategoryAndStatus(
+        categoryId: Long,
+        status: Task.Status
+    ): List<Task> {
+        return taskDao
+            .getTasksByCategoryAndStatus(categoryId, status.name)
             .map { it.toTask() }
     }
 }

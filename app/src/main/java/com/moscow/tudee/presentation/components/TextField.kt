@@ -82,19 +82,19 @@ fun TudeeTextField(
                     contentDescription = stringResource(R.string.divider),
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
-
-                TudeeBasicTextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    hint = hint,
-                    keyboardOptions = keyboardOptions,
-                    singleLine = singleLine,
-                    interactionSource = interactionSource,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
             }
+            TudeeBasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                hint = hint,
+                keyboardOptions = keyboardOptions,
+                singleLine = singleLine,
+                interactionSource = interactionSource,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            )
+
         }
     }
 }
