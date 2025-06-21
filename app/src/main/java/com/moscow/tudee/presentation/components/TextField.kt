@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
@@ -94,7 +95,6 @@ fun TudeeTextField(
                     .weight(1f)
                     .fillMaxHeight()
             )
-
         }
     }
 }
@@ -127,7 +127,8 @@ private fun TudeeBasicTextField(
                     text = hint,
                     color = Theme.colors.hint,
                     maxLines = 1,
-                    style = Theme.textStyle.label.medium
+                    style = Theme.textStyle.label.medium,
+
                 )
             }
             innerTextField()
@@ -141,7 +142,6 @@ private fun TudeeBasicTextField(
 private fun TextFieldPreview() {
 
     var text by remember { mutableStateOf("") }
-
     TudeeTextField(
         value = text,
         onValueChange = { text = it },
