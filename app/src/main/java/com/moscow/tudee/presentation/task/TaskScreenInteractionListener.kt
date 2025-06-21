@@ -15,4 +15,8 @@ interface TaskScreenInteractionListener {
     fun nextMonth()
 
     fun updateMonthFromPicker(epochMillis: Long?)
+
+    fun dismissDatePicker()
+
+    fun showDatePicker()
 }

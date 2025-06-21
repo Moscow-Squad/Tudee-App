@@ -1,6 +1,5 @@
 package com.moscow.tudee.presentation.task
 
-import SwipeToDeleteItem
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,17 +19,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.R
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.DayItem
 import com.moscow.tudee.presentation.component.Tab
 import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
-import com.moscow.tudee.presentation.designSystem.component.PriorityChip
-import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
@@ -46,6 +42,23 @@ fun TaskScreen(
     viewModel: TaskViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
+
+    TaskContent(
+        interactionListener = viewModel,
+        uiState = uiState,
+        showDatePicker = showDatePicker
+    )
+}
+
+
+@Composable
+private fun TaskContent(
+    modifier: Modifier = Modifier,
+    interactionListener: TaskScreenInteractionListener,
+    uiState: TaskUiState,
+    showDatePicker: Boolean
+) {
 
     val selectedTabIndex = when (uiState.selectedStatus) {
         Task.Status.IN_PROGRESS -> 0
@@ -64,16 +77,8 @@ fun TaskScreen(
         Tab("Done", doneCount)
     )
 
-    val showDatePicker by viewModel.showDatePicker.collectAsState()
 
-    if (showDatePicker) {
-        DatePickerModal(
-            onDateSelected = { epochMillis ->
-                viewModel.updateMonthFromPicker(epochMillis)
-            },
-            onDismiss = viewModel::dismissDatePicker
-        )
-    }
+
     val currentMonthYear = uiState.currentMonth.getDisplayName(
         TextStyle.FULL,
         Locale.getDefault()
@@ -94,18 +99,27 @@ fun TaskScreen(
             lazyListState.animateScrollToItem(todayIndex)
         }
     }
+
     Column(
         Modifier
             .fillMaxSize()
             .background(Theme.colors.surface)
     ) {
 
+        if (showDatePicker) {
+            DatePickerModal(
+                onDateSelected = { epochMillis ->
+                    interactionListener.updateMonthFromPicker(epochMillis)
+                },
+                onDismiss = interactionListener::dismissDatePicker
+            )
+        }
 
         Header(
             currentMonthYear,
-            onBackClick = viewModel::previousMonth,
-            onNextClick = viewModel::nextMonth,
-            onDownClick = viewModel::showDatePicker
+            onBackClick = interactionListener::previousMonth,
+            onNextClick = interactionListener::nextMonth,
+            onDownClick = interactionListener::showDatePicker
         )
         LazyRow(
             state = lazyListState,
@@ -130,7 +144,7 @@ fun TaskScreen(
                     dayDate = date.dayOfMonth,
                     isSelected = isSelected,
                     onDayClick = {
-                        viewModel.selectDate(date)
+                        interactionListener.selectDate(date)
                     },
                     isToday = isToday
                 )
@@ -141,7 +155,7 @@ fun TaskScreen(
             tabs = allTabs,
             selectedTabIndex = selectedTabIndex,
             onTabClick = {
-                viewModel.selectStatus(
+                interactionListener.selectStatus(
                     when (it) {
                         0 -> Task.Status.IN_PROGRESS
                         1 -> Task.Status.TODO
@@ -158,33 +172,37 @@ fun TaskScreen(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
             ) {
                 items(uiState.tasksForSelectedState) { task ->
-                    SwipeToDeleteItem(onDelete = { selectedTaskToDelete = task }) {
-                        TaskCard(
-                            icon = when (task.priority) {
-                                Task.Priority.HIGH -> painterResource(id = R.drawable.ic_quran)
-                                Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_briefcase)
-                                Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
-                            },
-                            title = task.title,
-                            description = task.description,
-                            iconTint = Theme.colors.secondary
-                        ) {
-                            PriorityChip(
-                                text = task.priority.name.lowercase()
-                                    .replaceFirstChar { it.uppercase() },
-                                backgroundColor = when (task.priority) {
-                                    Task.Priority.HIGH -> Theme.colors.pinkAccent
-                                    Task.Priority.MEDIUM -> Theme.colors.yellowAccent
-                                    Task.Priority.LOW -> Theme.colors.greenAccent
-                                },
-                                icon = when (task.priority) {
-                                    Task.Priority.HIGH -> painterResource(id = R.drawable.ic_flag)
-                                    Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
-                                    Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
-                                }
-                            )
-                        }
-                    }
+                    //TODO("update it to new card task")
+//                    SwipeToDeleteItem(onDelete = { selectedTaskToDelete = task }) {
+//                        TaskCard(
+//                            icon = when (task.priority) {
+//                                Task.Priority.HIGH -> painterResource(id = R.drawable.ic_quran)
+//                                Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_briefcase)
+//                                Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
+//                            },
+//                            title = task.title,
+//                            description = task.description,
+//                            category = TODO(),
+//                            modifier = TODO(),
+//                            date = TODO(),
+//                            iconTint = Theme.colors.secondary
+//                        ) {
+//                            PriorityChip(
+//                                text = task.priority.name.lowercase()
+//                                    .replaceFirstChar { it.uppercase() },
+//                                backgroundColor = when (task.priority) {
+//                                    Task.Priority.HIGH -> Theme.colors.pinkAccent
+//                                    Task.Priority.MEDIUM -> Theme.colors.yellowAccent
+//                                    Task.Priority.LOW -> Theme.colors.greenAccent
+//                                },
+//                                icon = when (task.priority) {
+//                                    Task.Priority.HIGH -> painterResource(id = R.drawable.ic_flag)
+//                                    Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
+//                                    Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
+//                                }
+//                            )
+//                        }
+//                    }
                 }
                 item {
                     AnimatedVisibility(
@@ -193,7 +211,7 @@ fun TaskScreen(
                         DeleteBottomSheet(
                             title = "Delete task",
                             description = "Are you sure to continue?",
-                            onDelete = { selectedTaskToDelete?.let { viewModel.deleteTask(it) } },
+                            onDelete = { selectedTaskToDelete?.let { interactionListener.deleteTask(it) } },
                             onDismiss = {
                                 selectedTaskToDelete = null
                             }
