@@ -124,8 +124,7 @@ fun TaskCard(
     }
 }
 
-
-@Preview(showBackground = true, widthDp = 330)
+@Preview(showBackground = true, widthDp = 330, apiLevel = 33)
 @Composable
 fun TaskCardWithoutDatePreview() {
     TudeeTheme {
@@ -148,7 +147,7 @@ fun TaskCardWithoutDatePreview() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 330)
+@Preview(showBackground = true, widthDp = 330, apiLevel = 33)
 @Composable
 fun TaskCardWithDatePreview() {
     TudeeTheme {
