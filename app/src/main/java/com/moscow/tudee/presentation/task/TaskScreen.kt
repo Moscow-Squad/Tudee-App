@@ -71,11 +71,11 @@ private fun TaskContent(
     val todoCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.TODO }
     val doneCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.DONE }
 
-    val allTabs = listOf(
-        Tab("In Progress", inProgressCount),
-        Tab("To Do", todoCount),
-        Tab("Done", doneCount)
-    )
+//    val allTabs = listOf(
+//        Tab("In Progress", inProgressCount),
+//        Tab("To Do", todoCount),
+//        Tab("Done", doneCount)
+//    )
 
 
 
@@ -151,21 +151,21 @@ private fun TaskContent(
             }
         }
 
-        Tabs(
-            tabs = allTabs,
-            selectedTabIndex = selectedTabIndex,
-            onTabClick = {
-                interactionListener.selectStatus(
-                    when (it) {
-                        0 -> Task.Status.IN_PROGRESS
-                        1 -> Task.Status.TODO
-                        else -> Task.Status.DONE
-                    }
-                )
-            },
-            modifier = Modifier.background(Theme.colors.surfaceHigh)
-
-        )
+//        Tabs(
+//            tabs = allTabs,
+//            selectedTabIndex = selectedTabIndex,
+//            onTabClick = {
+//                interactionListener.selectStatus(
+//                    when (it) {
+//                        0 -> Task.Status.IN_PROGRESS
+//                        1 -> Task.Status.TODO
+//                        else -> Task.Status.DONE
+//                    }
+//                )
+//            },
+//            modifier = Modifier.background(Theme.colors.surfaceHigh)
+//
+//        )
         if (uiState.tasksForSelectedState.isNotEmpty()) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
