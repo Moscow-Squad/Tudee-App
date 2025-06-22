@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.category
+package com.moscow.tudee.presentation.category.categoryScreen.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -73,7 +73,7 @@ fun CategoryBar(
     }
 }
 
-@Preview(apiLevel = 34)
+@Preview()
 @Composable
 fun CategoryBarPreview() {
     CategoryBar(

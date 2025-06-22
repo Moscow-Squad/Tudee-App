@@ -1,10 +1,10 @@
+
 package com.moscow.tudee.data.local.mapper
 
 import com.moscow.tudee.data.local.entity.CategoryEntity
 import com.moscow.tudee.data.local.entity.TaskEntity
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 
 fun CategoryEntity.toCategory(): Category {
@@ -27,13 +27,13 @@ fun Category.toCategoryEntity(): CategoryEntity {
     )
 }
 
-fun TaskEntity.toTask(): Task {
+fun TaskEntity.toTask(category: Category): Task {
     return Task(
         id = id.takeIf { it.toInt() != 0 },
         title = title,
         description = description,
         priority = getPriorityFromString(priority),
-        categoryId = categoryId,
+        category = category,
         status = getStatusFromString(status),
         date = if (date.contains("T")) {
             LocalDateTime.parse(date)
@@ -49,7 +49,7 @@ fun Task.toTaskEntity(): TaskEntity {
         title = title,
         description = description,
         priority = priority.toString(),
-        categoryId = categoryId,
+        categoryId = category.id,
         status = status.toString(),
         date = date.toString().substringBefore("T")
     )

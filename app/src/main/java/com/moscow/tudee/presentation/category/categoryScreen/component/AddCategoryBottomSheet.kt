@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.category
+package com.moscow.tudee.presentation.category.categoryScreen.component
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -212,7 +212,7 @@ fun AddCategoryBottomSheet(
     }
 }
 
-@Preview(showBackground = true, apiLevel = 34)
+@Preview(showBackground = true)
 @Composable
 fun AddCategoryBottomSheetPreview() {
     var show by remember { mutableStateOf(true) }
