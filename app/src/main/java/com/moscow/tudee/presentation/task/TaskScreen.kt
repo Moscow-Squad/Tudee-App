@@ -28,11 +28,14 @@ import com.moscow.tudee.presentation.component.Tab
 import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.screen.home.asLong
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.UtcOffset
 import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
 import java.time.format.TextStyle
@@ -95,7 +98,7 @@ private fun TaskContent(
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
 
     LaunchedEffect(uiState.selectedDate) {
-        val index = uiState.monthDays.indexOf(uiState.selectedDate)
+        val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
         if (index >= 0) {
             lazyListState.animateScrollToItem(index)
         }
@@ -113,9 +116,7 @@ private fun TaskContent(
                     interactionListener.updateMonthFromPicker(epochMillis)
                 },
                 onDismiss = interactionListener::dismissDatePicker,
-                selectedDate = uiState.selectedDate
-                    .atStartOfDayIn(TimeZone.currentSystemDefault())
-                    .toEpochMilliseconds()
+                selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO).toEpochMilliseconds()
             )
         }
 
@@ -141,8 +142,7 @@ private fun TaskContent(
                 val dayName = date.dayOfWeek.name.take(3)
                     .lowercase()
                     .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-                val isSelected = date == uiState.selectedDate
-                val isToday = date == today
+                val isSelected = date == uiState.selectedDate.date
                 DayItem(
                     day = dayName,
                     dayDate = date.dayOfMonth,
@@ -150,7 +150,7 @@ private fun TaskContent(
                     onDayClick = {
                         interactionListener.selectDate(date)
                     },
-                    isToday = isToday
+                    isToday = isSelected
                 )
             }
         }

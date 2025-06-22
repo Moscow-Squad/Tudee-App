@@ -9,14 +9,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 
 open class TaskViewModel(
     private val taskService: TasksServices
 ) : ViewModel(), TaskScreenInteractionListener {
 
-    private val today: LocalDate =
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    private val today: LocalDateTime =
+        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     private val _uiState = MutableStateFlow(TaskUiState())
     open val uiState: StateFlow<TaskUiState> = _uiState.asStateFlow()
 
@@ -33,15 +42,23 @@ open class TaskViewModel(
 
 
     init {
-        updateMonth(today)
+        _uiState.update {
+            it.copy(
+                selectedDate = today,
+                monthDays = generateMonthDays(today.year, today.month.value),
+                currentMonth = today.month,
+                currentYear = today.year
+            )
+        }
     }
 
     override fun selectDate(date: LocalDate) {
         viewModelScope.launch {
             val tasksForDate = taskService.getTasksByDate(date)
+            val selectedDate = LocalDateTime(date, LocalTime(0, 0, 0))
             _uiState.update {
                 it.copy(
-                    selectedDate = date,
+                    selectedDate = selectedDate,
                     allTasksForSelectedDate = tasksForDate,
                     tasksForSelectedState = filterTasksByStatus(tasksForDate, it.selectedStatus)
                 )
@@ -104,21 +121,17 @@ open class TaskViewModel(
     private fun updateMonth(date: LocalDate) {
         val newMonthDays = generateMonthDays(date.year, date.monthNumber)
 
+
         _uiState.update {
-            val newSelectedDate = if (it.selectedDate.year == date.year && it.selectedDate.month == date.month) {
-                it.selectedDate
-            } else {
-                date
-            }
             it.copy(
                 currentMonth = date.month,
                 currentYear = date.year,
                 monthDays = newMonthDays,
-                selectedDate = newSelectedDate
+                selectedDate = LocalDateTime(date, LocalTime(0, 0, 0))
             )
         }
 
-        selectDate(_uiState.value.selectedDate)
+        selectDate(_uiState.value.selectedDate.date)
     }
 
     private fun generateMonthDays(year: Int, month: Int): List<LocalDate> {
