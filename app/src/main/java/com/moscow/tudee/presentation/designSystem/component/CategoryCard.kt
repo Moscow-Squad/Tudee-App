@@ -33,10 +33,10 @@ import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 fun CategoryCard(
     icon: Painter,
     label: String,
+    modifier: Modifier = Modifier,
     count: Int? = null,
     selected: Boolean = false,
-    iconTint: androidx.compose.ui.graphics.Color = Theme.colors.greenAccent,
-    modifier: Modifier = Modifier
+    iconTint: androidx.compose.ui.graphics.Color = Theme.colors.greenAccent
 ) {
     Column(
         modifier = modifier

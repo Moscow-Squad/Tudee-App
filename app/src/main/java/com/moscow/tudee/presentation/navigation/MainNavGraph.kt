@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.moscow.tudee.presentation.navigation.entry.CategoryTasks
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
@@ -48,8 +49,16 @@ fun MainNavGraph(
 
         categoriesRoute(
             appBar = appBar,
-            isBottomNavigationVisible = isBottomNavigationVisible
+            isBottomNavigationVisible = isBottomNavigationVisible,
+            navigateToCategoryTasks = {categoryID->
+                navController.navigateSafe(
+                    route =  CategoryTasks(categoryID),
+                    builder = {}
+                )
+            }
         )
 
+//        categoriesTasksRoute()
     }
 }
+

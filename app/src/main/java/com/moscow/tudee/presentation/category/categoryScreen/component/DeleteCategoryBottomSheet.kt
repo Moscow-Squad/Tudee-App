@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.category
+package com.moscow.tudee.presentation.category.categoryScreen.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
