@@ -13,14 +13,14 @@ import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 fun NavGraphBuilder.categoriesRoute(
     appBar: (TudeeAppBar) -> Unit,
     isBottomNavigationVisible: (Boolean) -> Unit,
-    navigateToCategoryTasks: (Long) ->
+    navigateToCategoryTasks: (Long) -> Unit
 ) {
-    tudeeComposable<CategoriesScreen>{
+    tudeeComposable<CategoriesScreen> {
         CategoryScreen(navigateToCategoryTasks = navigateToCategoryTasks)
 
-        ) {
-        tudeeComposable<CategoryTasks>{
-            val args = it.toRoute<CategoryTasks>()
-            CategoryTasksScreen (args.categoryId)
-        }
     }
+    tudeeComposable<CategoryTasks> {
+        val args = it.toRoute<CategoryTasks>()
+        CategoryTasksScreen(args.categoryId)
+    }
+}

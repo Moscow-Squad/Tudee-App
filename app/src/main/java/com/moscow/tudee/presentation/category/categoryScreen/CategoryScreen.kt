@@ -111,13 +111,13 @@ fun CategoryContent(
 
             }
         }
-        Button(onClick = { categoriesInteractionListener.onShowAddCategoryBottomSheet() }) {
-            if (uiState.isAddCategoryBottomSheetShow)
-                AddCategoryBottomSheet(
-                    onNewCategory = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
-                    onDismissRequest = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
-                )
-        }
+//        Button(onClick = { categoriesInteractionListener.onShowAddCategoryBottomSheet() }) {
+//            if (uiState.isAddCategoryBottomSheetShow)
+//                AddCategoryBottomSheet(
+//                    onNewCategory = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
+//                    onDismissRequest = { categoriesInteractionListener.onHideAddCategoryBottomSheet()},
+//                )
+//        }
     }
 }
 

@@ -94,29 +94,29 @@ fun CategoryTasksContent(
 
         ) {
             items(uiState.tasks) {
-                TaskCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 4.dp)
-                        .clickable { },
-                    icon = painterResource(R.drawable.ic_developer),
-                    title = it.title,
-                    description = it.description,
-                    date = it.date
-                ) {
-                    PriorityChip(
-                        text = it.priority,
-                        backgroundColor = when (it.priority) {
-                            Task.Priority.HIGH.toString() -> Theme.colors.pinkAccent
-                            Task.Priority.MEDIUM.toString() -> Theme.colors.yellowAccent
-                            Task.Priority.LOW.toString() -> Theme.colors.greenAccent
-                            else -> {
-                                Theme.colors.greenAccent
-                            }
-                        },
-                        icon = painterResource(id = R.drawable.ic_alert/*it.priority.ordinal*/)
-                    )
-                }
+//                TaskCard(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(bottom = 4.dp)
+//                        .clickable { },
+//                    icon = painterResource(R.drawable.ic_developer),
+//                    title = it.title,
+//                    description = it.description,
+//                    date = it.date
+//                ) {
+//                    PriorityChip(
+//                        text = it.priority,
+//                        backgroundColor = when (it.priority) {
+//                            Task.Priority.HIGH.toString() -> Theme.colors.pinkAccent
+//                            Task.Priority.MEDIUM.toString() -> Theme.colors.yellowAccent
+//                            Task.Priority.LOW.toString() -> Theme.colors.greenAccent
+//                            else -> {
+//                                Theme.colors.greenAccent
+//                            }
+//                        },
+//                        icon = painterResource(id = R.drawable.ic_alert/*it.priority.ordinal*/)
+//                    )
+//                }
             }
 
         }
