@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,9 +17,9 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.EditTaskBottomSheet
-import com.moscow.tudee.presentation.component.home_components.OverviewSection
-import com.moscow.tudee.presentation.component.home_components.TaskList
-import com.moscow.tudee.presentation.component.home_components.TaskListHeader
+import com.moscow.tudee.presentation.screen.home.home_components.OverviewSection
+import com.moscow.tudee.presentation.screen.home.home_components.TaskList
+import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent

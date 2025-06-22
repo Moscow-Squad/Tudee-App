@@ -32,6 +32,6 @@ data class HomeState(
         val priority: Priority,
         val status: Status,
         val date: LocalDateTime,
-        val category: Category? = null
+        val category: Category
     )
 }
