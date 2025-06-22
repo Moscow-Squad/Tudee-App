@@ -157,7 +157,7 @@ class TasksServicesImplTest {
         coEvery { taskDao.getTaskById(taskId) } returns null
 
         val thrown = assertThrows<Exception> { tasksServices.getTaskById(taskId) }
-        assertThat(thrown).hasMessageThat().isEqualTo("task not found")
+        assertThat(thrown).hasMessageThat().isEqualTo("Task not found with id=1")
 
         coVerify { taskDao.getTaskById(taskId) }
     }
@@ -206,7 +206,7 @@ class TasksServicesImplTest {
         coEvery { taskDao.getTaskById(taskId) } returns null
 
         val thrown = assertThrows<Exception> { tasksServices.changeTaskStatus(taskId) }
-        assertThat(thrown).hasMessageThat().isEqualTo("task not existed")
+        assertThat(thrown).hasMessageThat().isEqualTo("Task not found with id=1")
 
         coVerify { taskDao.getTaskById(taskId) }
         coVerify(exactly = 0) { taskDao.updateTaskStatus(any(), any()) }
