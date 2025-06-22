@@ -34,6 +34,7 @@ import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
 import java.time.format.TextStyle
@@ -96,7 +97,6 @@ private fun TaskContent(
     ) + ", ${uiState.currentYear}"
     val lazyListState = rememberLazyListState()
     val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val todayIndex = uiState.monthDays.indexOfFirst { it == today }
     val isAtStart by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemIndex == 0
@@ -105,9 +105,10 @@ private fun TaskContent(
 
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
 
-    LaunchedEffect(uiState.monthDays) {
-        if (todayIndex != -1) {
-            lazyListState.animateScrollToItem(todayIndex)
+    LaunchedEffect(uiState.selectedDate) {
+        val index = uiState.monthDays.indexOf(uiState.selectedDate)
+        if (index >= 0) {
+            lazyListState.animateScrollToItem(index)
         }
     }
 
@@ -126,14 +127,17 @@ private fun TaskContent(
                 .background(Theme.colors.surface)
         ) {
 
-            if (showDatePicker) {
-                DatePickerModal(
-                    onDateSelected = { epochMillis ->
-                        interactionListener.updateMonthFromPicker(epochMillis)
-                    },
-                    onDismiss = interactionListener::dismissDatePicker
-                )
-            }
+        if (showDatePicker) {
+            DatePickerModal(
+                onDateSelected = { epochMillis ->
+                    interactionListener.updateMonthFromPicker(epochMillis)
+                },
+                onDismiss = interactionListener::dismissDatePicker,
+                selectedDate = uiState.selectedDate
+                    .atStartOfDayIn(TimeZone.currentSystemDefault())
+                    .toEpochMilliseconds()
+            )
+        }
 
             Header(
                 currentMonthYear,

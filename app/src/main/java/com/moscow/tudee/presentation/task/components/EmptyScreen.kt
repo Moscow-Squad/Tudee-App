@@ -91,7 +91,7 @@ fun MessageBox(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier
             .shadow(
-                1.dp,
+                4.dp,
                 RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp, bottomStart = 16.dp),
                 ambientColor = Theme.colors.body,
                 spotColor = Theme.colors.hint
