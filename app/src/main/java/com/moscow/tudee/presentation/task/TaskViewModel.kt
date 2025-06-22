@@ -36,6 +36,7 @@ open class TaskViewModel(
         updateMonth(today)
     }
 
+
     override fun selectDate(date: LocalDate) {
         viewModelScope.launch {
             val tasksForDate = taskService.getTasksByDate(date)

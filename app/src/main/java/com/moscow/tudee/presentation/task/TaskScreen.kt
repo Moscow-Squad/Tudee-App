@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.DayItem
@@ -33,17 +35,15 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.UtcOffset
 import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
 import java.time.format.TextStyle
 import java.util.Locale
-import com.moscow.tudee.R
-import com.moscow.tudee.presentation.component.AddTaskBottomSheet
-import kotlinx.datetime.Instant
-import kotlinx.datetime.UtcOffset
-import kotlinx.datetime.toInstant
 
 @Composable
 fun TaskScreen(
@@ -127,17 +127,17 @@ private fun TaskContent(
                 .background(Theme.colors.surface)
         ) {
 
-        if (showDatePicker) {
-            DatePickerModal(
-                onDateSelected = { epochMillis ->
-                    interactionListener.updateMonthFromPicker(epochMillis)
-                },
-                onDismiss = interactionListener::dismissDatePicker,
-                selectedDate = uiState.selectedDate
-                    .atStartOfDayIn(TimeZone.currentSystemDefault())
-                    .toEpochMilliseconds()
-            )
-        }
+            if (showDatePicker) {
+                DatePickerModal(
+                    onDateSelected = { epochMillis ->
+                        interactionListener.updateMonthFromPicker(epochMillis)
+                    },
+                    onDismiss = interactionListener::dismissDatePicker,
+                    selectedDate = uiState.selectedDate
+                        .atStartOfDayIn(TimeZone.currentSystemDefault())
+                        .toEpochMilliseconds()
+                )
+            }
 
             Header(
                 currentMonthYear,
@@ -294,10 +294,10 @@ private fun TaskContent(
 
 @Preview(showBackground = true, apiLevel = 34)
 @Composable
-fun TaskContentPreview(modifier: Modifier = Modifier) {
-    val viewModel: TaskViewModel = koinViewModel()
-    val addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel()
-
+fun TaskContentPreview(
+    viewModel: TaskViewModel = koinViewModel(),
+    addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val bottomSheetUiState by addTaskBottomSheetViewModel.uiState.collectAsStateWithLifecycle()
     val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
