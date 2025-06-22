@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.category.categoryScreen.getPriorityFromString
 import com.moscow.tudee.presentation.component.OutlinedIconButton
 import com.moscow.tudee.presentation.component.SecondaryButton
 import com.moscow.tudee.presentation.component.TudeeText
@@ -112,9 +113,7 @@ fun TaskDetailsBottomSheet(
                 )
 
                 PriorityChip(
-                    text = task.priority.getText(),
-                    backgroundColor = task.priority.getColor(),
-                    icon = painterResource(task.priority.getIcon()),
+                    priority = task.priority,
                     selected = true
                 )
 

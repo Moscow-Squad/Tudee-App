@@ -30,6 +30,7 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.ObserveAsEvent
 import com.moscow.tudee.presentation.category.categoryScreen.CategoriesEvents
 import com.moscow.tudee.presentation.category.categoryScreen.CategoriesScreenState
+import com.moscow.tudee.presentation.category.categoryScreen.getPriorityFromString
 import com.moscow.tudee.presentation.category.categoryScreen.toCategory
 import com.moscow.tudee.presentation.component.TabItem
 import com.moscow.tudee.presentation.component.Tabs
@@ -72,6 +73,18 @@ fun CategoryTasksContent(
         TabItem("In progress", uiState.categories.size, Task.Status.IN_PROGRESS),
         TabItem("Done", uiState.categories.size, Task.Status.DONE)
     )
+    Tabs(
+        tabs = tabs,
+        selectedStatus = selectedStatus,
+        onTabClick = { status ->
+            selectedStatus = status
+            categoriesInteractionListener.onTasksStatusClick(categoryId, status)
+        },
+        modifier = Modifier
+            .background(Theme.colors.surfaceHigh)
+            .padding(top = 8.dp)
+    )
+
     TudeeScaffold(
         topBar = {
             Column {
@@ -104,18 +117,7 @@ fun CategoryTasksContent(
                     date = task.date
                 ) {
                     PriorityChip(
-                        text = task.priority,
-                        backgroundColor = when (task.priority) {
-                            "High" -> Theme.colors.pinkAccent
-                            "Medium" -> Theme.colors.yellowAccent
-                            else -> Theme.colors.greenAccent
-                        },
-                        icon = painterResource(
-                            id = when (task.priority) {
-                                "High" -> R.drawable.ic_flag
-                                else -> R.drawable.ic_alert
-                            }
-                        )
+                        priority = getPriorityFromString(task.priority),
                     )
                 }
             }

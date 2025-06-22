@@ -65,5 +65,13 @@
     <string name="add_task">Add Task</string>
     <string name="edited_task_successfully">Edited task successfully</string>
     <string name="add_task_successfully">Add task successfully</string>
-
+    <string name="edit_category">Edit category</string>
+    <string name="add_new_category">Add new category</string>
+    <string name="category_title">Category title</string>
+    <string name="category_image">Category image</string>
+    <string name="add_bottom_sheet">Add</string>
+    <string name="cancel_bottom_sheet">Cancel</string>
+    <string name="priority_high">High</string>
+    <string name="priority_medium">Medium</string>
+    <string name="priority_low">Low</string>
 </resources>

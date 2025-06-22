@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task.Priority
+import com.moscow.tudee.presentation.category.categoryScreen.getPriorityFromString
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
@@ -153,19 +154,15 @@ fun TaskBottomSheet(
 
                     Row(modifier = Modifier.padding(top = 8.dp)) {
                         PriorityChip(
-                            text = stringResource(R.string.high),
+                            priority = getPriorityFromString(stringResource(R.string.high)),
                             selected = selectedPriority == Priority.HIGH,
-                            backgroundColor = Theme.colors.pinkAccent,
-                            icon = painterResource(id = R.drawable.ic_flag),
                             modifier = Modifier.clickable {
                                 onPrioritySelected(Priority.HIGH)
                             }
                         )
                         PriorityChip(
-                            text = stringResource(R.string.medium),
+                            priority = getPriorityFromString(stringResource(R.string.medium)),
                             selected = selectedPriority == Priority.MEDIUM,
-                            backgroundColor = Theme.colors.yellowAccent,
-                            icon = painterResource(id = R.drawable.ic_alert),
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .clickable {
@@ -173,10 +170,8 @@ fun TaskBottomSheet(
                                 }
                         )
                         PriorityChip(
-                            text = stringResource(R.string.low),
+                            priority = getPriorityFromString(stringResource(R.string.low)),
                             selected = selectedPriority == Priority.LOW,
-                            backgroundColor = Theme.colors.greenAccent,
-                            icon = painterResource(id = R.drawable.ic_trade_down),
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .clickable {
