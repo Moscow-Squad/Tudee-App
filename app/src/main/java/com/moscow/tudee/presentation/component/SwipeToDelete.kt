@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,7 +28,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-private fun SwipeToDeleteItem(
+fun SwipeToDeleteItem(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     animationDuration: Long = 100L,

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.moscow.tudee.presentation.designSystem.theme.ThemeState
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
 import com.moscow.tudee.presentation.navigation.entry.OnBoardingScreen
 import com.moscow.tudee.presentation.navigation.entry.SplashScreen
@@ -14,7 +15,7 @@ import com.moscow.tudee.presentation.ui.splash.splashRoute
 
 @Composable
 fun TudeeGraph(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
         navController = navController,

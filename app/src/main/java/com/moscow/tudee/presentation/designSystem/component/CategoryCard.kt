@@ -137,7 +137,7 @@ fun CategoryItem_Count_Preview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 33)
 @Composable
 fun CategoryItem_Selected_Preview() {
     TudeeTheme {

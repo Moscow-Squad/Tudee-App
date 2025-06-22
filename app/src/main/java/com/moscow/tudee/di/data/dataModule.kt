@@ -12,7 +12,10 @@ import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.SplashService
 import com.moscow.tudee.domain.service.TasksServices
 import org.koin.android.ext.koin.androidApplication
+import com.moscow.tudee.presentation.screen.home.HomeViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 private const val TUDEE_DATABASE = "tudee_database"

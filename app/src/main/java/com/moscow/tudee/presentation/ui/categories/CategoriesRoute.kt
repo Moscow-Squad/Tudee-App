@@ -7,21 +7,20 @@ import com.moscow.tudee.presentation.category.categoryTasks.CategoryTasksScreen
 import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
 import com.moscow.tudee.presentation.navigation.entry.CategoryTasks
 
+import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 
 fun NavGraphBuilder.categoriesRoute(
-    navigateToCategoryTasks: (Long) -> Unit
+    appBar: (TudeeAppBar) -> Unit,
+    isBottomNavigationVisible: (Boolean) -> Unit,
+    navigateToCategoryTasks: (Long) ->
 ) {
     tudeeComposable<CategoriesScreen>{
         CategoryScreen(navigateToCategoryTasks = navigateToCategoryTasks)
-    }
-}
 
-fun NavGraphBuilder.categoriesTasksRoute(
-
-) {
-    tudeeComposable<CategoryTasks>{
-        val args = it.toRoute<CategoryTasks>()
-        CategoryTasksScreen (args.categoryId)
+        ) {
+        tudeeComposable<CategoryTasks>{
+            val args = it.toRoute<CategoryTasks>()
+            CategoryTasksScreen (args.categoryId)
+        }
     }
-}
