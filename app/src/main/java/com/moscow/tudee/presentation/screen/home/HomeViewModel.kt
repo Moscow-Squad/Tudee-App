@@ -77,7 +77,7 @@ class HomeViewModel(
     private fun getCategoryAndSaveTasks(tasks: List<Task>) {
         tasks.forEach { task ->
             launchWithResult(
-                action = { categoryServices.getCategoryById(task.categoryId) },
+                action = { categoryServices.getCategoryById(task.category.id) },
                 onSuccess = { response ->
                     saveCategory(task, response)
                 },

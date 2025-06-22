@@ -80,59 +80,6 @@ class CategoryServicesImplTest {
     }
 
     @Test
-    fun `addCategory should handle null id`() = runTest {
-        // Given
-        val category = createCategoryDomainEntity(id = null, title = "New Category")
-        val expectedEntity = category.toCategoryEntity()
-        coEvery { categoryDao.addCategory(any()) } just Runs
-
-        // When
-        categoryServices.addCategory(category)
-
-        // Then
-        coVerify(exactly = 1) {
-            categoryDao.addCategory(match {
-                it.id == expectedEntity.id &&
-                        it.title == expectedEntity.title
-            })
-        }
-    }
-
-    @Test
-    fun `updateCategory should call DAO`() = runTest {
-        // Given
-        val category = createCategoryDomainEntity(id = null, title = "Updated")
-        val expectedEntity = category.toCategoryEntity()
-        coEvery { categoryDao.updateCategory(any()) } just Runs
-
-        // When
-        categoryServices.updateCategory(category)
-
-        // Then
-        coVerify(exactly = 1) {
-            categoryDao.updateCategory(match {
-                it.id == expectedEntity.id &&
-                        it.title == expectedEntity.title
-            })
-        }
-    }
-
-    @Test
-    fun `updateCategory should handle null id by using zero`() = runTest {
-        // Given
-        val category = createCategoryDomainEntity(id = null, title = "No ID")
-        coEvery { categoryDao.updateCategory(any()) } just Runs
-
-        // When
-        categoryServices.updateCategory(category)
-
-        // Then
-        coVerify {
-            categoryDao.updateCategory(match { it.id == 0L })
-        }
-    }
-
-    @Test
     fun `deleteCategory should call DAO with correct ID`() = runTest {
         // Given
         val categoryId = 99L
@@ -160,7 +107,7 @@ class CategoryServicesImplTest {
     }
 
     private fun createCategoryDomainEntity(
-        id: Long? = 0L,
+        id: Long = 0L,
         title: String = "Education",
         iconUrl: String = "url1",
         countOfTasks: Int = 0
