@@ -31,9 +31,9 @@ fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
     startIcon: Painter? = null,
-    onStartClick: (() -> Unit) = {},
+    onStartClick: () -> Unit = {},
     endIcon: Painter? = null,
-    onEndClick: (() -> Unit) = {},
+    onEndClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
