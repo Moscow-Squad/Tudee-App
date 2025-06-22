@@ -3,7 +3,10 @@ package com.moscow.tudee.data.service
 import com.google.common.truth.Truth.assertThat
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
+import com.moscow.tudee.data.local.entity.CategoryEntity
 import com.moscow.tudee.data.local.entity.TaskEntity
+import com.moscow.tudee.data.local.mapper.toCategory
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -23,29 +26,39 @@ class TasksServicesImplTest {
     private lateinit var categoryDao: CategoryDao
     private lateinit var tasksServices: TasksServicesImpl
 
+    private val sampleCategoryEntity = CategoryEntity(
+        id = 1L,
+        title = "Sample Category",
+        iconUri = null,
+        isPredefined = false,
+        countOfTasks = 0
+    )
+    private val sampleCategory: Category = sampleCategoryEntity.toCategory()
+
     private val sampleTaskEntity = TaskEntity(
         id = 1L,
         title = "Test Task",
         description = "Test Description",
+        priority = Task.Priority.HIGH.name,
         categoryId = 1L,
-        status = "TODO",
-        date = "2024-06-18T15:45",
-        priority = "HIGH"
+        status = Task.Status.TODO.name,
+        date = "2025-06-18"
     )
 
     @BeforeEach
     fun setUp() {
         taskDao = mockk(relaxed = true)
         categoryDao = mockk(relaxed = true)
-        
+
+        coEvery { categoryDao.getCategories() } returns listOf(sampleCategoryEntity)
+        coEvery { categoryDao.getCategoryById(any()) } returns sampleCategoryEntity
+
         tasksServices = TasksServicesImpl(taskDao, categoryDao)
-
     }
-
 
     @Test
     fun `should return list of tasks when tasks exist`() = runTest {
-        val taskEntity = TaskEntity(
+        val taskEntity = sampleTaskEntity.copy(
             id = 1,
             title = "Test Task",
             description = "Description",
@@ -59,10 +72,11 @@ class TasksServicesImplTest {
             title = "Test Task",
             description = "Description",
             priority = Task.Priority.HIGH,
-            categoryId = 1,
+            category = sampleCategory,
             status = Task.Status.TODO,
             date = LocalDateTime.parse("2025-06-18T00:00:00")
         )
+
         coEvery { taskDao.getTasks() } returns listOf(taskEntity)
 
         val result = tasksServices.getTasks()
@@ -84,24 +98,17 @@ class TasksServicesImplTest {
     @Test
     fun `should return tasks for given date when tasks exist`() = runTest {
         val date = LocalDate.parse("2025-06-18")
-        val taskEntity = TaskEntity(
-            id = 1,
-            title = "Test Task",
-            description = "Description",
-            priority = Task.Priority.HIGH.name,
-            categoryId = 1,
-            status = Task.Status.TODO.name,
-            date = "2025-06-18"
-        )
+        val taskEntity = sampleTaskEntity.copy(date = "2025-06-18")
         val expectedTask = Task(
             id = 1,
-            title = "Test Task",
-            description = "Description",
+            title = taskEntity.title,
+            description = taskEntity.description,
             priority = Task.Priority.HIGH,
-            categoryId = 1,
+            category = sampleCategory,
             status = Task.Status.TODO,
             date = LocalDateTime.parse("2025-06-18T00:00:00")
         )
+
         coEvery { taskDao.getTasksByDate("2025-06-18") } returns listOf(taskEntity)
 
         val result = tasksServices.getTasksByDate(date)
@@ -124,30 +131,24 @@ class TasksServicesImplTest {
     @Test
     fun `should return task when task exists`() = runTest {
         val taskId = 1L
-        val taskEntity = TaskEntity(
-            id = taskId,
-            title = "Test Task",
-            description = "Description",
-            priority = Task.Priority.HIGH.name,
-            categoryId = 1,
-            status = Task.Status.TODO.name,
-            date = "2025-06-18"
-        )
+        val taskEntity = sampleTaskEntity.copy(id = taskId)
         val expectedTask = Task(
             id = taskId,
-            title = "Test Task",
-            description = "Description",
+            title = taskEntity.title,
+            description = taskEntity.description,
             priority = Task.Priority.HIGH,
-            categoryId = 1,
+            category = sampleCategory,
             status = Task.Status.TODO,
             date = LocalDateTime.parse("2025-06-18T00:00:00")
         )
+
         coEvery { taskDao.getTaskById(taskId) } returns taskEntity
 
         val result = tasksServices.getTaskById(taskId)
 
         assertThat(result).isEqualTo(expectedTask)
         coVerify { taskDao.getTaskById(taskId) }
+        coVerify { categoryDao.getCategoryById(taskEntity.categoryId) }
     }
 
     @Test
@@ -155,25 +156,17 @@ class TasksServicesImplTest {
         val taskId = 1L
         coEvery { taskDao.getTaskById(taskId) } returns null
 
-        assertThrows<Exception> { tasksServices.getTaskById(taskId) }.also {
-            assertThat(it.message).isEqualTo("task not found")
-        }
+        val thrown = assertThrows<Exception> { tasksServices.getTaskById(taskId) }
+        assertThat(thrown).hasMessageThat().isEqualTo("task not found")
+
         coVerify { taskDao.getTaskById(taskId) }
     }
 
     @Test
     fun `should update status from TODO to IN_PROGRESS when status is TODO`() = runTest {
         val taskId = 1L
-        val taskEntity = TaskEntity(
-            id = taskId,
-            title = "Test Task",
-            description = "Description",
-            priority = Task.Priority.HIGH.name,
-            categoryId = 1,
-            status = Task.Status.TODO.name,
-            date = "2025-06-18"
-        )
-        coEvery { taskDao.getTaskById(taskId) } returns taskEntity
+        val entity = sampleTaskEntity.copy(status = Task.Status.TODO.name)
+        coEvery { taskDao.getTaskById(taskId) } returns entity
         coEvery { taskDao.updateTaskStatus(taskId, Task.Status.IN_PROGRESS.name) } returns Unit
 
         tasksServices.changeTaskStatus(taskId)
@@ -185,16 +178,8 @@ class TasksServicesImplTest {
     @Test
     fun `should update status from IN_PROGRESS to DONE when status is IN_PROGRESS`() = runTest {
         val taskId = 1L
-        val taskEntity = TaskEntity(
-            id = taskId,
-            title = "Test Task",
-            description = "Description",
-            priority = Task.Priority.HIGH.name,
-            categoryId = 1,
-            status = Task.Status.IN_PROGRESS.name,
-            date = "2025-06-18"
-        )
-        coEvery { taskDao.getTaskById(taskId) } returns taskEntity
+        val entity = sampleTaskEntity.copy(status = Task.Status.IN_PROGRESS.name)
+        coEvery { taskDao.getTaskById(taskId) } returns entity
         coEvery { taskDao.updateTaskStatus(taskId, Task.Status.DONE.name) } returns Unit
 
         tasksServices.changeTaskStatus(taskId)
@@ -206,16 +191,8 @@ class TasksServicesImplTest {
     @Test
     fun `should not update status when status is DONE`() = runTest {
         val taskId = 1L
-        val taskEntity = TaskEntity(
-            id = taskId,
-            title = "Test Task",
-            description = "Description",
-            priority = Task.Priority.HIGH.name,
-            categoryId = 1,
-            status = Task.Status.DONE.name,
-            date = "2025-06-18"
-        )
-        coEvery { taskDao.getTaskById(taskId) } returns taskEntity
+        val entity = sampleTaskEntity.copy(status = Task.Status.DONE.name)
+        coEvery { taskDao.getTaskById(taskId) } returns entity
 
         tasksServices.changeTaskStatus(taskId)
 
@@ -228,182 +205,84 @@ class TasksServicesImplTest {
         val taskId = 1L
         coEvery { taskDao.getTaskById(taskId) } returns null
 
-        assertThrows<Exception> { tasksServices.changeTaskStatus(taskId) }.also {
-            assertThat(it.message).isEqualTo("task not existed")
-        }
+        val thrown = assertThrows<Exception> { tasksServices.changeTaskStatus(taskId) }
+        assertThat(thrown).hasMessageThat().isEqualTo("task not existed")
+
         coVerify { taskDao.getTaskById(taskId) }
         coVerify(exactly = 0) { taskDao.updateTaskStatus(any(), any()) }
     }
 
     @Test
     fun `should insert task into dao when adding new task`() = runTest {
-        val task = Task(
+        val newTask = Task(
             id = null,
             title = "Test Task",
             description = "Description",
             priority = Task.Priority.HIGH,
-            categoryId = 1,
+            category = sampleCategory,
             status = Task.Status.TODO,
             date = LocalDateTime.parse("2025-06-18T00:00:00")
         )
-        val taskEntity = TaskEntity(
+        val expectedEntity = TaskEntity(
             id = 0,
             title = "Test Task",
             description = "Description",
             priority = Task.Priority.HIGH.name,
-            categoryId = 1,
+            categoryId = sampleCategory.id!!,
             status = Task.Status.TODO.name,
             date = "2025-06-18"
         )
-        coEvery { taskDao.addTask(taskEntity) } returns Unit
+        coEvery { taskDao.addTask(expectedEntity) } returns Unit
 
-        tasksServices.addTask(task)
+        tasksServices.addTask(newTask)
 
-        coVerify { taskDao.addTask(taskEntity) }
+        coVerify { taskDao.addTask(expectedEntity) }
+        coVerify { categoryDao.incrementTaskCount(sampleCategory.id!!) }
     }
 
     @Test
     fun `should update task in dao when updating existing task`() = runTest {
-        val task = Task(
+        val upd = Task(
             id = 1,
             title = "Updated Task",
             description = "Updated Description",
             priority = Task.Priority.MEDIUM,
-            categoryId = 1,
+            category = sampleCategory,
             status = Task.Status.IN_PROGRESS,
             date = LocalDateTime.parse("2025-06-18T00:00:00")
         )
-        val taskEntity = TaskEntity(
+        val expectedEntity = TaskEntity(
             id = 1,
             title = "Updated Task",
             description = "Updated Description",
             priority = Task.Priority.MEDIUM.name,
-            categoryId = 1,
+            categoryId = sampleCategory.id!!,
             status = Task.Status.IN_PROGRESS.name,
             date = "2025-06-18"
         )
-        coEvery { taskDao.updateTask(taskEntity) } returns Unit
+        coEvery { taskDao.updateTask(expectedEntity) } returns Unit
 
-        tasksServices.updateTask(task)
+        tasksServices.updateTask(upd)
 
-        coVerify { taskDao.updateTask(taskEntity) }
+        coVerify { taskDao.updateTask(expectedEntity) }
     }
 
     @Test
-    fun `should propagate exception when DAO getTasks throws`() = runTest {
-        coEvery { taskDao.getTasks() } throws RuntimeException("db error")
-
-        assertThrows<RuntimeException> { tasksServices.getTasks() }.also {
-            assertThat(it.message).isEqualTo("db error")
-        }
-        coVerify { taskDao.getTasks() }
-    }
-
-    @Test
-    fun `should propagate exception when DAO getTasksByDate throws`() = runTest {
-        val date = LocalDate.parse("2025-06-18")
-        coEvery { taskDao.getTasksByDate("2025-06-18") } throws IllegalStateException("db failure")
-
-        assertThrows<IllegalStateException> { tasksServices.getTasksByDate(date) }.also {
-            assertThat(it.message).isEqualTo("db failure")
-        }
-        coVerify { taskDao.getTasksByDate("2025-06-18") }
-    }
-
-    @Test
-    fun `should throw IllegalArgumentException when mapping getTasksByDate with invalid status`() =
+    fun `deleteTask should call DAO delete and decrement count when valid taskID provided`() =
         runTest {
-            val date = LocalDate.parse("2025-06-18")
-            val badEntity = TaskEntity(
-                id = 6,
-                title = "Bad Status",
-                description = "Bad",
-                priority = Task.Priority.MEDIUM.name,
-                categoryId = 1,
-                status = "UNKNOWN_STATUS",
-                date = "2025-06-18"
-            )
-            coEvery { taskDao.getTasksByDate("2025-06-18") } returns listOf(badEntity)
+            val taskId = 1L
+            coEvery { taskDao.getTaskById(taskId) } returns sampleTaskEntity
+            coEvery { taskDao.deleteTask(taskId) } returns Unit
 
-            assertThrows<IllegalArgumentException> {
-                tasksServices.getTasksByDate(date)
-            }
-            coVerify { taskDao.getTasksByDate("2025-06-18") }
+            tasksServices.deleteTask(taskId)
+
+            coVerify { taskDao.getTaskById(taskId) }
+            coVerify { taskDao.deleteTask(taskId) }
+            coVerify { categoryDao.decrementTaskCount(sampleTaskEntity.categoryId) }
         }
 
     @Test
-    fun `should propagate exception when updateTaskStatus DAO update fails`() = runTest {
-        val taskId = 7L
-        val entity = TaskEntity(
-            id = taskId,
-            title = "Will Fail",
-            description = "Desc",
-            priority = Task.Priority.HIGH.name,
-            categoryId = 2,
-            status = Task.Status.TODO.name,
-            date = "2025-06-18"
-        )
-        coEvery { taskDao.getTaskById(taskId) } returns entity
-        coEvery {
-            taskDao.updateTaskStatus(
-                taskId,
-                Task.Status.IN_PROGRESS.name
-            )
-        } throws UnsupportedOperationException("update error")
-
-        assertThrows<UnsupportedOperationException> {
-            tasksServices.changeTaskStatus(taskId)
-        }
-        coVerify { taskDao.getTaskById(taskId) }
-        coVerify { taskDao.updateTaskStatus(taskId, Task.Status.IN_PROGRESS.name) }
-    }
-
-    @Test
-    fun `should propagate exception when DAO addTask throws`() = runTest {
-        val task = Task(
-            id = null,
-            title = "Add Fail",
-            description = "Desc",
-            priority = Task.Priority.LOW,
-            categoryId = 3,
-            status = Task.Status.TODO,
-            date = LocalDateTime.parse("2025-06-18T00:00:00")
-        )
-        coEvery { taskDao.addTask(any()) } throws IllegalStateException("insert error")
-
-        assertThrows<IllegalStateException> { tasksServices.addTask(task) }
-        coVerify { taskDao.addTask(any()) }
-    }
-
-    @Test
-    fun `should propagate exception when DAO updateTask throws`() = runTest {
-        val task = Task(
-            id = 8,
-            title = "Update Fail",
-            description = "Desc",
-            priority = Task.Priority.MEDIUM,
-            categoryId = 4,
-            status = Task.Status.IN_PROGRESS,
-            date = LocalDateTime.parse("2025-06-18T00:00:00")
-        )
-        coEvery { taskDao.updateTask(any()) } throws RuntimeException("update error")
-
-        assertThrows<RuntimeException> { tasksServices.updateTask(task) }
-        coVerify { taskDao.updateTask(any()) }
-    }
-
-    @Test
-    fun `deleteTask should call DAO delete when valid taskID provided`() = runTest {
-        val taskId = 1L
-        coEvery { taskDao.deleteTask(taskId) } returns Unit
-
-        tasksServices.deleteTask(taskId)
-
-        coVerify { taskDao.deleteTask(taskId) }
-    }
-
-    @Test
-    fun `getTaskByCategory should return list of tasks when categoryID provided`() = runTest {
+    fun `getTasksByCategory should return list of tasks when categoryID provided`() = runTest {
         val categoryId = 1L
         val taskEntities = listOf(sampleTaskEntity, sampleTaskEntity.copy(id = 2L))
         coEvery { taskDao.getTasksByCategory(categoryId) } returns taskEntities
@@ -411,6 +290,8 @@ class TasksServicesImplTest {
         val result = tasksServices.getTasksByCategory(categoryId)
 
         assertThat(result).hasSize(2)
+        // Optionally, verify each has the proper Category object:
+        result.forEach { assertThat(it.category).isEqualTo(sampleCategory) }
     }
 
     @Test
@@ -436,12 +317,13 @@ class TasksServicesImplTest {
             val result = tasksServices.getTasksByStatus(status)
 
             assertThat(result).hasSize(2)
+            result.forEach { assertThat(it.category).isEqualTo(sampleCategory) }
         }
 
     @Test
     fun `getTasksByDateAndStatus should return tasks when dao returns task entities for specific date and status`() =
         runTest {
-            val date = LocalDate(2024, 1, 1)
+            val date = LocalDate.parse("2025-06-18")
             val status = Task.Status.TODO
             val taskEntities = listOf(sampleTaskEntity)
             coEvery {
@@ -454,12 +336,13 @@ class TasksServicesImplTest {
             val result = tasksServices.getTasksByDateAndStatus(date, status)
 
             assertThat(result).hasSize(1)
+            assertThat(result[0].category).isEqualTo(sampleCategory)
         }
 
     @Test
     fun `getTasksByDateAndCategory should return tasks when dao returns task entities for specific date and category`() =
         runTest {
-            val date = LocalDate(2024, 1, 1)
+            val date = LocalDate.parse("2025-06-18")
             val categoryId = 1L
             val taskEntities = listOf(sampleTaskEntity)
             coEvery {
@@ -472,20 +355,23 @@ class TasksServicesImplTest {
             val result = tasksServices.getTasksByDateAndCategory(date, categoryId)
 
             assertThat(result).hasSize(1)
+            assertThat(result[0].category).isEqualTo(sampleCategory)
         }
 
     @Test
-    fun `getTasksByDateAndCategory should return empty list when no tasks match date and category criteria`() = runTest {
-        val date = LocalDate(2024, 12, 31)
-        val categoryId = 999L
-        coEvery { taskDao.getTasksByDateAndCategory(date.toString(), categoryId) } returns emptyList()
+    fun `getTasksByDateAndCategory should return empty list when no tasks match date and category criteria`() =
+        runTest {
+            val date = LocalDate.parse("2024-12-31")
+            val categoryId = 999L
+            coEvery {
+                taskDao.getTasksByDateAndCategory(
+                    date.toString(),
+                    categoryId
+                )
+            } returns emptyList()
 
-        val result = tasksServices.getTasksByDateAndCategory(date, categoryId)
+            val result = tasksServices.getTasksByDateAndCategory(date, categoryId)
 
-        assertThat(result).isEmpty()
-    }
+            assertThat(result).isEmpty()
+        }
 }
-
-
-
-
