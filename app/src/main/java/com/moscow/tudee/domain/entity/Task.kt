@@ -7,7 +7,7 @@ data class Task(
     val title: String,
     val description: String,
     val priority: Priority,
-    val categoryId: Long,
+    val category: Category,
     val status: Status,
     val date: LocalDateTime
 ) {
