@@ -30,7 +30,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
-import com.moscow.tudee.presentation.category.categoryScreen.getPriorityFromString
+import com.moscow.tudee.presentation.category.getPriorityFromString
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
@@ -125,7 +125,7 @@ fun TaskCard(
     }
 }
 
-@Preview(showBackground = true, widthDp = 330, apiLevel = 33)
+@Preview(showBackground = true, widthDp = 330, )
 @Composable
 fun TaskCardWithoutDatePreview() {
     TudeeTheme {
@@ -146,7 +146,7 @@ fun TaskCardWithoutDatePreview() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 330, apiLevel = 33)
+@Preview(showBackground = true, widthDp = 330, )
 @Composable
 fun TaskCardWithDatePreview() {
     TudeeTheme {
