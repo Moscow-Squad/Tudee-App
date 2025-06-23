@@ -27,7 +27,8 @@ import com.moscow.tudee.presentation.category.categoryScreen.component.DeleteCat
 import com.moscow.tudee.presentation.category.toCategory
 import com.moscow.tudee.presentation.component.TabItem
 import com.moscow.tudee.presentation.component.Tabs
-import com.moscow.tudee.presentation.designSystem.component.SnackBar
+import com.moscow.tudee.presentation.designSystem.component.ErrorSnackBar
+import com.moscow.tudee.presentation.designSystem.component.SuccessSnackBar
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
@@ -109,19 +110,12 @@ fun CategoryTasksContent(
 
             val messageId = uiState.successMessage ?: uiState.errorMessage
             messageId?.let {
-                SnackBar(
-                    icon = icon,
-                    message = stringResource(id = it),
-                    iconBackground = if (uiState.successMessage != null)
-                        Theme.colors.greenVariant
-                    else Theme.colors.errorVariant,
-                    iconTint = if (uiState.successMessage != null)
-                        Theme.colors.greenAccent
-                    else Theme.colors.error
-                )
-
-
-                LaunchedEffect(Unit) {
+                if (uiState.successMessage != null) {
+                    SuccessSnackBar(message = stringResource(id = it))
+                } else {
+                    ErrorSnackBar(message = stringResource(id = it))
+                }
+                    LaunchedEffect(Unit) {
                     kotlinx.coroutines.delay(3000)
                     listener.onHideSnackBar()
                 }

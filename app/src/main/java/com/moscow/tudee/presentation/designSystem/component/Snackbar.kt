@@ -2,7 +2,6 @@ package com.moscow.tudee.presentation.designSystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,13 +25,12 @@ import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
-
 @Composable
-fun SnackBar(
+private fun SnackBarContent(
     icon: Painter,
     message: String,
     iconBackground: Color,
-    iconTint: Color = Theme.colors.onPrimary,
+    iconTint: Color,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -71,6 +69,35 @@ fun SnackBar(
     }
 }
 
+@Composable
+fun SuccessSnackBar(
+    message: String,
+    modifier: Modifier = Modifier
+) {
+    SnackBarContent(
+        icon = painterResource(id = R.drawable.ic_checkmark_badge),
+        message = message,
+        iconBackground = Theme.colors.greenVariant,
+        iconTint = Theme.colors.greenAccent,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ErrorSnackBar(
+    message: String,
+    modifier: Modifier = Modifier
+) {
+    SnackBarContent(
+        icon = painterResource(id = R.drawable.ic_information_diamond),
+        message = message,
+        iconBackground = Theme.colors.errorVariant,
+        iconTint = Theme.colors.error,
+        modifier = modifier
+    )
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun CustomSnackBarPreview() {
@@ -78,18 +105,12 @@ fun CustomSnackBarPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            SnackBar(
-                icon = painterResource(id = R.drawable.ic_information_diamond),
+            SuccessSnackBar(
                 message = "Some error happened",
-                iconBackground = Theme.colors.errorVariant,
-                iconTint = Theme.colors.error
             )
 
-            SnackBar(
-                icon = painterResource(id = R.drawable.ic_checkmark_badge),
+            ErrorSnackBar(
                 message = "Successfully.",
-                iconBackground = Theme.colors.greenVariant,
-                iconTint = Theme.colors.greenAccent
             )
         }
     }

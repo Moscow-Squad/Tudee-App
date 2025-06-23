@@ -26,7 +26,8 @@ import com.moscow.tudee.presentation.category.CategoriesScreenState
 import com.moscow.tudee.presentation.category.categoryScreen.component.CategoryBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
-import com.moscow.tudee.presentation.designSystem.component.SnackBar
+import com.moscow.tudee.presentation.designSystem.component.ErrorSnackBar
+import com.moscow.tudee.presentation.designSystem.component.SuccessSnackBar
 import com.moscow.tudee.presentation.designSystem.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
@@ -101,17 +102,16 @@ fun CategoryContent(
 
         val messageId = uiState.successMessage ?: uiState.errorMessage
         messageId?.let {
-            SnackBar(
-                icon = icon,
-                message = stringResource(id = it),
-                iconBackground = if (uiState.successMessage != null)
-                    Theme.colors.greenVariant
-                else Theme.colors.errorVariant,
-                iconTint = if (uiState.successMessage != null)
-                    Theme.colors.greenAccent
-                else Theme.colors.error
-            )
-
+            if (uiState.successMessage != null) {
+                SuccessSnackBar(
+                    message = stringResource(id = it)
+                )
+            } else {
+                ErrorSnackBar(
+                    message = stringResource(id = it)
+                )
+            }
+        }
 
             LaunchedEffect(Unit) {
                 kotlinx.coroutines.delay(3000)
@@ -119,8 +119,6 @@ fun CategoryContent(
             }
         }
 
-
-    }
 
     val context = LocalContext.current
 
