@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,7 +30,7 @@ import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.DatePickerModal
-import com.moscow.tudee.presentation.component.DayItem
+import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.component.Tab
 import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
@@ -39,7 +38,7 @@ import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import com.moscow.tudee.presentation.task.components.EmptyScreen
+import com.moscow.tudee.presentation.component.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -216,7 +215,7 @@ private fun TaskContent(
                     }
                 }
             }
-        } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
+        } else EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
 
         AnimatedVisibility(
             visible = selectedTaskToDelete != null

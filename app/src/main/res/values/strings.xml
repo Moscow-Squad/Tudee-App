@@ -67,5 +67,10 @@
     <string name="add_task_successfully">Add task successfully</string>
     <string name="delete_task">Delete task</string>
     <string name="show_bottom_sheet">Show bottom sheet</string>
+    <string name="no_tasks_here">No tasks here!</string>
+    <string name="tap_the_button_to_add_your_first_one">Tap the + button to add your first one.</string>
+    <string name="circle_big">circle big</string>
+    <string name="circle_medium">circle medium</string>
+    <string name="circle_small">circle small</string>
 
 </resources>
