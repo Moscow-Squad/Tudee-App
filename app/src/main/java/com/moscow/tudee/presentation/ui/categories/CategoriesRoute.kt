@@ -3,7 +3,7 @@ package com.moscow.tudee.presentation.ui.categories
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.toRoute
 import com.moscow.tudee.presentation.category.categoryScreen.CategoryScreen
-import com.moscow.tudee.presentation.category.categoryTasks.CategoryTasksScreen
+import com.moscow.tudee.presentation.category.categoryTasksScreen.CategoryTasksScreen
 import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
 import com.moscow.tudee.presentation.navigation.entry.CategoryTasks
 
