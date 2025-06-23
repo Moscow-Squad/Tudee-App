@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
@@ -24,10 +24,8 @@ import com.moscow.tudee.presentation.component.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
+import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
-
-import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Category
 
 
 @Composable
@@ -58,7 +56,7 @@ fun HomeContent(
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
-    ){
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -159,38 +157,38 @@ fun HomeContent(
         EditTaskBottomSheet(
             modifier = Modifier,
             isVisible = true,
-            taskTitle = uiState.selectedTask!!.title,
+            taskTitle = uiState.selectedTask?.title ?: "",
             onTaskTitleChange = {
                 interactionListener.onTitleChange(it)
             },
-            taskDescription = uiState.selectedTask.description,
-
+            taskDescription = uiState.selectedTask?.description ?: "",
             onTaskDescriptionChange = {
                 interactionListener.onDescriptionChange(it)
             },
-            selectedPriority = uiState.selectedTask.priority,
+            selectedPriority = uiState.selectedTask?.priority ?: Task.Priority.LOW,
             onPrioritySelected = {
                 interactionListener.onPriorityClick(it)
             },
             categories = uiState.categories,
-            selectedCategory = uiState.selectedTask.category ?: Category(
-                id = 0,
-                title = "",
-                iconUri = "",
-                isPredefined = false,
-            ),
+            selectedCategory = uiState.selectedTask?.category,
             onCategorySelected = {
                 interactionListener.onCategoryClick(it)
             },
-            selectedDate = uiState.selectedTask.date.asLong(),
-            onDateSelected = {
-                interactionListener.onDateChange(uiState.selectedTask.date)
+            selectedDate = uiState.selectedTask?.date?.asLong(),
+            onDateSelected = { newDateMillis ->
+                if (newDateMillis != null) {
+                    val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
+                        .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
+                    interactionListener.onDateChange(newDate)
+                }
             },
             onDismiss = {
                 interactionListener.onDismissEditBottomSheet()
             },
             onSaveTask = {
-                interactionListener.onSaveEditTaskClick(uiState.selectedTask)
+                uiState.selectedTask?.let { task ->
+                    interactionListener.onSaveEditTaskClick(task)
+                }
             },
         )
     }
@@ -199,39 +197,39 @@ fun HomeContent(
         AddTaskBottomSheet(
             modifier = Modifier,
             isVisible = true,
-            taskTitle = uiState.selectedTask!!.title,
+            taskTitle = uiState.selectedTask?.title ?: "",
             onTaskTitleChange = {
                 interactionListener.onTitleChange(it)
             },
-            taskDescription = uiState.selectedTask.description,
+            taskDescription = uiState.selectedTask?.description ?: "",
             onTaskDescriptionChange = {
                 interactionListener.onDescriptionChange(it)
             },
-            selectedPriority = uiState.selectedTask.priority,
+            selectedPriority = uiState.selectedTask?.priority ?: Task.Priority.LOW,
             onPrioritySelected = {
                 interactionListener.onPriorityClick(it)
             },
             categories = uiState.categories,
-            selectedCategory = uiState.selectedTask.category ?: Category(
-                id = 0,
-                title = "",
-                iconUri = "",
-                isPredefined = false,
-            ),
+            selectedCategory = uiState.selectedTask?.category,
             onCategorySelected = {
                 interactionListener.onCategoryClick(it)
             },
-            selectedDate = uiState.selectedTask.date.asLong(),
-            onDateSelected = {
-                interactionListener.onDateChange(uiState.selectedTask.date)
+            selectedDate = uiState.selectedTask?.date?.asLong(),
+            onDateSelected = { newDateMillis ->
+                if (newDateMillis != null) {
+                    val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
+                        .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
+                    interactionListener.onDateChange(newDate)
+                }
             },
             onDismiss = {
                 interactionListener.onDismissAddBottomSheet()
             },
             onSaveTask = {
-                interactionListener.onAddTask(uiState.selectedTask)
+                uiState.selectedTask?.let { task ->
+                    interactionListener.onAddTask(task)
+                }
             }
-
         )
     }
 }

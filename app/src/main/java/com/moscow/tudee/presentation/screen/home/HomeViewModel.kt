@@ -19,10 +19,11 @@ class HomeViewModel(
         loadCategories()
         loadTasks()
     }
+
     private fun calculateSliderState(todo: Int, inProgress: Int, done: Int): SliderState {
         val total = todo + inProgress + done
         return when {
-            total == 0 ->  SliderState.NOTHING_ON_YOUR_LIST
+            total == 0 -> SliderState.NOTHING_ON_YOUR_LIST
             done == total -> SliderState.TADAA
             else -> SliderState.STAY_WORKING
         }
@@ -103,9 +104,12 @@ class HomeViewModel(
                 category = response
             )
 
-            val newTodoTasks = if (task.status == Task.Status.TODO) state.todoTasks + newTask else state.todoTasks
-            val newInProgressTasks = if (task.status == Task.Status.IN_PROGRESS) state.inProgressTasks + newTask else state.inProgressTasks
-            val newDoneTasks = if (task.status == Task.Status.DONE) state.doneTasks + newTask else state.doneTasks
+            val newTodoTasks =
+                if (task.status == Task.Status.TODO) state.todoTasks + newTask else state.todoTasks
+            val newInProgressTasks =
+                if (task.status == Task.Status.IN_PROGRESS) state.inProgressTasks + newTask else state.inProgressTasks
+            val newDoneTasks =
+                if (task.status == Task.Status.DONE) state.doneTasks + newTask else state.doneTasks
 
             val newSliderState = calculateSliderState(
                 newTodoTasks.size,
@@ -134,10 +138,10 @@ class HomeViewModel(
                     status = Task.Status.TODO,
                     category = null,
                     date = java.time.LocalDateTime.now().toKotlinLocalDateTime()
-                )
+                ),
+                showAddTaskBottomSheet = true
             )
         }
-        updateState { it.copy(showAddTaskBottomSheet = true) }
     }
 
     override fun onTaskClick(task: HomeState.HomeTask) {
@@ -146,17 +150,47 @@ class HomeViewModel(
     }
 
     override fun onAddTask(task: HomeState.HomeTask) {
+        if (task.title.isBlank() || task.description.isBlank() || task.category == null) {
+            Log.e("HomeViewModel", "Cannot add task: missing required fields")
+            return
+        }
+
         launchWithResult(
-            action = {
-                tasksServices.addTask(
-                    task.toTask()
-                )
-            },
-            onSuccess = {
-                updateState {
-                    it.copy(
+            action = { tasksServices.addTask(task.toTask()) },
+            onSuccess = { addedTask ->
+                updateState { state ->
+                    Log.d("HomeViewModel", "addedTask type: ${addedTask::class.simpleName}")
+                    Log.d("HomeViewModel", "addedTask value: $addedTask")
+
+                    val newTask = when (addedTask) {
+                        is Task -> task.copy(id = addedTask.id)
+                        is Long -> task.copy(id = addedTask)
+                        else -> {
+                            Log.e("HomeViewModel", "Unexpected addedTask type: ${addedTask::class}")
+                            task
+                        }
+                    }
+
+                    val newTodoTasks = if (newTask.status == Task.Status.TODO)
+                        state.todoTasks + newTask else state.todoTasks
+                    val newInProgressTasks = if (newTask.status == Task.Status.IN_PROGRESS)
+                        state.inProgressTasks + newTask else state.inProgressTasks
+                    val newDoneTasks = if (newTask.status == Task.Status.DONE)
+                        state.doneTasks + newTask else state.doneTasks
+
+                    val newSliderState = calculateSliderState(
+                        newTodoTasks.size,
+                        newInProgressTasks.size,
+                        newDoneTasks.size
+                    )
+
+                    state.copy(
                         showAddTaskBottomSheet = false,
-                        todoTasks = it.todoTasks + task
+                        selectedTask = null,
+                        todoTasks = newTodoTasks,
+                        inProgressTasks = newInProgressTasks,
+                        doneTasks = newDoneTasks,
+                        update = newSliderState
                     )
                 }
             },
@@ -181,7 +215,7 @@ class HomeViewModel(
             action = { categoryServices.getCategoryById(task.category!!.id!!) },
             onSuccess = { response ->
                 updateState { it.copy(selectedTask = task.copy(category = response)) }
-                },
+            },
             onError = { handleHomeError(it) },
             onStart = { startLoading() },
             onFinally = { endLoading() }
@@ -198,17 +232,51 @@ class HomeViewModel(
         )
 
         launchWithResult(
-            action = { tasksServices.updateTask(
-                updated.toTask()
-            ) },
+            action = { tasksServices.updateTask(updated.toTask()) },
             onSuccess = {
-                updateState {
-                    it.copy(
+                updateState { state ->
+                    val newTodoTasks = when (task.status) {
+                        Task.Status.TODO -> state.todoTasks - task
+                        else -> state.todoTasks
+                    }
+
+                    val newInProgressTasks = when (task.status) {
+                        Task.Status.IN_PROGRESS -> state.inProgressTasks - task
+                        else -> state.inProgressTasks
+                    }
+
+                    val newDoneTasks = when (task.status) {
+                        Task.Status.DONE -> state.doneTasks - task
+                        else -> state.doneTasks
+                    }
+
+                    val finalTodoTasks = when (updated.status) {
+                        Task.Status.TODO -> newTodoTasks + updated
+                        else -> newTodoTasks
+                    }
+
+                    val finalInProgressTasks = when (updated.status) {
+                        Task.Status.IN_PROGRESS -> newInProgressTasks + updated
+                        else -> newInProgressTasks
+                    }
+
+                    val finalDoneTasks = when (updated.status) {
+                        Task.Status.DONE -> newDoneTasks + updated
+                        else -> newDoneTasks
+                    }
+
+                    val newSliderState = calculateSliderState(
+                        finalTodoTasks.size,
+                        finalInProgressTasks.size,
+                        finalDoneTasks.size
+                    )
+
+                    state.copy(
                         showTaskDetailsBottomSheet = false,
-                        inProgressTasks =
-                            if (task.status == Task.Status.IN_PROGRESS) it.inProgressTasks - task else it.inProgressTasks + task,
-                        doneTasks = if (task.status == Task.Status.IN_PROGRESS) it.doneTasks + task else it.doneTasks,
-                        todoTasks = if (task.status == Task.Status.IN_PROGRESS) it.todoTasks else it.todoTasks - task
+                        todoTasks = finalTodoTasks,
+                        inProgressTasks = finalInProgressTasks,
+                        doneTasks = finalDoneTasks,
+                        update = newSliderState
                     )
                 }
             },
@@ -220,13 +288,25 @@ class HomeViewModel(
 
     override fun onSaveEditTaskClick(task: HomeState.HomeTask) {
         launchWithResult(
-            action = { tasksServices.updateTask(
-                task.toTask()
-            ) },
+            action = { tasksServices.updateTask(task.toTask()) },
             onSuccess = {
-                updateState {
-                    it.copy(
-                        showEditTaskBottomSheet = false
+                updateState { state ->
+                    val updatedTodoTasks = state.todoTasks.map {
+                        if (it.id == task.id) task else it
+                    }
+                    val updatedInProgressTasks = state.inProgressTasks.map {
+                        if (it.id == task.id) task else it
+                    }
+                    val updatedDoneTasks = state.doneTasks.map {
+                        if (it.id == task.id) task else it
+                    }
+
+                    state.copy(
+                        showEditTaskBottomSheet = false,
+                        selectedTask = null,
+                        todoTasks = updatedTodoTasks,
+                        inProgressTasks = updatedInProgressTasks,
+                        doneTasks = updatedDoneTasks
                     )
                 }
             },
