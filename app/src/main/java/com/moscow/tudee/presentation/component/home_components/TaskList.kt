@@ -22,14 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task.Status
+import com.moscow.tudee.presentation.category.toCategoryUi
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState
-import com.moscow.tudee.presentation.screen.home.getColor
-import com.moscow.tudee.presentation.screen.home.getIcon
-import com.moscow.tudee.presentation.screen.home.getText
 
 @Composable
 fun TaskListHeader(
@@ -79,7 +77,7 @@ fun TaskList(
                 modifier = modifier
                     .width(320.dp)
                     .clickable { onTaskClick(task) },
-                category = task.category!!,
+                category = task.category!!.toCategoryUi(),
                 title = task.title,
                 description = task.description,
             ) {

@@ -9,14 +9,15 @@ fun Task.toTaskUi() = CategoriesScreenState.TaskUi(
     date = date.toString(),
     priority = priority,
     status = status,
+    category = category.toCategoryUi()
 )
 
 fun Category.toCategoryUi() = CategoriesScreenState.CategoryUi(
-    id = id ?: 0L,
+    id = id,
     title = title,
     iconUrl = iconUri,
     numberOfTasksInCategory = countOfTasks,
-    isPredefined = false
+    isPredefined = isPredefined
 )
 
 fun CategoriesScreenState.CategoryUi.toCategory() = Category(

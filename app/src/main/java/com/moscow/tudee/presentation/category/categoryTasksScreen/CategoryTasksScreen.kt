@@ -77,7 +77,7 @@ fun CategoryTasksContent(
         ) {
             items(uiState.tasks) { task ->
                 TaskCard(
-                    category = uiState.category.toCategory(),
+                    category = task.category,
                     title = task.title,
                     description = task.description,
                     date = task.date
