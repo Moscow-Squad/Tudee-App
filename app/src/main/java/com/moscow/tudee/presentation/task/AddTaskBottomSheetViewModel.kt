@@ -10,7 +10,7 @@ import kotlinx.datetime.LocalDateTime
 class AddTaskBottomSheetViewModel(
     private val tasksServices: TasksServices,
     private val categoryServices: CategoryServices
-) : BaseViewModel<AddTaskBottomSheetUiState, Nothing>(AddTaskBottomSheetUiState()),
+) : BaseViewModel<AddTaskBottomSheetUiState, AddTaskBottomSheetEvents>(AddTaskBottomSheetUiState()),
     AddTaskInteractionListener {
 
     init {
@@ -29,7 +29,7 @@ class AddTaskBottomSheetViewModel(
         )
     }
 
-    private fun onErrorLoadCategories(errorMessage: String){
+    private fun onErrorLoadCategories(errorMessage: String) {
         updateState { it.copy(errorMessage = errorMessage) }
     }
 
@@ -80,8 +80,14 @@ class AddTaskBottomSheetViewModel(
                     )
                 )
             },
-            onSuccess = { updateState { it.copy(showAddTaskBottomSheet = false) } },
-            onError = { onErrorAddTask(message = "Some error happened") },
+            onSuccess = {
+                updateState { it.copy(showAddTaskBottomSheet = false) }
+                sendEvent(AddTaskBottomSheetEvents.NotifyTaskAdded)
+            },
+            onError = {
+                onErrorAddTask(message = "Some error happened")
+                sendEvent(AddTaskBottomSheetEvents.NotifyTaskNotAdded)
+            },
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )

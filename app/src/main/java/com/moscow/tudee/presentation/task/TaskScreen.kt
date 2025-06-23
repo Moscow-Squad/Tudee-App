@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.ObserveAsEvent
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
@@ -54,6 +55,13 @@ fun TaskScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val bottomSheetUiState by addTaskBottomSheetViewModel.uiState.collectAsStateWithLifecycle()
     val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
+
+    ObserveAsEvent(addTaskBottomSheetViewModel.uiEvent) { event ->
+        when (event) {
+            AddTaskBottomSheetEvents.NotifyTaskAdded -> TODO()
+            AddTaskBottomSheetEvents.NotifyTaskNotAdded -> TODO()
+        }
+    }
 
     TaskContent(
         interactionListener = viewModel,
@@ -128,50 +136,51 @@ private fun TaskContent(
                 .background(Theme.colors.surface)
         ) {
 
-        if (showDatePicker) {
-            DatePickerModal(
-                onDateSelected = { epochMillis ->
-                    interactionListener.updateMonthFromPicker(epochMillis)
-                },
-                onDismiss = interactionListener::dismissDatePicker,
-                selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO).toEpochMilliseconds()
-            )
-        }
-
-        Header(
-            currentMonthYear,
-            onBackClick = interactionListener::previousMonth,
-            onNextClick = interactionListener::nextMonth,
-            onDownClick = interactionListener::showDatePicker
-        )
-        LazyRow(
-            state = lazyListState,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .background(Theme.colors.surfaceHigh)
-                .padding(
-                    start = if (isAtStart) 16.dp else 0.dp,
-                    end = 16.dp,
-                    top = 8.dp,
-                    bottom = 8.dp
-                ),
-        ) {
-            items(uiState.monthDays) { date ->
-                val dayName = date.dayOfWeek.name.take(3)
-                    .lowercase()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-                val isSelected = date == uiState.selectedDate.date
-                DayItem(
-                    day = dayName,
-                    dayDate = date.dayOfMonth,
-                    isSelected = isSelected,
-                    onDayClick = {
-                        interactionListener.selectDate(date)
+            if (showDatePicker) {
+                DatePickerModal(
+                    onDateSelected = { epochMillis ->
+                        interactionListener.updateMonthFromPicker(epochMillis)
                     },
-                    isToday = isSelected
+                    onDismiss = interactionListener::dismissDatePicker,
+                    selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO)
+                        .toEpochMilliseconds()
                 )
             }
-        }
+
+            Header(
+                currentMonthYear,
+                onBackClick = interactionListener::previousMonth,
+                onNextClick = interactionListener::nextMonth,
+                onDownClick = interactionListener::showDatePicker
+            )
+            LazyRow(
+                state = lazyListState,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .background(Theme.colors.surfaceHigh)
+                    .padding(
+                        start = if (isAtStart) 16.dp else 0.dp,
+                        end = 16.dp,
+                        top = 8.dp,
+                        bottom = 8.dp
+                    ),
+            ) {
+                items(uiState.monthDays) { date ->
+                    val dayName = date.dayOfWeek.name.take(3)
+                        .lowercase()
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+                    val isSelected = date == uiState.selectedDate.date
+                    DayItem(
+                        day = dayName,
+                        dayDate = date.dayOfMonth,
+                        isSelected = isSelected,
+                        onDayClick = {
+                            interactionListener.selectDate(date)
+                        },
+                        isToday = isSelected
+                    )
+                }
+            }
 
             Tabs(
                 tabs = allTabs,
