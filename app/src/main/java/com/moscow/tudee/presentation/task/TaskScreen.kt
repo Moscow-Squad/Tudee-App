@@ -1,5 +1,8 @@
 package com.moscow.tudee.presentation.task
 
+import SwipeToDeleteItem
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,22 +15,30 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.DayItem
 import com.moscow.tudee.presentation.component.Tab
 import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
+import com.moscow.tudee.presentation.designSystem.component.PriorityChip
+import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
@@ -42,7 +53,7 @@ import java.util.Locale
 fun TaskScreen(
     viewModel: TaskViewModel = koinViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
 
     TaskContent(
@@ -77,9 +88,6 @@ private fun TaskContent(
         Tab("To Do", todoCount),
         Tab("Done", doneCount)
     )
-
-
-
     val currentMonthYear = uiState.currentMonth.getDisplayName(
         TextStyle.FULL,
         Locale.getDefault()
@@ -176,53 +184,66 @@ private fun TaskContent(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
             ) {
                 items(uiState.tasksForSelectedState) { task ->
-                    //TODO("update it to new card task")
-//                    SwipeToDeleteItem(onDelete = { selectedTaskToDelete = task }) {
-//                        TaskCard(
-//                            icon = when (task.priority) {
-//                                Task.Priority.HIGH -> painterResource(id = R.drawable.ic_quran)
-//                                Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_briefcase)
-//                                Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
-//                            },
-//                            title = task.title,
-//                            description = task.description,
-//                            category = TODO(),
-//                            modifier = TODO(),
-//                            date = TODO(),
-//                            iconTint = Theme.colors.secondary
-//                        ) {
-//                            PriorityChip(
-//                                text = task.priority.name.lowercase()
-//                                    .replaceFirstChar { it.uppercase() },
-//                                backgroundColor = when (task.priority) {
-//                                    Task.Priority.HIGH -> Theme.colors.pinkAccent
-//                                    Task.Priority.MEDIUM -> Theme.colors.yellowAccent
-//                                    Task.Priority.LOW -> Theme.colors.greenAccent
-//                                },
-//                                icon = when (task.priority) {
-//                                    Task.Priority.HIGH -> painterResource(id = R.drawable.ic_flag)
-//                                    Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
-//                                    Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
-//                                }
-//                            )
-//                        }
-//                    }
-                }
-                item {
-                    AnimatedVisibility(
-                        visible = selectedTaskToDelete != null
+                    SwipeToDeleteItem(
+                        onDelete = { selectedTaskToDelete = task },
+                        animationDuration = 200L
                     ) {
-                        DeleteBottomSheet(
-                            title = "Delete task",
-                            description = "Are you sure to continue?",
-                            onDelete = { selectedTaskToDelete?.let { interactionListener.deleteTask(it) } },
-                            onDismiss = {
-                                selectedTaskToDelete = null
-                            }
-                        )
+                        TaskCard(
+                            category = Category(
+                                id = task.category.id,
+                                title = task.category.title,
+                                iconUri = task.category.iconUri,
+                                isPredefined = task.category.isPredefined
+                            ),
+                            title = task.title,
+                            description = task.description,
+                        ) {
+                            PriorityChip(
+                                text = task.priority.name.lowercase()
+                                    .replaceFirstChar { it.uppercase() },
+                                backgroundColor = when (task.priority) {
+                                    Task.Priority.HIGH -> Theme.colors.pinkAccent
+                                    Task.Priority.MEDIUM -> Theme.colors.yellowAccent
+                                    Task.Priority.LOW -> Theme.colors.greenAccent
+                                },
+                                icon = when (task.priority) {
+                                    Task.Priority.HIGH -> painterResource(id = R.drawable.ic_flag)
+                                    Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
+                                    Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
+                                }
+                            )
+                        }
                     }
                 }
             }
         } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
+
+        AnimatedVisibility(
+            visible = selectedTaskToDelete != null
+        ) {
+            DeleteBottomSheet(
+                title = stringResource(R.string.delete_task),
+                description = stringResource(R.string.are_you_sure_to_continue),
+                onDelete = {
+                    selectedTaskToDelete?.let { interactionListener.deleteTask(it) }
+                    selectedTaskToDelete = null
+                           },
+                onDismiss = {
+                    selectedTaskToDelete = null
+                }
+            )
+        }
     }
+}
+
+@Preview(showBackground = true,apiLevel = 33, uiMode = UI_MODE_NIGHT_NO)
+@Preview(showBackground = true,apiLevel = 33, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun TaskScreenPreview() {
+    TudeeTheme {
+        TaskScreen(
+            viewModel = mockTaskViewModel()
+        )
+    }
+
 }

@@ -65,5 +65,7 @@
     <string name="add_task">Add Task</string>
     <string name="edited_task_successfully">Edited task successfully</string>
     <string name="add_task_successfully">Add task successfully</string>
+    <string name="delete_task">Delete task</string>
+    <string name="show_bottom_sheet">Show bottom sheet</string>
 
 </resources>

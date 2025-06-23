@@ -60,14 +60,20 @@ open class TaskViewModel(
             )
         }
     }
-
     override fun deleteTask(task: Task) {
         viewModelScope.launch {
             runCatching {
                 task.id?.let { taskService.deleteTask(it) }
             }.onSuccess {
                 _uiState.update {
-                    it.copy(showDeletedTaskNotification = true, isTaskDeleted = true)
+                    val updatedAllTasks = it.allTasksForSelectedDate.filterNot { t -> t.id == task.id }
+                    val updatedFiltered = updatedAllTasks.filter { t -> t.status == it.selectedStatus }
+                    it.copy(
+                        allTasksForSelectedDate = updatedAllTasks,
+                        tasksForSelectedState = updatedFiltered,
+                        showDeletedTaskNotification = true,
+                        isTaskDeleted = true
+                    )
                 }
             }.onFailure {
                 _uiState.update {
