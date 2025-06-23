@@ -30,6 +30,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
+import com.moscow.tudee.presentation.category.categoryScreen.getPriorityFromString
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
@@ -139,9 +140,7 @@ fun TaskCardWithoutDatePreview() {
             description = "Study biology flashcards for 15 minutes",
         ) {
             PriorityChip(
-                text = "High",
-                backgroundColor = Theme.colors.pinkAccent,
-                icon = painterResource(id = R.drawable.ic_flag)
+                priority = getPriorityFromString(stringResource(R.string.high)),
             )
         }
     }
@@ -163,9 +162,7 @@ fun TaskCardWithDatePreview() {
             date = "03/12/2025",
         ) {
             PriorityChip(
-                text = "Medium",
-                backgroundColor = Theme.colors.yellowAccent,
-                icon = painterResource(id = R.drawable.ic_alert)
+                priority = getPriorityFromString(stringResource(R.string.medium))
             )
         }
     }

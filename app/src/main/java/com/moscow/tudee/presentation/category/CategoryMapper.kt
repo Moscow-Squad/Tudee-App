@@ -26,3 +26,12 @@ fun CategoriesScreenState.CategoryUi.toCategory() = Category(
     countOfTasks = numberOfTasksInCategory,
     isPredefined =isPredefined
 )
+
+fun getPriorityFromString(priority: String): Task.Priority {
+    return when (priority) {
+        "LOW" -> Task.Priority.LOW
+        "MEDIUM" -> Task.Priority.MEDIUM
+        "HIGH" -> Task.Priority.HIGH
+        else -> throw IllegalArgumentException("Invalid priority string: $priority")
+    }
+}
