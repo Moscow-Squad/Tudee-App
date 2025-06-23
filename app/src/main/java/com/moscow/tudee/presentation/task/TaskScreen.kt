@@ -10,18 +10,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.component.AddTaskBottomSheet
+import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.DayItem
 import com.moscow.tudee.presentation.component.Tab
@@ -32,6 +36,7 @@ import com.moscow.tudee.presentation.screen.home.asLong
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.UtcOffset
 import kotlinx.datetime.atStartOfDayIn
@@ -44,23 +49,28 @@ import java.util.Locale
 @Composable
 fun TaskScreen(
     viewModel: TaskViewModel = koinViewModel(),
+    addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val bottomSheetUiState by addTaskBottomSheetViewModel.uiState.collectAsStateWithLifecycle()
     val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
 
     TaskContent(
         interactionListener = viewModel,
         uiState = uiState,
-        showDatePicker = showDatePicker
+        showDatePicker = showDatePicker,
+        bottomSheetListener = addTaskBottomSheetViewModel,
+        bottomSheetUiState = bottomSheetUiState,
     )
 }
-
 
 @Composable
 private fun TaskContent(
     modifier: Modifier = Modifier,
     interactionListener: TaskScreenInteractionListener,
     uiState: TaskUiState,
+    bottomSheetListener: AddTaskInteractionListener,
+    bottomSheetUiState: AddTaskBottomSheetUiState,
     showDatePicker: Boolean
 ) {
 
@@ -80,7 +90,6 @@ private fun TaskContent(
         Tab("To Do", todoCount),
         Tab("Done", doneCount)
     )
-
 
 
     val currentMonthYear = uiState.currentMonth.getDisplayName(
@@ -104,11 +113,20 @@ private fun TaskContent(
         }
     }
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(Theme.colors.surface)
+    Scaffold(
+        floatingActionButton = {
+            CustomFAB(
+                onClick = { bottomSheetListener.onShowAddTaskBottomSheet() },
+                icon = R.drawable.ic_add_task
+            )
+        }
     ) {
+        Column(
+            Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(Theme.colors.surface)
+        ) {
 
         if (showDatePicker) {
             DatePickerModal(
@@ -155,28 +173,28 @@ private fun TaskContent(
             }
         }
 
-        Tabs(
-            tabs = allTabs,
-            selectedTabIndex = selectedTabIndex,
-            onTabClick = {
-                interactionListener.selectStatus(
-                    when (it) {
-                        0 -> Task.Status.IN_PROGRESS
-                        1 -> Task.Status.TODO
-                        else -> Task.Status.DONE
-                    }
-                )
-            },
-            modifier = Modifier.background(Theme.colors.surfaceHigh)
+            Tabs(
+                tabs = allTabs,
+                selectedTabIndex = selectedTabIndex,
+                onTabClick = {
+                    interactionListener.selectStatus(
+                        when (it) {
+                            0 -> Task.Status.IN_PROGRESS
+                            1 -> Task.Status.TODO
+                            else -> Task.Status.DONE
+                        }
+                    )
+                },
+                modifier = Modifier.background(Theme.colors.surfaceHigh)
 
-        )
-        if (uiState.tasksForSelectedState.isNotEmpty()) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
-            ) {
-                items(uiState.tasksForSelectedState) { task ->
-                    //TODO("update it to new card task")
+            )
+            if (uiState.tasksForSelectedState.isNotEmpty()) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                ) {
+                    items(uiState.tasksForSelectedState) { task ->
+                        //TODO("update it to new card task")
 //                    SwipeToDeleteItem(onDelete = { selectedTaskToDelete = task }) {
 //                        TaskCard(
 //                            icon = when (task.priority) {
@@ -207,22 +225,86 @@ private fun TaskContent(
 //                            )
 //                        }
 //                    }
+                    }
+                    item {
+                        AnimatedVisibility(
+                            visible = selectedTaskToDelete != null
+                        ) {
+                            DeleteBottomSheet(
+                                title = "Delete task",
+                                description = "Are you sure to continue?",
+                                onDelete = {
+                                    selectedTaskToDelete?.let {
+                                        interactionListener.deleteTask(
+                                            it
+                                        )
+                                    }
+                                },
+                                onDismiss = {
+                                    selectedTaskToDelete = null
+                                }
+                            )
+                        }
+                    }
                 }
-                item {
-                    AnimatedVisibility(
-                        visible = selectedTaskToDelete != null
-                    ) {
-                        DeleteBottomSheet(
-                            title = "Delete task",
-                            description = "Are you sure to continue?",
-                            onDelete = { selectedTaskToDelete?.let { interactionListener.deleteTask(it) } },
-                            onDismiss = {
-                                selectedTaskToDelete = null
-                            }
+            } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
+
+            if (bottomSheetUiState.showAddTaskBottomSheet) {
+                bottomSheetUiState.priority?.let { onTaskDescriptionChange ->
+                    bottomSheetUiState.category?.let { categories ->
+                        AddTaskBottomSheet(
+                            isVisible = bottomSheetUiState.showAddTaskBottomSheet,
+                            taskTitle = bottomSheetUiState.title,
+                            onTaskTitleChange = { newTitle ->
+                                bottomSheetListener.onTitleChange(newTitle)
+                            },
+                            taskDescription = bottomSheetUiState.description,
+                            onTaskDescriptionChange = { newDescription ->
+                                bottomSheetListener.onDescriptionChange(newDescription)
+                            },
+                            selectedPriority = onTaskDescriptionChange,
+                            onPrioritySelected = { newPriority ->
+                                bottomSheetListener.onPriorityClick(newPriority)
+                            },
+                            categories = bottomSheetUiState.availableCategories,
+                            selectedCategory = categories,
+                            onCategorySelected = { newCategory ->
+                                bottomSheetListener.onCategoryClick(newCategory)
+                            },
+                            selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
+                                .toEpochMilliseconds(),
+                            onDateSelected = { newDate ->
+                                val instant = Instant.fromEpochMilliseconds(newDate)
+                                val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                                bottomSheetListener.onDateChange(date)
+                            },
+                            onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
+                            onSaveTask = { bottomSheetListener.onAddTask() },
                         )
                     }
                 }
             }
-        } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
+
+        }
     }
+
+}
+
+@Preview(showBackground = true, apiLevel = 34)
+@Composable
+fun TaskContentPreview(
+    viewModel: TaskViewModel = koinViewModel(),
+    addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val bottomSheetUiState by addTaskBottomSheetViewModel.uiState.collectAsStateWithLifecycle()
+    val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
+
+    TaskContent(
+        interactionListener = viewModel,
+        uiState = uiState,
+        showDatePicker = showDatePicker,
+        bottomSheetListener = addTaskBottomSheetViewModel,
+        bottomSheetUiState = bottomSheetUiState,
+    )
 }
