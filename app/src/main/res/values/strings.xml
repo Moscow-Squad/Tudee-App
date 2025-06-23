@@ -72,5 +72,6 @@
     <string name="circle_big">circle big</string>
     <string name="circle_medium">circle medium</string>
     <string name="circle_small">circle small</string>
+    <string name="deleted_task_successfully">Deleted Task Successfully.</string>
 
 </resources>

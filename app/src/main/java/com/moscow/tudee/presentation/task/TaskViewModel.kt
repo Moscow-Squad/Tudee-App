@@ -1,36 +1,27 @@
 package com.moscow.tudee.presentation.task
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.moscow.tudee.presentation.BaseViewModel
 import kotlinx.coroutines.launch
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 
 open class TaskViewModel(
     private val taskService: TasksServices
-) : ViewModel(), TaskScreenInteractionListener {
+) : BaseViewModel<TaskUiState, TaskUiEvent>(TaskUiState()),
+    TaskScreenInteractionListener
+{
 
     private val today: LocalDate =
         Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-    private val _uiState = MutableStateFlow(TaskUiState())
-    open val uiState: StateFlow<TaskUiState> = _uiState.asStateFlow()
-
-    private val _showDatePicker = MutableStateFlow(false)
-    val showDatePicker: StateFlow<Boolean> = _showDatePicker.asStateFlow()
-
-    override fun showDatePicker() {
-        _showDatePicker.value = true
-    }
-
-    override fun dismissDatePicker() {
-        _showDatePicker.value = false
-    }
-
 
     init {
         updateMonth(today)
@@ -39,7 +30,7 @@ open class TaskViewModel(
     override fun selectDate(date: LocalDate) {
         viewModelScope.launch {
             val tasksForDate = taskService.getTasksByDate(date)
-            _uiState.update {
+            updateState  {
                 it.copy(
                     selectedDate = date,
                     allTasksForSelectedDate = tasksForDate,
@@ -50,55 +41,54 @@ open class TaskViewModel(
     }
 
     override fun selectStatus(status: Task.Status) {
-        val currentState = _uiState.value
-        val filtered = filterTasksByStatus(currentState.allTasksForSelectedDate, status)
-
-        _uiState.update {
-            it.copy(
+        updateState {currentState ->
+            val filtered = filterTasksByStatus(currentState.allTasksForSelectedDate, status)
+            currentState.copy(
                 selectedStatus = status,
                 tasksForSelectedState = filtered
             )
         }
     }
     override fun deleteTask(task: Task) {
-        viewModelScope.launch {
-            runCatching {
-                task.id?.let { taskService.deleteTask(it) }
-            }.onSuccess {
-                _uiState.update {
-                    val updatedAllTasks = it.allTasksForSelectedDate.filterNot { t -> t.id == task.id }
-                    val updatedFiltered = updatedAllTasks.filter { t -> t.status == it.selectedStatus }
+        launchWithResult(
+            action = { task.id?.let { taskService.deleteTask(it) } },
+            onSuccess = {
+                updateState {
+                    val updatedAllTasks =
+                        it.allTasksForSelectedDate.filterNot { t -> t.id == task.id }
+                    val updatedFiltered =
+                        updatedAllTasks.filter { t -> t.status == it.selectedStatus }
                     it.copy(
                         allTasksForSelectedDate = updatedAllTasks,
                         tasksForSelectedState = updatedFiltered,
-                        showDeletedTaskNotification = true,
-                        isTaskDeleted = true
                     )
                 }
-            }.onFailure {
-                _uiState.update {
-                    it.copy(showDeletedTaskNotification = true, isTaskDeleted = false)
-                }
+                sendEvent(TaskUiEvent.ShowDeleteResult(true))
+            },
+            onError = {
+                sendEvent(TaskUiEvent.ShowDeleteResult(false))
             }
-        }
+        )
     }
 
+
+
     override fun previousMonth() {
-        val current = _uiState.value
+        val current = uiState.value
         val newDate =
             LocalDate(current.currentYear, current.currentMonth, 1).minus(DatePeriod(months = 1))
         updateMonth(newDate)
     }
 
     override fun nextMonth() {
-        val current = _uiState.value
+        val current = uiState.value
         val newDate =
             LocalDate(current.currentYear, current.currentMonth, 1).plus(DatePeriod(months = 1))
         updateMonth(newDate)
     }
 
     override fun updateMonthFromPicker(epochMillis: Long?) {
-        dismissDatePicker()
+        sendEvent(TaskUiEvent.DismissDatePicker)
         epochMillis?.let {
             val instant = Instant.fromEpochMilliseconds(it)
             val date = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -110,7 +100,7 @@ open class TaskViewModel(
     private fun updateMonth(date: LocalDate) {
         val newMonthDays = generateMonthDays(date.year, date.monthNumber)
 
-        _uiState.update {
+        updateState {
             val newSelectedDate = if (it.selectedDate.year == date.year && it.selectedDate.month == date.month) {
                 it.selectedDate
             } else {
@@ -124,7 +114,7 @@ open class TaskViewModel(
             )
         }
 
-        selectDate(_uiState.value.selectedDate)
+        selectDate(uiState.value.selectedDate)
     }
 
     private fun generateMonthDays(year: Int, month: Int): List<LocalDate> {
