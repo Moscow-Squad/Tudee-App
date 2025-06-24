@@ -10,7 +10,7 @@
     <string name="priority_icon">أيقونة الأولوية</string>
     <string name="category_icon">أيقونة الفئة</string>
     <string name="selected_icon">أيقونة مختارة</string>
-    <string name="greater_than_100">+100</string>
+    <string name="greater_than_100">أكبر من 100</string>
     <string name="home">الصفحة الرئيسية</string>
     <string name="tasks">المهام</string>
     <string name="categories">الفئات</string>
@@ -21,7 +21,7 @@
     <string name="zero_progress">لا تقدم؟!</string>
     <string name="Noting_to_do">لا يوجد شيء في قائمتك</string>
     <string name="stay_working_description">أنت تحقق تقدمًا رائعًا - استمر!</string>
-    <string name="tadaa_description">أنت تقوم بعمل رائع!!!\nتودي فخورة بك.</string>
+    <string name="tadaa_description">أنت تقوم بعمل رائع!!!\nتادي فخورة بك.</string>
     <string name="zero_progress_description">أنت فقط تتصفح، لا تعمل.\nتادي تراقبك. ارجع إلى العمل!!!</string>
     <string name="Noting_to_do_description">املأ يومك بشيء رائع.</string>
     <string name="clear">مسح</string>
@@ -37,7 +37,7 @@
     <string name="to_do">مهام معلقة</string>
     <string name="today">اليوم، %1$s</string>
     <string name="delete_item">حذف العنصر</string>
-    <string name="splash_background">خلفية فاتحة</string>
+    <string name="splash_background">خلفية البداية</string>
     <string name="splash_logo">أيقونة الشعار\n</string>
     <string name="overwhelmed_with_tasks">مرهق بالمهام؟</string>
     <string name="let_s_bring_some_order_to_the_chaos_tudee_is_here_to_help_you_sort_plan_and_breathe_easier">لننظم الفوضى.تادي هنا لمساعدتك في الترتيب، التخطيط والتنفس بسهولة.</string>
