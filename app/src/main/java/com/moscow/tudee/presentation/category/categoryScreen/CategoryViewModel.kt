@@ -18,6 +18,18 @@ class CategoryViewModel(
         getAllCategories()
     }
 
+    fun onReturnedFromEditWithMessage(messageResId: Int?) {
+        getAllCategories()
+        messageResId?.let {
+            updateState {
+                it.copy(
+                    successMessage = messageResId,
+                    isSnackBarShow = true
+                )
+            }
+        }
+    }
+
     private fun getAllCategories() {
         launchWithResult(
             action = { categoryServices.getCategories() },
@@ -49,7 +61,7 @@ class CategoryViewModel(
     override fun onAddCategory(categoryUi: CategoriesScreenState.CategoryUi) {
         launchWithResult(
             action = { categoryServices.addCategory(categoryUi.toCategory()) },
-            onSuccess = { onAddCategorySuccess() } ,
+            onSuccess = { onAddCategorySuccess() },
             onError = ::onAddCategoryFailed,
             onStart = ::onLoading,
             onFinally = ::onFinally
@@ -76,7 +88,6 @@ class CategoryViewModel(
             )
         }
     }
-
 
     override fun onShowAddCategoryBottomSheet() {
         updateState { it.copy(isAddCategoryBottomSheetShow = true) }

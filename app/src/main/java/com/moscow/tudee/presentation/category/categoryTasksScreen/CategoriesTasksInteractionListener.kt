@@ -12,5 +12,6 @@ interface CategoriesTasksInteractionListener {
     fun onShowDeleteCategoryBottomSheet()
     fun onHideDeleteCategoryBottomSheet()
     fun onHideSnackBar()
+    fun onBackPress()
 
 }

@@ -1,42 +1,58 @@
 package com.moscow.tudee.presentation.category.categoryTasksScreen
 
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
-import com.moscow.tudee.presentation.category.CategoriesEvents
 import com.moscow.tudee.presentation.category.CategoriesScreenState
+import com.moscow.tudee.presentation.category.CategoryTasksEvents
 import com.moscow.tudee.presentation.category.toCategory
 import com.moscow.tudee.presentation.category.toCategoryUi
 import com.moscow.tudee.presentation.category.toTaskUi
 
 class CategoryTasksViewModel(
-    private val categoryServices: CategoryServices, private val taskServices: TasksServices
-) : BaseViewModel<CategoriesScreenState, CategoriesEvents>(CategoriesScreenState()),
+    private val categoryId: Long,
+    private val categoryServices: CategoryServices,
+    private val taskServices: TasksServices
+) : BaseViewModel<CategoriesScreenState, CategoryTasksEvents>(CategoriesScreenState()),
     CategoriesTasksInteractionListener {
 
-    // TODO: replace this id with outside id came from previous screen 
     init {
-        onTasksStatusClick(1L, Task.Status.IN_PROGRESS)
-        test()
+        onTasksStatusClick(categoryId, Task.Status.TODO)
+        getCategoryById()
     }
 
-    fun test() {
+    private fun getCategoryById() {
         launchWithResult(
-            action = { categoryServices.getCategoryById(22L) },
+            action = { categoryServices.getCategoryById(categoryId) },
             onSuccess = { category ->
-                updateState {
-                    it.copy(
-                        category = category.toCategoryUi(),
-                        isEditCategoryBottomSheetShow = true
-                    )
-                }
+                onGetCategoryByIdSuccess(category)
             },
-            onError = {},
+            onError = {
+                onGetCategoryByIdFailed()
+            },
             onStart = ::onLoading,
             onFinally = ::onFinally
         )
+    }
+
+    private fun onGetCategoryByIdSuccess(category: Category) {
+        updateState {
+            it.copy(
+                category = category.toCategoryUi()
+            )
+        }
+    }
+
+    private fun onGetCategoryByIdFailed() {
+        updateState {
+            it.copy(
+                errorMessage = R.string.get_category_failed,
+                isSnackBarShow = true
+            )
+        }
     }
 
 
@@ -82,10 +98,9 @@ class CategoryTasksViewModel(
         updateState {
             it.copy(
                 isEditCategoryBottomSheetShow = false,
-                successMessage = R.string.category_updated_successfully,
-                isSnackBarShow = true
             )
         }
+        sendEvent(CategoryTasksEvents.NavigateBackWithResult(R.string.category_updated_successfully))
     }
 
     private fun onUpdateCategoryFailed(error: Throwable) {
@@ -96,6 +111,7 @@ class CategoryTasksViewModel(
                 isSnackBarShow = true
             )
         }
+
     }
 
     override fun onDeleteCategory(category: CategoriesScreenState.CategoryUi) {
@@ -112,10 +128,9 @@ class CategoryTasksViewModel(
         updateState {
             it.copy(
                 isDeleteCategoryBottomSheetShow = false,
-                successMessage = R.string.category_deleted_successfully,
-                isSnackBarShow = true
             )
         }
+        sendEvent(CategoryTasksEvents.NavigateBackWithResult(R.string.category_deleted_successfully))
     }
 
     private fun onDeleteCategoryFailed(error: Throwable) {
@@ -129,7 +144,6 @@ class CategoryTasksViewModel(
     }
 
     override fun onShowEditCategoryBottomSheet() {
-        // TODO: get current category
         updateState { it.copy(isEditCategoryBottomSheetShow = true) }
     }
 
@@ -156,6 +170,10 @@ class CategoryTasksViewModel(
             )
         }
 
+    }
+
+    override fun onBackPress() {
+        sendEvent(CategoryTasksEvents.NavigateBack)
     }
 
     private fun onLoading() {
