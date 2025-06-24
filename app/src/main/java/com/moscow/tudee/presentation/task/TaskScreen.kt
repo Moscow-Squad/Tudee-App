@@ -12,7 +12,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -21,6 +23,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -49,12 +52,12 @@ import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.SnackBar
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
-import com.moscow.tudee.presentation.designSystem.component.topbar.TudeeAppBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.task.components.Header
+import com.moscow.tudee.presentation.util.getPriorityBackground
+import com.moscow.tudee.presentation.util.iconRes
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -100,11 +103,20 @@ fun TaskScreen(
 
     Scaffold(
         topBar = {
-            TudeeAppBar(
-                appBar = TudeeAppBar.TudeeTopAppBar(
-                    titleId = R.string.tasks
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Theme.colors.surfaceHigh)
+                    .padding(horizontal = 16.dp, vertical = 20.dp)
+            ) {
+                Text(
+                    text = "Task",
+                    style = Theme.textStyle.title.large,
+                    color = Theme.colors.title.copy(
+                        alpha = 0.87f
+                    )
                 )
-            )
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
@@ -127,7 +139,6 @@ fun TaskScreen(
                 bottomSheetListener = addTaskBottomSheetViewModel,
                 showDatePicker = showDatePicker,
             )
-
             if (showCustomSnackBar) {
                 val visuals = getSnackBarVisuals(snackBarType)
                 AnimatedVisibility(
@@ -185,8 +196,9 @@ private fun TaskContent(
         if (index >= 0) lazyListState.animateScrollToItem(index)
     }
     Column(
-        modifier = modifier
+        modifier = Modifier
             .background(Theme.colors.surface)
+            .fillMaxSize()
     ) {
         if (showDatePicker) {
             DatePickerModal(
@@ -259,16 +271,8 @@ private fun TaskContent(
                         ) {
                             PriorityChip(
                                 text = task.priority.name.lowercase().replaceFirstChar { it.uppercase() },
-                                backgroundColor = when (task.priority) {
-                                    Task.Priority.HIGH -> Theme.colors.pinkAccent
-                                    Task.Priority.MEDIUM -> Theme.colors.yellowAccent
-                                    Task.Priority.LOW -> Theme.colors.greenAccent
-                                },
-                                icon = when (task.priority) {
-                                    Task.Priority.HIGH -> painterResource(id = R.drawable.ic_flag)
-                                    Task.Priority.MEDIUM -> painterResource(id = R.drawable.ic_alert)
-                                    Task.Priority.LOW -> painterResource(id = R.drawable.ic_trade_down)
-                                }
+                                backgroundColor = task.priority.getPriorityBackground(),
+                                icon = painterResource(task.priority.iconRes())
                             )
                         }
                     }
