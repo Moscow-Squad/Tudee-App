@@ -46,7 +46,7 @@ fun HomeState.HomeTask.toTask(): Task {
         id = id,
         title = title,
         description = description,
-        priority = priority,
+        priority = priority ?: Priority.LOW,
         category = category,
         status = status,
         date = date
@@ -82,4 +82,16 @@ fun Task.Status.getColor(): Color {
 
 fun LocalDateTime.asLong(): Long {
     return this.toInstant(kotlinx.datetime.TimeZone.currentSystemDefault()).toEpochMilliseconds()
+}
+
+fun Task.toTaskItem(): HomeState.HomeTask {
+    return HomeState.HomeTask(
+        id = id,
+        title = title,
+        description = description,
+        priority = priority,
+        status = status,
+        category = category,
+        date = date
+    )
 }

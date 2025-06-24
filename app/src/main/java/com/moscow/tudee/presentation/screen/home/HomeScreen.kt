@@ -157,24 +157,24 @@ fun HomeContent(
         EditTaskBottomSheet(
             modifier = Modifier,
             isVisible = true,
-            taskTitle = uiState.selectedTask?.title ?: "",
+            taskTitle = uiState.addedTask?.title ?: "",
             onTaskTitleChange = {
                 interactionListener.onTitleChange(it)
             },
-            taskDescription = uiState.selectedTask?.description ?: "",
+            taskDescription = uiState.addedTask?.description ?: "",
             onTaskDescriptionChange = {
                 interactionListener.onDescriptionChange(it)
             },
-            selectedPriority = uiState.selectedTask?.priority ?: Task.Priority.LOW,
+            selectedPriority = uiState.addedTask?.priority ?: Task.Priority.LOW,
             onPrioritySelected = {
                 interactionListener.onPriorityClick(it)
             },
             categories = uiState.categories,
-            selectedCategory = uiState.selectedTask?.category,
+            selectedCategory = uiState.addedTask?.category,
             onCategorySelected = {
                 interactionListener.onCategoryClick(it)
             },
-            selectedDate = uiState.selectedTask?.date?.asLong(),
+            selectedDate = uiState.addedTask?.date?.asLong(),
             onDateSelected = { newDateMillis ->
                 if (newDateMillis != null) {
                     val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
@@ -186,7 +186,7 @@ fun HomeContent(
                 interactionListener.onDismissEditBottomSheet()
             },
             onSaveTask = {
-                uiState.selectedTask?.let { task ->
+                uiState.addedTask?.let { task ->
                     interactionListener.onSaveEditTaskClick(task)
                 }
             },
@@ -197,24 +197,24 @@ fun HomeContent(
         AddTaskBottomSheet(
             modifier = Modifier,
             isVisible = true,
-            taskTitle = uiState.selectedTask?.title ?: "",
+            taskTitle = uiState.addedTask?.title ?: "",
             onTaskTitleChange = {
                 interactionListener.onTitleChange(it)
             },
-            taskDescription = uiState.selectedTask?.description ?: "",
+            taskDescription = uiState.addedTask?.description ?: "",
             onTaskDescriptionChange = {
                 interactionListener.onDescriptionChange(it)
             },
-            selectedPriority = uiState.selectedTask?.priority ?: Task.Priority.LOW,
+            selectedPriority = uiState.addedTask?.priority,
             onPrioritySelected = {
                 interactionListener.onPriorityClick(it)
             },
             categories = uiState.categories,
-            selectedCategory = uiState.selectedTask?.category,
+            selectedCategory = uiState.addedTask?.category,
             onCategorySelected = {
                 interactionListener.onCategoryClick(it)
             },
-            selectedDate = uiState.selectedTask?.date?.asLong(),
+            selectedDate = uiState.addedTask?.date?.asLong(),
             onDateSelected = { newDateMillis ->
                 if (newDateMillis != null) {
                     val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
@@ -226,7 +226,7 @@ fun HomeContent(
                 interactionListener.onDismissAddBottomSheet()
             },
             onSaveTask = {
-                uiState.selectedTask?.let { task ->
+                uiState.addedTask?.let { task ->
                     interactionListener.onAddTask(task)
                 }
             }
