@@ -22,11 +22,7 @@ class HomeViewModel(
     }
 
 
-
     private fun loadTasks() {
-        //TODO: get tasks from database
-
-        Log.d("TAG", "loadTasks:${Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date} ")
         launchWithResult(
             action    = { tasksServices.getTasksByDate(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date) },
             onSuccess = ::onSuccessLoadingTasks ,
@@ -37,12 +33,7 @@ class HomeViewModel(
     }
 
     private fun onSuccessLoadingTasks(tasks:List<Task>){
-
-        Log.d("TAG", "updateTasksListState: $tasks")
         val groupedTasks = tasks.groupBy{ it.status }
-
-
-
         updateState {
             it.copy(
 
@@ -56,12 +47,10 @@ class HomeViewModel(
     }
 
     private fun updateSliderState(groupedTasks: Map<Status, List<Task>>): HomeState.SliderState {
-
         val todoTasks = groupedTasks[Status.TODO]?.size ?: 0
         val inProgressTasks = groupedTasks[Status.IN_PROGRESS]?.size ?: 0
         val doneTasks = groupedTasks[Status.DONE]?.size ?: 0
         val totalTasks = todoTasks + inProgressTasks + doneTasks
-
         return when {
             totalTasks == 0 -> HomeState.SliderState.NOTHING_ON_YOUR_LIST
             doneTasks == totalTasks -> HomeState.SliderState.TADAA

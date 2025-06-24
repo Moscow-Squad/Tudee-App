@@ -31,34 +31,24 @@ import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel(),
-    navigateToTaskScreen: () -> Unit
+    viewModel: HomeViewModel = koinViewModel(), navigateToTaskScreen: () -> Unit
 ) {
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveAsEvent(viewModel.uiEvent) { event ->
         when (event) {
-            is HomeEvent.ViewAll -> { navigateToTaskScreen() }
+            is HomeEvent.ViewAll -> {
+                navigateToTaskScreen()
+            }
         }
     }
 
-    Scaffold(
-        floatingActionButton = {
-            CustomFAB(
-                onClick = { viewModel.onFloatingActionButtonClick() },
-                icon = R.drawable.ic_add_task,
-            )
 
-        }
-    ) {paddingValues ->
-        HomeContent(
-            uiState.value,
-            viewModel,
-            Modifier.padding(paddingValues)
-
-        )
-    }
+    HomeContent(
+        uiState.value,
+        viewModel,
+    )
 
 }
 
@@ -66,95 +56,102 @@ fun HomeScreen(
 fun HomeContent(
     uiState: HomeState,
     interactionListener: HomeInteractionListener,
-    modifier:Modifier = Modifier
 ) {
-
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Theme.colors.surface)
-        ) {
-            item {
-                Box(
-                    Modifier
-                ) {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(170.dp)
-                            .background(color = Theme.colors.primary)
-                            .align(Alignment.TopStart)
-                            .zIndex(0f)
-                    )
-
-                    OverviewSection(
-                        sliderState = uiState.sliderState,
-                        todoTasks = uiState.todoTasks,
-                        inProgressTasks = uiState.inProgressTasks,
-                        doneTasks = uiState.doneTasks )
-                }
-            }
-            item {
-                if (uiState.todoTasks.isNotEmpty() || uiState.inProgressTasks.isNotEmpty() || uiState.doneTasks.isNotEmpty()) {
-
-                    if(uiState.inProgressTasks.isNotEmpty()) {
-                        TaskListHeader(
-                            taskState = Task.Status.IN_PROGRESS,
-                            taskCount = uiState.inProgressTasks.size,
-                            onCountClick = { interactionListener.onViewAllClick(Task.Status.IN_PROGRESS) }
-                        )
-                        TaskList(
-                            tasks = uiState.inProgressTasks,
-                            onTaskClick = { task -> interactionListener.onTaskClick(task) },
-                        )
-                    }
-
-                    if(uiState.todoTasks.isNotEmpty()) {
-                        TaskListHeader(
-                            taskState = Task.Status.TODO,
-                            taskCount = uiState.todoTasks.size,
-                            onCountClick = { interactionListener.onViewAllClick(Task.Status.TODO) }
-
-                        )
-                        TaskList(
-                            tasks = uiState.todoTasks,
-                            onTaskClick = { task -> interactionListener.onTaskClick(task) },
-                        )
-                    }
-
-                    if(uiState.doneTasks.isNotEmpty()) {
-                        TaskListHeader(
-                            taskState = Task.Status.DONE,
-                            taskCount = uiState.doneTasks.size,
-                            onCountClick = { interactionListener.onViewAllClick(Task.Status.DONE) }
-                        )
-                        TaskList(
-                            tasks = uiState.doneTasks,
-                            onTaskClick = { task -> interactionListener.onTaskClick(task) },
-                        )
-                    }
-
-                }
-                else {
-                    // TODO: handle empty State
-                }
-            }
+    Scaffold(
+        floatingActionButton = {
+            CustomFAB(
+                onClick = { interactionListener.onFloatingActionButtonClick() },
+                icon = R.drawable.ic_add_task,
+            )
 
         }
-    }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Theme.colors.surface)
+            ) {
+                item {
+                    Box(
+                        Modifier
+                    ) {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(170.dp)
+                                .background(color = Theme.colors.primary)
+                                .align(Alignment.TopStart)
+                                .zIndex(0f)
+                        )
 
+                        OverviewSection(
+                            sliderState = uiState.sliderState,
+                            todoTasks = uiState.todoTasks,
+                            inProgressTasks = uiState.inProgressTasks,
+                            doneTasks = uiState.doneTasks
+                        )
+                    }
+                }
+                item {
+                    if (uiState.todoTasks.isNotEmpty() || uiState.inProgressTasks.isNotEmpty() || uiState.doneTasks.isNotEmpty()) {
+
+                        if (uiState.inProgressTasks.isNotEmpty()) {
+                            TaskListHeader(
+                                taskState = Task.Status.IN_PROGRESS,
+                                taskCount = uiState.inProgressTasks.size,
+                                onCountClick = { interactionListener.onViewAllClick(Task.Status.IN_PROGRESS) })
+                            TaskList(
+                                tasks = uiState.inProgressTasks,
+                                onTaskClick = { task -> interactionListener.onTaskClick(task) },
+                            )
+                        }
+
+                        if (uiState.todoTasks.isNotEmpty()) {
+                            TaskListHeader(
+                                taskState = Task.Status.TODO,
+                                taskCount = uiState.todoTasks.size,
+                                onCountClick = { interactionListener.onViewAllClick(Task.Status.TODO) }
+
+                            )
+                            TaskList(
+                                tasks = uiState.todoTasks,
+                                onTaskClick = { task -> interactionListener.onTaskClick(task) },
+                            )
+                        }
+
+                        if (uiState.doneTasks.isNotEmpty()) {
+                            TaskListHeader(
+                                taskState = Task.Status.DONE,
+                                taskCount = uiState.doneTasks.size,
+                                onCountClick = { interactionListener.onViewAllClick(Task.Status.DONE) })
+                            TaskList(
+                                tasks = uiState.doneTasks,
+                                onTaskClick = { task -> interactionListener.onTaskClick(task) },
+                            )
+                        }
+
+                    } else {
+                        // TODO: handle empty State
+                    }
+                }
+
+            }
+        }
+
+    }
     if (uiState.showTaskDetailsBottomSheet) {
 
         TaskDetailsBottomSheet(
             task = uiState.selectedTask!!,
             onDismiss = { interactionListener.onDismissDetailsBottomSheet() },
             onEditClick = { interactionListener.onEditTaskIconClick(uiState.selectedTask) },
-            onMoveClick = { interactionListener.onMoveTaskClick(uiState.selectedTask) }
-        )
+            onMoveClick = { interactionListener.onMoveTaskClick(uiState.selectedTask) })
     }
 
     if (uiState.showEditTaskBottomSheet) {
@@ -196,8 +193,7 @@ fun HomeContent(
             selectedDate = uiState.selectedTask.date.asLong(),
             onDateSelected = { interactionListener.onDateChange(uiState.selectedTask.date) },
             onDismiss = { interactionListener.onDismissAddBottomSheet() },
-            onSaveTask = { interactionListener.onAddTask(uiState.selectedTask) }
-        )
+            onSaveTask = { interactionListener.onAddTask(uiState.selectedTask) })
 
     }
 }
