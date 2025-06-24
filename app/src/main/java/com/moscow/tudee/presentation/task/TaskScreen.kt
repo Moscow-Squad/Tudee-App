@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -21,14 +22,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
+import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.component.AddTaskBottomSheet
+import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.component.Tab
@@ -37,12 +42,17 @@ import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.screen.home.asLong
+import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.component.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.UtcOffset
 import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
 import java.time.format.TextStyle
@@ -51,23 +61,28 @@ import java.util.Locale
 @Composable
 fun TaskScreen(
     viewModel: TaskViewModel = koinViewModel(),
+    addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val bottomSheetUiState by addTaskBottomSheetViewModel.uiState.collectAsStateWithLifecycle()
     val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
 
     TaskContent(
         interactionListener = viewModel,
         uiState = uiState,
-        showDatePicker = showDatePicker
+        showDatePicker = showDatePicker,
+        bottomSheetListener = addTaskBottomSheetViewModel,
+        bottomSheetUiState = bottomSheetUiState,
     )
 }
-
 
 @Composable
 private fun TaskContent(
     modifier: Modifier = Modifier,
     interactionListener: TaskScreenInteractionListener,
     uiState: TaskUiState,
+    bottomSheetListener: AddTaskInteractionListener,
+    bottomSheetUiState: AddTaskBottomSheetUiState,
     showDatePicker: Boolean
 ) {
 
@@ -87,6 +102,8 @@ private fun TaskContent(
         Tab("To Do", todoCount),
         Tab("Done", doneCount)
     )
+
+
     val currentMonthYear = uiState.currentMonth.getDisplayName(
         TextStyle.FULL,
         Locale.getDefault()
@@ -102,17 +119,26 @@ private fun TaskContent(
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
 
     LaunchedEffect(uiState.selectedDate) {
-        val index = uiState.monthDays.indexOf(uiState.selectedDate)
+        val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
         if (index >= 0) {
             lazyListState.animateScrollToItem(index)
         }
     }
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(Theme.colors.surface)
+    Scaffold(
+        floatingActionButton = {
+            CustomFAB(
+                onClick = { bottomSheetListener.onShowAddTaskBottomSheet() },
+                icon = R.drawable.ic_add_task
+            )
+        }
     ) {
+        Column(
+            Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(Theme.colors.surface)
+        ) {
 
         if (showDatePicker) {
             DatePickerModal(
@@ -120,9 +146,7 @@ private fun TaskContent(
                     interactionListener.updateMonthFromPicker(epochMillis)
                 },
                 onDismiss = interactionListener::dismissDatePicker,
-                selectedDate = uiState.selectedDate
-                    .atStartOfDayIn(TimeZone.currentSystemDefault())
-                    .toEpochMilliseconds()
+                selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO).toEpochMilliseconds()
             )
         }
 
@@ -148,8 +172,7 @@ private fun TaskContent(
                 val dayName = date.dayOfWeek.name.take(3)
                     .lowercase()
                     .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-                val isSelected = date == uiState.selectedDate
-                val isToday = date == today
+                val isSelected = date == uiState.selectedDate.date
                 DayItem(
                     day = dayName,
                     dayDate = date.dayOfMonth,
@@ -157,7 +180,7 @@ private fun TaskContent(
                     onDayClick = {
                         interactionListener.selectDate(date)
                     },
-                    isToday = isToday
+                    isToday = isSelected
                 )
             }
         }
@@ -244,5 +267,23 @@ private fun TaskScreenPreview() {
             viewModel = mockTaskViewModel()
         )
     }
+}
 
+@Preview(showBackground = true, apiLevel = 34)
+@Composable
+fun TaskContentPreview(
+    viewModel: TaskViewModel = koinViewModel(),
+    addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val bottomSheetUiState by addTaskBottomSheetViewModel.uiState.collectAsStateWithLifecycle()
+    val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
+
+    TaskContent(
+        interactionListener = viewModel,
+        uiState = uiState,
+        showDatePicker = showDatePicker,
+        bottomSheetListener = addTaskBottomSheetViewModel,
+        bottomSheetUiState = bottomSheetUiState,
+    )
 }
