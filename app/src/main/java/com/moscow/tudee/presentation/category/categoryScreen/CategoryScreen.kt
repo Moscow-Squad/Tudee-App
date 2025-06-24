@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,7 +30,6 @@ import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.ErrorSnackBar
 import com.moscow.tudee.presentation.designSystem.component.SuccessSnackBar
 import com.moscow.tudee.presentation.designSystem.component.TopBar
-import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import com.moscow.tudee.presentation.util.saveUriToInternalStorage
 import org.koin.androidx.compose.koinViewModel
@@ -73,9 +73,10 @@ fun CategoryContent(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             items(
-                items = uiState.categories, key = { it.id }
+                items = uiState.categories,
+                key = { it.id }
             ) { currentCategory ->
-                val iconPainter = if (currentCategory.isPredefined) {
+                val iconPainter: Painter = if (currentCategory.isPredefined) {
                     painterResource(getPredefinedIconRes(currentCategory.title))
                 } else {
                     rememberAsyncImagePainter(currentCategory.iconUrl)
@@ -86,9 +87,11 @@ fun CategoryContent(
                     label = currentCategory.title,
                     count = currentCategory.numberOfTasksInCategory,
                     iconTint = Color.Unspecified,
+                    isPredefined = currentCategory.isPredefined,
                     modifier = Modifier.clickable {
                         listener.onCategoryClick(currentCategory.id)
-                    })
+                    }
+                )
             }
         }
     }
@@ -113,11 +116,11 @@ fun CategoryContent(
             }
         }
 
-            LaunchedEffect(Unit) {
-                kotlinx.coroutines.delay(3000)
-                listener.onHideSnackBar()
-            }
+        LaunchedEffect(Unit) {
+            kotlinx.coroutines.delay(3000)
+            listener.onHideSnackBar()
         }
+    }
 
 
     val context = LocalContext.current
