@@ -4,10 +4,8 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
-import com.moscow.tudee.presentation.mapper.toCategoryUi
 import com.moscow.tudee.presentation.mapper.toTask
 import com.moscow.tudee.presentation.mapper.toTaskUi
-import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.LocalDateTime
 
@@ -46,16 +44,92 @@ class HomeViewModel(
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
+        launchWithResult(
+            action = { tasksServices.getTasksByStatus(Task.Status.IN_PROGRESS) },
+            onSuccess = { response ->
+                Log.e("BLA", response.toString())
+                getCategoryAndSaveTasks(response)
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
+        launchWithResult(
+            action = { tasksServices.getTasksByStatus(Task.Status.DONE) },
+            onSuccess = { response ->
+                Log.e("BLA", response.toString())
+                getCategoryAndSaveTasks(response)
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
+    }
+
+    private fun getCategoryAndSaveTasks(tasks: List<Task>) {
+        tasks.forEach { task ->
+            launchWithResult(
+                action = { categoryServices.getCategoryById(task.category.id) },
+                onSuccess = { response ->
+                    saveCategory(task, response)
+                },
+                onError = { handleHomeError(it) },
+                onStart = { startLoading() },
+                onFinally = { endLoading() }
+            )
+        }
+    }
+
+    private fun saveCategory(
+        task: Task,
+        response: Category
+    ) {
+        updateState { state ->
+            val newTask = HomeState.HomeTask(
+                id = task.id,
+                title = task.title,
+                description = task.description,
+                priority = task.priority,
+                status = task.status,
+                date = task.date,
+                category = response
+            )
+
+            val newTodoTasks = if (task.status == Task.Status.TODO) state.todoTasks + newTask else state.todoTasks
+            val newInProgressTasks = if (task.status == Task.Status.IN_PROGRESS) state.inProgressTasks + newTask else state.inProgressTasks
+            val newDoneTasks = if (task.status == Task.Status.DONE) state.doneTasks + newTask else state.doneTasks
+
+            val newSliderState = calculateSliderState(
+                newTodoTasks.size,
+                newInProgressTasks.size,
+                newDoneTasks.size
+            )
+
+            state.copy(
+                todoTasks = newTodoTasks,
+                inProgressTasks = newInProgressTasks,
+                doneTasks = newDoneTasks,
+                update = newSliderState
+            )
+        }
     }
 
 
     override fun onFloatingActionButtonClick() {
         updateState {
             it.copy(
-                selectedTask = null
+                addedTask = HomeState.HomeTask(
+                    id = null,
+                    title = "",
+                    description = "",
+                    priority = null,
+                    status = Task.Status.TODO,
+                    category = null,
+                    date = java.time.LocalDateTime.now().toKotlinLocalDateTime()
+                ),
+                showAddTaskBottomSheet = true
             )
         }
-        updateState { it.copy(showAddTaskBottomSheet = true) }
     }
 
     override fun onTaskClick(task: TaskUi) {
@@ -64,15 +138,22 @@ class HomeViewModel(
     }
 
     override fun onAddTask(task: TaskUi) {
+        if (task.title.isBlank() || task.description.isBlank() || task.category == null) {
+            Log.e("HomeViewModel", "Cannot add task: missing required fields")
+            return
+        }
+
         launchWithResult(
-            action = {
-                tasksServices.addTask(task.toTask())
-            },
-            onSuccess = {
-                updateState {
-                    it.copy(
+            action = { tasksServices.addTask(task.toTask()) },
+            onSuccess = { addedTask ->
+                updateState { state ->
+                    Log.d("HomeViewModel", "addedTask type: ${addedTask::class.simpleName}")
+                    Log.d("HomeViewModel", "addedTask value: $addedTask")
+                    loadTasks()
+
+                    state.copy(
                         showAddTaskBottomSheet = false,
-                        todoTasks = it.todoTasks + task
+                        addedTask = null,
                     )
                 }
             },
@@ -87,22 +168,11 @@ class HomeViewModel(
     }
 
     override fun onEditTaskIconClick(task: TaskUi) {
-        updateState { it.copy(selectedTask = task) }
-        getCategory(task)
+        updateState { it.copy(addedTask = task) }
         updateState { it.copy(showEditTaskBottomSheet = true) }
     }
 
-    private fun getCategory(task: TaskUi) {
-        launchWithResult(
-            action = { categoryServices.getCategoryById(task.category.id) },
-            onSuccess = { response ->
-                updateState { it.copy(selectedTask = task.copy(category = response.toCategoryUi())) }
-            },
-            onError = { handleHomeError(it) },
-            onStart = { startLoading() },
-            onFinally = { endLoading() }
-        )
-    }
+
 
     override fun onUpdateStatusClick(task: TaskUi) {
 
@@ -167,15 +237,14 @@ class HomeViewModel(
 
     override fun onSaveEditTaskClick(task: TaskUi) {
         launchWithResult(
-            action = {
-                tasksServices.updateTask(
-                    task.toTask()
-                )
-            },
+            action = { tasksServices.updateTask(task.toTask()) },
             onSuccess = {
+                loadTasks()
                 updateState {
                     it.copy(
-                        showEditTaskBottomSheet = false
+                        showEditTaskBottomSheet = false,
+                        selectedTask = it.addedTask,
+                        addedTask = null,
                     )
                 }
             },
@@ -186,23 +255,23 @@ class HomeViewModel(
     }
 
     override fun onPriorityClick(taskPriority: Task.Priority) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(priority = taskPriority)) }
+        updateState { it.copy(addedTask = it.addedTask?.copy(priority = taskPriority)) }
     }
 
     override fun onTitleChange(newTitle: String) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(title = newTitle)) }
+        updateState { it.copy(addedTask = it.addedTask?.copy(title = newTitle)) }
     }
 
     override fun onDescriptionChange(newDescription: String) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(description = newDescription)) }
+        updateState { it.copy(addedTask = it.addedTask?.copy(description = newDescription)) }
     }
 
     override fun onDateChange(newDate: LocalDateTime) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(date = newDate)) }
+        updateState { it.copy(addedTask = it.addedTask?.copy(date = newDate)) }
     }
 
-    override fun onCategoryClick(category: CategoryUi) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(category = category)) }
+    override fun onCategoryClick(category: Category) {
+        updateState { it.copy(addedTask = it.addedTask?.copy(category = category)) }
     }
 
     override fun onShowAddBottomSheet() {

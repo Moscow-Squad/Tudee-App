@@ -111,13 +111,14 @@ fun TaskDetailsBottomSheet(
                     statusColor = task.status.getColor(),
                     dotColor = task.status.getColor()
                 )
-
-                PriorityChip(
-                    text = task.priority.getText(),
-                    backgroundColor = task.priority.getColor(),
-                    icon = painterResource(task.priority.getIcon()),
-                    selected = true
-                )
+                task.priority?.let {
+                    PriorityChip(
+                        text = task.priority.getText(),
+                        backgroundColor = task.priority.getColor(),
+                        icon = painterResource(task.priority.getIcon()),
+                        selected = true
+                    )
+                }
 
             }
 

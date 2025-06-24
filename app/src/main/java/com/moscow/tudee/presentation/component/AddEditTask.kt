@@ -1,23 +1,23 @@
 package com.moscow.tudee.presentation.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task.Priority
@@ -36,7 +37,7 @@ import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
 fun TaskBottomSheet(
@@ -47,14 +48,15 @@ fun TaskBottomSheet(
     onTaskTitleChange: (String) -> Unit,
     taskDescription: String,
     onTaskDescriptionChange: (String) -> Unit,
-    selectedPriority: Priority,
+    selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
     categories: List<CategoryUi>,
-    selectedCategory: CategoryUi,
+    selectedCategory: CategoryUi?,
     onCategorySelected: (CategoryUi) -> Unit,
     selectedDate: Long?,
-    onDateSelected: (Long) -> Unit,
+    onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
+    onCancel: () -> Unit = onDismiss,
     onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {},
     addSuccessMessage: String = stringResource(R.string.add_task_successfully),
@@ -66,34 +68,33 @@ fun TaskBottomSheet(
             contentHorizontalAlignment = Alignment.Start,
             modifier = Modifier.fillMaxHeight(0.8f)
         ) {
-            val isFormValid by remember {
-                derivedStateOf {
-                    if (isEditMode) {
-                        true
-                    } else {
-                        taskTitle.isNotBlank() &&
-                                taskDescription.isNotBlank() &&
-                                selectedDate != null &&
-                                selectedCategory.title.isNotBlank()
-                    }
-                }
-            }
+            val scrollState = rememberScrollState()
 
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-            ) {
+            val isTitleValid = taskTitle.trim().isNotBlank()
+            val isDescriptionValid = taskDescription.trim().isNotBlank()
+            val isPriorityValid = selectedPriority != null
+            val isDateValid = selectedDate != null
+            val isCategoryValid =
+                selectedCategory != null && selectedCategory.id != null && selectedCategory.id!! > 0
+            val isFormValid =
+                isTitleValid && isDescriptionValid && isDateValid && isCategoryValid && isPriorityValid
+
+
+            Box(modifier = modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            top = 16.dp,
+                            bottom = 160.dp
+                        )
                 ) {
                     TudeeText(
                         text = if (isEditMode) stringResource(R.string.edit_task)
-                        else stringResource(
-                            R.string.add_new_task
-                        ),
+                        else stringResource(R.string.add_new_task),
                         color = Theme.colors.title,
                         style = Theme.textStyle.title.large,
                         fontSize = 20.sp
@@ -101,7 +102,9 @@ fun TaskBottomSheet(
 
                     TudeeTextField(
                         value = taskTitle,
-                        onValueChange = { onTaskTitleChange(it) },
+                        onValueChange = { newTitle ->
+                            onTaskTitleChange(newTitle)
+                        },
                         keyboardOptions = KeyboardOptions.Default,
                         singleLine = true,
                         hint = stringResource(R.string.task_title),
@@ -114,7 +117,9 @@ fun TaskBottomSheet(
 
                     TudeeTextField(
                         value = taskDescription,
-                        onValueChange = { onTaskDescriptionChange(it) },
+                        onValueChange = { newDescription ->
+                            onTaskDescriptionChange(newDescription)
+                        },
                         keyboardOptions = KeyboardOptions.Default,
                         singleLine = true,
                         hint = stringResource(R.string.description),
@@ -125,9 +130,10 @@ fun TaskBottomSheet(
                     )
 
                     TudeeDatePickerTextField(
-                        selectedDate = selectedDate ?: 0L,
-                        onDateSelected = { date ->
-                            onDateSelected(date ?: 0L)
+                        selectedDate = selectedDate,
+                        onDateSelected = { newDate ->
+                            Log.d("TaskBottomSheet_Debug", "📅 Date changed: $newDate")
+                            onDateSelected(newDate)
                         },
                         startIcon = painterResource(id = R.drawable.ic_calendar_add),
                         dateFormat = "dd-MM-yyyy",
@@ -163,6 +169,7 @@ fun TaskBottomSheet(
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .clickable {
+                                    Log.d("TaskBottomSheet_Debug", "⚠️ Priority changed: MEDIUM")
                                     onPrioritySelected(Priority.MEDIUM)
                                 }
                         )
@@ -174,6 +181,7 @@ fun TaskBottomSheet(
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .clickable {
+                                    Log.d("TaskBottomSheet_Debug", "⬇️ Priority changed: LOW")
                                     onPrioritySelected(Priority.LOW)
                                 }
                         )
@@ -187,69 +195,90 @@ fun TaskBottomSheet(
                         modifier = Modifier.padding(top = 16.dp)
                     )
 
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(3),
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .height(300.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    LaunchedEffect(categories) {
+                        Log.d(
+                            "TaskBottomSheet_Debug",
+                            "🏷️ Categories loaded: ${categories.map { "${it.title}(id:${it.id})" }}"
+                        )
+                    }
+
+                    Column(
+                        modifier = Modifier.padding(top = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(categories) { category ->
-                            val categoryLabel = category.title
-                            CategoryCard(
-                                icon = painterResource(id = R.drawable.ic_flag),
-                                label = categoryLabel,
-                                count = 10,
-                                selected = selectedCategory.id == category.id,
-                                modifier = Modifier.clickable {
-                                    onCategorySelected(category)
+                        categories.chunked(3).forEach { rowCategories ->
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                rowCategories.forEach { category ->
+                                    Box(
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        CategoryCard(
+                                            icon = if (category.isPredefined) painterResource(
+                                                getPredefinedIconRes(category.title)
+                                            )
+                                            else rememberAsyncImagePainter(category.iconUri),
+                                            label = category.title,
+                                            selected = selectedCategory?.id == category.id,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clickable {
+                                                    Log.d(
+                                                        "TaskBottomSheet_Debug",
+                                                        "🏷️ Category selected: ${category.title} (id: ${category.id})"
+                                                    )
+                                                    onCategorySelected(category)
+                                                }
+                                        )
+                                    }
                                 }
-                            )
+                                repeat(3 - rowCategories.size) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
                         }
                     }
                 }
 
                 Column(
                     modifier = Modifier
+                        .align(Alignment.BottomCenter)
                         .background(Theme.colors.surfaceHigh)
-                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                        .padding(16.dp)
                 ) {
                     PrimaryButton(
                         text = if (isEditMode) stringResource(R.string.save)
                         else stringResource(R.string.add_task),
                         isEnabled = isFormValid,
                         backgroundColor = if (isFormValid) Theme.colors.primaryGradient
-                        else {
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Theme.colors.disable,
-                                    Theme.colors.disable
-                                )
+                        else Brush.verticalGradient(
+                            listOf(
+                                Theme.colors.disable,
+                                Theme.colors.disable
                             )
-                        },
-                        textColor = if (isFormValid) {
-                            Color.White
-                        } else {
-                            Theme.colors.stroke
-                        },
+                        ),
+                        textColor = if (isFormValid) Color.White else Theme.colors.stroke,
                         onClick = {
-                            onSaveTask()
-
-                            val message = if (isEditMode) {
-                                editSuccessMessage
+                            if (isFormValid) {
+                                onSaveTask()
+                                onShowSnackBar(
+                                    if (isEditMode) editSuccessMessage else addSuccessMessage
+                                )
                             } else {
-                                addSuccessMessage
+                                Log.w("TaskBottomSheet_Debug", "❌ Cannot save - form invalid!")
                             }
-                            onShowSnackBar(message)
                         },
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    CustomTextButton(
+                    SecondaryButton(
                         text = stringResource(R.string.cancel),
-                        onClick = { onDismiss() },
-                        modifier = Modifier.fillMaxWidth()
+                        onClick = { onCancel() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
                     )
                 }
             }
@@ -265,18 +294,18 @@ fun AddTaskBottomSheet(
     onTaskTitleChange: (String) -> Unit,
     taskDescription: String,
     onTaskDescriptionChange: (String) -> Unit,
-    selectedPriority: Priority,
+    selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
     categories: List<CategoryUi>,
-    selectedCategory: CategoryUi,
+    selectedCategory: CategoryUi?,
     onCategorySelected: (CategoryUi) -> Unit,
     selectedDate: Long?,
-    onDateSelected: (Long) -> Unit,
+    onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
+    onCancel: () -> Unit = onDismiss,
     onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {},
-
-) {
+    ) {
     TaskBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
@@ -293,6 +322,7 @@ fun AddTaskBottomSheet(
         selectedDate = selectedDate,
         onDateSelected = onDateSelected,
         onDismiss = onDismiss,
+        onCancel = onCancel,
         onSaveTask = onSaveTask,
         onShowSnackBar = onShowSnackBar,
         addSuccessMessage = stringResource(R.string.add_task_successfully),
@@ -311,10 +341,10 @@ fun EditTaskBottomSheet(
     selectedPriority: Priority,
     onPrioritySelected: (Priority) -> Unit,
     categories: List<CategoryUi>,
-    selectedCategory: CategoryUi,
+    selectedCategory: CategoryUi?,
     onCategorySelected: (CategoryUi) -> Unit,
     selectedDate: Long?,
-    onDateSelected: (Long) -> Unit,
+    onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
     onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {}
@@ -339,5 +369,40 @@ fun EditTaskBottomSheet(
         onShowSnackBar = onShowSnackBar,
         addSuccessMessage = stringResource(R.string.add_task_successfully),
         editSuccessMessage = stringResource(R.string.edited_task_successfully)
+    )
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun TaskBottomSheetPreview() {
+    val mockCategories = listOf(
+        Category(id = 1, title = "Work", iconUri = "", isPredefined = false, countOfTasks = 0),
+        Category(id = 2, title = "Personal", iconUri = "", isPredefined = false, countOfTasks = 0),
+        Category(id = 3, title = "Study", iconUri = "", isPredefined = false, countOfTasks = 0)
+    )
+
+    var taskTitle by remember { mutableStateOf("My Task") }
+    var taskDescription by remember { mutableStateOf("This is a task description") }
+    var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
+    var selectedCategory by remember { mutableStateOf(mockCategories.first()) }
+    var selectedDate by remember { mutableStateOf<Long?>(System.currentTimeMillis()) }
+
+    TaskBottomSheet(
+        isVisible = true,
+        isEditMode = false,
+        taskTitle = taskTitle,
+        onTaskTitleChange = { taskTitle = it },
+        taskDescription = taskDescription,
+        onTaskDescriptionChange = { taskDescription = it },
+        selectedPriority = selectedPriority,
+        onPrioritySelected = { selectedPriority = it },
+        categories = mockCategories,
+        selectedCategory = selectedCategory,
+        onCategorySelected = { selectedCategory = it },
+        selectedDate = selectedDate,
+        onDateSelected = { selectedDate = it },
+        onDismiss = {},
+        onSaveTask = {},
     )
 }

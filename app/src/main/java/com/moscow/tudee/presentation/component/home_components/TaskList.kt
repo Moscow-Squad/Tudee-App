@@ -83,12 +83,14 @@ fun TaskList(
                 title = task.title,
                 description = task.description,
             ) {
-                PriorityChip(
-                    text = task.priority.getText(),
-                    backgroundColor = task.priority.getColor(),
-                    icon = painterResource(id = task.priority.getIcon()),
-                    selected = true
-                )
+                task.priority?.let {
+                    PriorityChip(
+                        text = task.priority.getText(),
+                        backgroundColor = task.priority.getColor(),
+                        icon = painterResource(id = task.priority.getIcon()),
+                        selected = true
+                    )
+                }
             }
         }
 

@@ -1,6 +1,5 @@
 package com.moscow.tudee.presentation.screen.home
 
-import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
 
