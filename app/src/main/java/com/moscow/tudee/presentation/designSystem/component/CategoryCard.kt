@@ -82,7 +82,7 @@ fun CategoryCard(
             }
 
             androidx.compose.animation.AnimatedVisibility(
-                visible = !selected && (count ?: 0) > 0,
+                visible = !selected && (count ?: 0) >= 0,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
@@ -137,7 +137,7 @@ fun CategoryItem_Count_Preview() {
     }
 }
 
-@Preview(showBackground = true, apiLevel = 33)
+@Preview(showBackground = true)
 @Composable
 fun CategoryItem_Selected_Preview() {
     TudeeTheme {

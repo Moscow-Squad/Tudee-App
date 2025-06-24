@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.presentation.component.modifier.applyIf
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @Composable
@@ -55,6 +56,9 @@ fun TopBar(
             style = Theme.textStyle.title.large,
             color = Theme.colors.title,
             modifier = Modifier.weight(1f)
+               .applyIf(startIcon==null|| endIcon==null) {
+                    this.padding(vertical = 8.dp)
+                }
         )
 
         if (endIcon != null) {
@@ -86,7 +90,7 @@ private fun TopBarIcon(
             .border(1.dp, Theme.colors.stroke, CircleShape)
             .clickable(
                 interactionSource = interactionSource,
-                indication       = null,
+                indication = null,
                 onClick = onClick
             )
             .padding(10.dp)

@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.designSystem.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,7 +44,7 @@ private fun SnackBarContent(
                 clip = false
             )
             .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
+            .background(Theme.colors.surfaceHigh)
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -98,9 +99,12 @@ fun ErrorSnackBar(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun CustomSnackBarPreview() {
+
     TudeeTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
