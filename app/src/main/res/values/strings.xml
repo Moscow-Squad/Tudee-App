@@ -73,5 +73,6 @@
     <string name="circle_medium">circle medium</string>
     <string name="circle_small">circle small</string>
     <string name="deleted_task_successfully">Deleted Task Successfully.</string>
+    <string name="some_error_happened">Some error happened</string>
 
 </resources>

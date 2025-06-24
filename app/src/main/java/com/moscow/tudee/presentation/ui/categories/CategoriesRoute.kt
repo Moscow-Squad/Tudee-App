@@ -6,12 +6,9 @@ import com.moscow.tudee.presentation.category.categoryScreen.CategoryScreen
 import com.moscow.tudee.presentation.category.categoryTasks.CategoryTasksScreen
 import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
 import com.moscow.tudee.presentation.navigation.entry.CategoryTasks
-
-import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 
 fun NavGraphBuilder.categoriesRoute(
-    appBar: (TudeeAppBar) -> Unit,
     isBottomNavigationVisible: (Boolean) -> Unit,
     navigateToCategoryTasks: (Long) -> Unit
 ) {

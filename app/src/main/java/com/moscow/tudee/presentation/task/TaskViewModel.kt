@@ -4,15 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
@@ -29,9 +24,10 @@ open class TaskViewModel(
 ) : BaseViewModel<TaskUiState, TaskUiEvent>(TaskUiState()),
     TaskScreenInteractionListener
 {
-
-    private val today: LocalDate =
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    private val today: LocalDateTime =
+        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    private val _showDatePicker = MutableStateFlow(false)
+    val showDatePicker: StateFlow<Boolean> = _showDatePicker.asStateFlow()
 
     init {
         updateState {
@@ -42,6 +38,13 @@ open class TaskViewModel(
                 currentYear = today.year
             )
         }
+    }
+    override fun showDatePicker() {
+        _showDatePicker.value = true
+    }
+
+    override fun dismissDatePicker() {
+        _showDatePicker.value = false
     }
 
     override fun selectDate(date: LocalDate) {
@@ -81,15 +84,21 @@ open class TaskViewModel(
                         tasksForSelectedState = updatedFiltered,
                     )
                 }
-                sendEvent(TaskUiEvent.ShowDeleteResult(true))
+                sendEvent(
+                    TaskUiEvent.ShowSnackBar(
+                        type = SnackBarType.SUCCESS,
+                    )
+                )
+
+
             },
             onError = {
-                sendEvent(TaskUiEvent.ShowDeleteResult(false))
+                TaskUiEvent.ShowSnackBar(
+                    type = SnackBarType.ERROR,
+                )
             }
         )
     }
-
-
 
     override fun previousMonth() {
         val current = uiState.value
@@ -106,25 +115,15 @@ open class TaskViewModel(
     }
 
     override fun updateMonthFromPicker(epochMillis: Long?) {
-        sendEvent(TaskUiEvent.DismissDatePicker)
+        dismissDatePicker()
         epochMillis?.let {
             val instant = Instant.fromEpochMilliseconds(it)
             val date = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
             updateMonth(date)
         }
     }
-
-
     private fun updateMonth(date: LocalDate) {
         val newMonthDays = generateMonthDays(date.year, date.monthNumber)
-
-//        updateState {
-//            val newSelectedDate = if (it.selectedDate.year == date.year && it.selectedDate.month == date.month) {
-//                it.selectedDate
-//            } else {
-//                date
-//            }
-
         updateState {
             it.copy(
                 currentMonth = date.month,
@@ -133,8 +132,7 @@ open class TaskViewModel(
                 selectedDate = LocalDateTime(date, LocalTime(0, 0, 0))
             )
         }
-
-        selectDate(uiState.value.selectedDate)
+        selectDate(uiState.value.selectedDate.date)
     }
 
     private fun generateMonthDays(year: Int, month: Int): List<LocalDate> {

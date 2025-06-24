@@ -1,7 +1,6 @@
 package com.moscow.tudee.presentation.task
 
 import com.moscow.tudee.domain.entity.Task
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
 interface TaskScreenInteractionListener {
@@ -16,5 +15,9 @@ interface TaskScreenInteractionListener {
     fun nextMonth()
 
     fun updateMonthFromPicker(epochMillis: Long?)
+
+    fun showDatePicker()
+
+    fun dismissDatePicker()
 
 }
