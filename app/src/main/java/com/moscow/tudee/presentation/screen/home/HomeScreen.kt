@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
@@ -22,20 +21,20 @@ import com.moscow.tudee.presentation.component.EditTaskBottomSheet
 import com.moscow.tudee.presentation.screen.home.home_components.OverviewSection
 import com.moscow.tudee.presentation.screen.home.home_components.TaskList
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.mapper.asLong
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import org.koin.androidx.compose.koinViewModel
-import com.moscow.tudee.R
+
 import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
 
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel(), navigateToTaskScreen: () -> Unit
+    viewModel: HomeViewModel = koinViewModel(),
+    navigateToTaskScreen: () -> Unit
 ) {
-
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-
     ObserveAsEvent(viewModel.uiEvent) { event ->
         when (event) {
             is HomeEvent.ViewAll -> {
@@ -43,13 +42,10 @@ fun HomeScreen(
             }
         }
     }
-
-
     HomeContent(
         uiState.value,
-        viewModel,
+        viewModel
     )
-
 }
 
 @Composable
@@ -146,55 +142,97 @@ fun HomeContent(
 
     }
     if (uiState.showTaskDetailsBottomSheet) {
-
-        TaskDetailsBottomSheet(
-            task = uiState.selectedTask!!,
-            onDismiss = { interactionListener.onDismissDetailsBottomSheet() },
-            onEditClick = { interactionListener.onEditTaskIconClick(uiState.selectedTask) },
-            onMoveClick = { interactionListener.onMoveTaskClick(uiState.selectedTask) })
+        uiState.addedTask?.let { task ->
+            TaskDetailsBottomSheet(
+                task = task,
+                onDismiss = { interactionListener.onDismissDetailsBottomSheet() },
+                onEditClick = { interactionListener.onEditTaskIconClick(task) },
+                onMoveClick = { interactionListener.onUpdateStatusClick(task) }
+            )
+        }
     }
 
     if (uiState.showEditTaskBottomSheet) {
-
         EditTaskBottomSheet(
             modifier = Modifier,
             isVisible = true,
-            taskTitle = uiState.selectedTask!!.title,
-            onTaskTitleChange = { interactionListener.onTitleChange(it) },
-            taskDescription = uiState.selectedTask.description,
-            onTaskDescriptionChange = { interactionListener.onDescriptionChange(it) },
-            selectedPriority = uiState.selectedTask.priority,
-            onPrioritySelected = { interactionListener.onPriorityClick(it) },
-            categories = uiState.categories,
-            selectedCategory = uiState.selectedTask.category,
-            onCategorySelected = { interactionListener.onCategoryClick(it) },
-            selectedDate = uiState.selectedTask.date.asLong(),
-            onDateSelected = { interactionListener.onDateChange(uiState.selectedTask.date) },
-            onDismiss = { interactionListener.onDismissEditBottomSheet() },
-            onSaveTask = { interactionListener.onSaveEditTaskClick(uiState.selectedTask) },
-        )
+            taskTitle = uiState.addedTask?.title ?: "",
+            onTaskTitleChange = {
+                interactionListener.onTitleChange(it)
+            },
+            taskDescription = uiState.addedTask?.description  ?: "",
 
+            onTaskDescriptionChange = {
+                interactionListener.onDescriptionChange(it)
+            },
+            selectedPriority = uiState.addedTask?.priority,
+            onPrioritySelected = {
+                interactionListener.onPriorityClick(it)
+            },
+            categories = uiState.categories,
+            selectedCategory = uiState.addedTask?.category,
+            onCategorySelected = {
+                interactionListener.onCategoryClick(it)
+            },
+            selectedDate = uiState.addedTask?.date?.asLong(),
+            onDateSelected = { newDateMillis ->
+                if (newDateMillis != null) {
+                    val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
+                        .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
+                    interactionListener.onDateChange(newDate)
+                }
+            },
+            onDismiss = {
+                interactionListener.onDismissEditBottomSheet()
+            },
+            onSaveTask = {
+                uiState.addedTask?.let { task ->
+                    interactionListener.onSaveEditTaskClick(task)
+                }
+            },
+        )
     }
 
     if (uiState.showAddTaskBottomSheet) {
-
         AddTaskBottomSheet(
             modifier = Modifier,
             isVisible = true,
-            taskTitle = uiState.selectedTask!!.title,
-            onTaskTitleChange = { interactionListener.onTitleChange(it) },
-            taskDescription = uiState.selectedTask.description,
-            onTaskDescriptionChange = { interactionListener.onDescriptionChange(it) },
-            selectedPriority = uiState.selectedTask.priority,
-            onPrioritySelected = { interactionListener.onPriorityClick(it) },
+            taskTitle = uiState.addedTask?.title ?: "",
+            onTaskTitleChange = {
+                Log.e("hdhhdhdhdhhd", "HomeContent: $it", )
+                interactionListener.onTitleChange(it)
+            },
+            taskDescription = uiState.addedTask?.description ?: "",
+            onTaskDescriptionChange = {
+                interactionListener.onDescriptionChange(it)
+            },
+            selectedPriority = uiState.addedTask?.priority,
+            onPrioritySelected = {
+                interactionListener.onPriorityClick(it)
+            },
             categories = uiState.categories,
-            selectedCategory = uiState.selectedTask.category,
-            onCategorySelected = { interactionListener.onCategoryClick(it) },
-            selectedDate = uiState.selectedTask.date.asLong(),
-            onDateSelected = { interactionListener.onDateChange(uiState.selectedTask.date) },
-            onDismiss = { interactionListener.onDismissAddBottomSheet() },
-            onSaveTask = { interactionListener.onAddTask(uiState.selectedTask) })
+            selectedCategory = uiState.addedTask?.category,
+            onCategorySelected = {
+                interactionListener.onCategoryClick(it)
+            },
+            selectedDate = uiState.addedTask?.date?.asLong(),
+            onDateSelected = { newDateMillis ->
+                if (newDateMillis != null) {
+                    val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
+                        .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
+                    interactionListener.onDateChange(newDate)
+                }
+            },
+            onDismiss = {
+                interactionListener.onDismissAddBottomSheet()
+            },
+            onSaveTask = {
+                uiState.addedTask?.let { task ->
+                    interactionListener.onAddTask(task)
+                }
+            }
 
+        )
     }
 }
 
@@ -203,5 +241,6 @@ fun HomeContent(
 @Composable
 private fun PreviewScreen() {
     HomeScreen(
-        navigateToTaskScreen = {})
+        navigateToTaskScreen = {}
+    )
 }

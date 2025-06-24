@@ -12,10 +12,10 @@ fun Task.toTaskUi() = CategoriesScreenState.TaskUi(
 )
 
 fun Category.toCategoryUi() = CategoriesScreenState.CategoryUi(
-    id = id ?: 0L,
+    id = id,
     title = title,
     iconUrl = iconUri,
-    numberOfTasksInCategory =countOfTasks ,
+    numberOfTasksInCategory = countOfTasks,
     isPredefined = false
 )
 
@@ -24,5 +24,5 @@ fun CategoriesScreenState.CategoryUi.toCategory() = Category(
     title = title,
     iconUri = iconUrl,
     countOfTasks = numberOfTasksInCategory,
-    isPredefined =isPredefined
+    isPredefined = isPredefined
 )

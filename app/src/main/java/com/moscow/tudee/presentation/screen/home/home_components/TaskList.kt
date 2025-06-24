@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.screen.home.home_components
+package com.moscow.tudee.presentation.component.home_components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
@@ -22,15 +21,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.getColor
-import com.moscow.tudee.presentation.screen.home.getIcon
-import com.moscow.tudee.presentation.screen.home.getText
+import com.moscow.tudee.presentation.mapper.getColor
+import com.moscow.tudee.presentation.mapper.getIcon
+import com.moscow.tudee.presentation.mapper.getText
+import com.moscow.tudee.presentation.model.TaskUi
 
 @Composable
 fun TaskListHeader(
@@ -61,8 +60,8 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    tasks: List<Task>,
-    onTaskClick: (Task) -> Unit,
+    tasks: List<TaskUi>,
+    onTaskClick: (TaskUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
@@ -77,19 +76,21 @@ fun TaskList(
 
         items(tasks) { task ->
             TaskCard(
-                modifier = Modifier
+                modifier = modifier
                     .width(320.dp)
                     .clickable { onTaskClick(task) },
-                category = task.category!!,
+                category = task.category,
                 title = task.title,
                 description = task.description,
             ) {
-                PriorityChip(
-                    text = task.priority.getText(),
-                    backgroundColor = task.priority.getColor(),
-                    icon = painterResource(id = task.priority.getIcon()),
-                    selected = true
-                )
+                task.priority?.let {
+                    PriorityChip(
+                        text = task.priority.getText(),
+                        backgroundColor = task.priority.getColor(),
+                        icon = painterResource(id = task.priority.getIcon()),
+                        selected = true
+                    )
+                }
             }
         }
 

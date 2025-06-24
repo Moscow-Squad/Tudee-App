@@ -11,7 +11,7 @@ interface TasksServices {
 
     suspend fun getTaskById(taskId: Long): Task
 
-    suspend fun changeTaskStatus(taskId: Long)
+    suspend fun changeTaskStatus(taskId: Long,updatedStatus: String)
 
     suspend fun addTask(task: Task)
 

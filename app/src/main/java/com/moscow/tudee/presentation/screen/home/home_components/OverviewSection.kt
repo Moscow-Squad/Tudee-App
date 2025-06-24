@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.screen.home.home_components
+package com.moscow.tudee.presentation.component.home_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,16 +28,13 @@ import java.util.Locale
 
 @Composable
 fun OverviewSection(
+    formattedDate: String,
     sliderState: SliderState,
-    doneTasks: List<Task>,
-    inProgressTasks: List<Task>,
-    todoTasks: List<Task>,
+    todoTasksCount: Int,
+    inProgressTasksCount: Int,
+    doneTasksCount: Int,
     modifier: Modifier = Modifier
 ) {
-    val todayDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-    val formattedDate = todayDate.toJavaLocalDateTime()
-        .format(DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.US))
-
     Column(
         modifier
             .fillMaxWidth()
@@ -52,7 +49,7 @@ fun OverviewSection(
                 .padding(top = 8.dp)
         )
 
-        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 6.dp))
+        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 12.dp))
 
         TudeeText(
             text = stringResource(R.string.overview),
@@ -69,10 +66,9 @@ fun OverviewSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-                OverviewCard(Task.Status.DONE, doneTasks.count(), modifier = Modifier.weight(1f))
-                OverviewCard(Task.Status.IN_PROGRESS, inProgressTasks.count(), modifier = Modifier.weight(1f))
-                OverviewCard(Task.Status.TODO, todoTasks.count(), modifier = Modifier.weight(1f))
-
+                OverviewCard(Task.Status.DONE, doneTasksCount, modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.IN_PROGRESS, inProgressTasksCount, modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.TODO, todoTasksCount, modifier = Modifier.weight(1f))
         }
     }
 }

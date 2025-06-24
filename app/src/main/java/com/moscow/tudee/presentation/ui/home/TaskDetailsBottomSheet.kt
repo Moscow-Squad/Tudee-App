@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.OutlinedIconButton
 import com.moscow.tudee.presentation.component.SecondaryButton
@@ -29,18 +28,19 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.HomeState
-import com.moscow.tudee.presentation.screen.home.getBackgroundColor
-import com.moscow.tudee.presentation.screen.home.getColor
-import com.moscow.tudee.presentation.screen.home.getIcon
-import com.moscow.tudee.presentation.screen.home.getText
+import com.moscow.tudee.presentation.mapper.getBackgroundColor
+import com.moscow.tudee.presentation.mapper.getColor
+import com.moscow.tudee.presentation.mapper.getIcon
+import com.moscow.tudee.presentation.mapper.getText
+import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.model.TaskUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 
 @Composable
 fun TaskDetailsBottomSheet(
-    task: Task,
+    task: TaskUi,
     onDismiss: () -> Unit,
     onEditClick: () -> Unit,
     onMoveClick: () -> Unit,
@@ -71,12 +71,12 @@ fun TaskDetailsBottomSheet(
                     .padding(12.dp)
             ) {
                 Image(
-                    painter = if (task.category?.isPredefined == true) painterResource(
+                    painter = if (task.category.isPredefined == true) painterResource(
                         getPredefinedIconRes(
                             task.category.title
                         )
-                    ) else rememberAsyncImagePainter(task.category?.iconUri),
-                    contentDescription = task.category?.title,
+                    ) else rememberAsyncImagePainter(task.category.iconUrl),
+                    contentDescription = task.category.title,
                     modifier = Modifier
                         .size(32.dp)
                 )
@@ -111,22 +111,22 @@ fun TaskDetailsBottomSheet(
                     statusColor = task.status.getColor(),
                     dotColor = task.status.getColor()
                 )
-
-                PriorityChip(
-                    text = task.priority.getText(),
-                    backgroundColor = task.priority.getColor(),
-                    icon = painterResource(task.priority.getIcon()),
-                    selected = true
-                )
+                task.priority?.let {
+                    PriorityChip(
+                        text = task.priority.getText(),
+                        backgroundColor = task.priority.getColor(),
+                        icon = painterResource(task.priority.getIcon()),
+                        selected = true
+                    )
+                }
 
             }
 
             if (task.status != Task.Status.DONE) {
-                val movedToStatus = when (task.status) {
-                    Task.Status.TODO -> Task.Status.IN_PROGRESS
-                    Task.Status.IN_PROGRESS -> Task.Status.DONE
-                    Task.Status.DONE -> Task.Status.TODO
-                }
+                val movedToStatus = if (task.status == Task.Status.TODO)
+                    Task.Status.IN_PROGRESS
+                else Task.Status.DONE
+
                 Row(
                     modifier = Modifier.padding(top = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -148,30 +148,32 @@ fun TaskDetailsBottomSheet(
                     )
                 }
             }
+
         }
     }
-
 }
+
+
 
 @Preview
 @Composable
 private fun TaskDetailsBottomSheetPreview() {
     TaskDetailsBottomSheet(
-        task = Task(
+        task = TaskUi(
             id = 1,
             title = "Organize Study Desk",
             description = "Solve all exercises from page 45 to 50 in the textbook, Solve all exercises from page 45 to 50 in the textbook.",
             priority = Task.Priority.HIGH,
             status = Task.Status.IN_PROGRESS,
-            category = Category(
+            date = LocalDateTime.now().toKotlinLocalDateTime(),
+            category = CategoryUi(
                 id = 0,
                 title = "",
-                iconUri = "",
+                iconUrl = "",
                 isPredefined = false,
+                countOfTasks = 10
             ),
-            date = LocalDateTime.now().toKotlinLocalDateTime(),
-
-            ),
+        ),
         onEditClick = {},
         onMoveClick = {},
         onDismiss = {}

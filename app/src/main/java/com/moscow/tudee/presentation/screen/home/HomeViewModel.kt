@@ -3,14 +3,15 @@ package com.moscow.tudee.presentation.screen.home
 import android.util.Log
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
-import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
-import kotlinx.datetime.Clock
+import com.moscow.tudee.presentation.mapper.toTask
+import com.moscow.tudee.presentation.mapper.toTaskUi
+import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 
 class HomeViewModel(
     private val tasksServices: TasksServices,
@@ -61,54 +62,177 @@ class HomeViewModel(
 
     }
     override fun onFloatingActionButtonClick() {
-        //TODO : show add task bottom sheet
+        updateState {
+            it.copy(
+                addedTask = TaskUi(
+                    id = null,
+                    title = "",
+                    description = "",
+                    priority = Task.Priority.LOW,
+                    status = Task.Status.TODO,
+                    category = CategoryUi(
+                        id = 1,
+                        title = "ggfgf",
+                        isPredefined = false,
+                        numberOfTasksInCategory = 5,
+                        iconUrl = "",
+                        countOfTasks = 10
+                    ),
+                    date = java.time.LocalDateTime.now().toKotlinLocalDateTime()
+                ),
+                showAddTaskBottomSheet = true
+            )
+        }
     }
 
-    override fun onTaskClick(task: Task) {
+    override fun onTaskClick(task: TaskUi) {
         updateState { it.copy(showTaskDetailsBottomSheet = true) }
-        updateState { it.copy(selectedTask = task) }
+        updateState { it.copy(addedTask = task) }
     }
 
-    override fun onAddTask(task: Task) {
-        //TODO: add new task
+    override fun onAddTask(task: TaskUi) {
+        if (task.title.isBlank() || task.description.isBlank()) {
+            return
+        }
+
+        launchWithResult(
+            action = { tasksServices.addTask(task.toTask()) },
+            onSuccess = { addedTask ->
+                updateState { state ->
+                    loadTasks()
+
+                    state.copy(
+                        showAddTaskBottomSheet = false,
+                        addedTask = null,
+                    )
+                }
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
     override fun onViewAllClick(taskStatus: Task.Status) {
         sendEvent(HomeEvent.ViewAll(taskStatus))
     }
 
-    override fun onEditTaskIconClick(task: Task) {
-        updateState { it.copy(selectedTask = task) }
+    override fun onEditTaskIconClick(task: TaskUi) {
+        updateState { it.copy(addedTask = task) }
         updateState { it.copy(showEditTaskBottomSheet = true) }
     }
 
-
-    override fun onMoveTaskClick(task: Task) {
-        // TODO : move task from current state to a different state
+    private fun getCategory(task: HomeState.HomeTask) {
+        launchWithResult(
+            action = { categoryServices.getCategoryById(task.category!!.id!!) },
+            onSuccess = { response ->
+                updateState { it.copy(selectedTask = task.copy(category = response)) }
+                },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
-    override fun onSaveEditTaskClick(task: Task) {
-         // TODO: save task after editing it
+    override fun onUpdateStatusClick(task: TaskUi) {
+
+        val nextStatus = getNextStatus(task.status)
+
+        launchWithResult(
+            action = {
+                task.id?.let { tasksServices.changeTaskStatus(it, nextStatus.name) }
+            },
+            onSuccess = {
+                updateState {
+                    it.copy(
+                        showTaskDetailsBottomSheet = false,
+                        inProgressTasks = it.inProgressTasks.filter { it.id != task.id },
+                        todoTasks = it.todoTasks.filter { it.id != task.id },
+                        inProgressTasksCount = if (task.status == Task.Status.IN_PROGRESS)
+                            it.inProgressTasksCount - 1 else it.inProgressTasksCount,
+                        todoTasksCount = if (task.status == Task.Status.TODO)
+                            it.todoTasksCount - 1 else it.todoTasksCount,
+                        doneTasksCount = if (task.status == Task.Status.DONE)
+                            it.doneTasksCount - 1 else it.doneTasksCount
+                    )
+                }
+                updateTaskStatus(task, nextStatus)
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
+    }
+
+    private fun updateTaskStatus(task: TaskUi, nextStatus: Task.Status) {
+        when (nextStatus) {
+            Task.Status.IN_PROGRESS -> {
+                updateState {
+                    it.copy(
+                        inProgressTasks = it.inProgressTasks + task.copy(status = nextStatus),
+                        inProgressTasksCount = it.inProgressTasksCount + 1
+                    )
+                }
+            }
+
+            Task.Status.DONE -> {
+                updateState {
+                    it.copy(
+                        doneTasks = it.doneTasks + task.copy(status = nextStatus),
+                        doneTasksCount = it.doneTasksCount + 1
+                    )
+                }
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun getNextStatus(currentStatus: Task.Status): Task.Status {
+        return when (currentStatus) {
+            Task.Status.TODO -> Task.Status.IN_PROGRESS
+            Task.Status.IN_PROGRESS -> Task.Status.DONE
+            Task.Status.DONE -> Task.Status.DONE
+        }
+    }
+
+    override fun onSaveEditTaskClick(task: TaskUi) {
+        launchWithResult(
+            action = { tasksServices.updateTask(task.toTask()) },
+            onSuccess = {
+                loadTasks()
+                updateState {
+                    it.copy(
+                        showEditTaskBottomSheet = false,
+                        selectedTask = it.addedTask,
+                        addedTask = null,
+                    )
+                }
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
     override fun onPriorityClick(taskPriority: Task.Priority) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(priority = taskPriority)) }
+        updateState { it.copy(addedTask = it.addedTask?.copy(priority = taskPriority)) }
     }
 
     override fun onTitleChange(newTitle: String) {
-        // TODO:Implement logic to change title of task
+        updateState { it.copy(addedTask = it.addedTask?.copy(title = newTitle)) }
     }
 
     override fun onDescriptionChange(newDescription: String) {
-        // TODO:Implement logic to change description of task
+        updateState { it.copy(addedTask = it.addedTask?.copy(description = newDescription)) }
     }
 
     override fun onDateChange(newDate: LocalDateTime) {
-        //// TODO:Implement logic to change date of task
+        updateState { it.copy(addedTask = it.addedTask?.copy(date = newDate)) }
     }
 
-    override fun onCategoryClick(category: Category) {
-        updateState { it.copy(selectedTask = it.selectedTask?.copy(category = category)) }
+    override fun onCategoryClick(category: CategoryUi) {
+        updateState { it.copy(addedTask = it.addedTask?.copy(category = category)) }
     }
 
     override fun onShowAddBottomSheet() {
@@ -144,7 +268,6 @@ class HomeViewModel(
     }
 
     private fun handleHomeError(throwable: Throwable) {
-        Log.d("TAG", "handleHomeError: ${throwable.message}")
         // TODO: Some error handling we can do later
     }
 
