@@ -1,13 +1,13 @@
-package com.moscow.tudee.presentation.category.categoryScreen
+package com.moscow.tudee.presentation.screen.category.categoriesScreen
 
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.presentation.BaseViewModel
-import com.moscow.tudee.presentation.category.CategoriesEvents
-import com.moscow.tudee.presentation.category.CategoriesScreenState
-import com.moscow.tudee.presentation.category.toCategory
-import com.moscow.tudee.presentation.category.toCategoryUi
+import com.moscow.tudee.presentation.screen.category.categoriesScreen.CategoriesEvents
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.toCategory
+import com.moscow.tudee.presentation.screen.category.toCategoryUi
 
 class CategoryViewModel(
     private val categoryServices: CategoryServices,

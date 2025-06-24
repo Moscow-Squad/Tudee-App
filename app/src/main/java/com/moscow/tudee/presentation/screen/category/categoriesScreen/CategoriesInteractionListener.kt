@@ -1,7 +1,6 @@
-package com.moscow.tudee.presentation.category.categoryScreen
+package com.moscow.tudee.presentation.screen.category.categoriesScreen
 
-import android.net.Uri
-import com.moscow.tudee.presentation.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
 
 interface CategoriesInteractionListener {
     fun onAddCategory(categoryUi: CategoriesScreenState.CategoryUi)

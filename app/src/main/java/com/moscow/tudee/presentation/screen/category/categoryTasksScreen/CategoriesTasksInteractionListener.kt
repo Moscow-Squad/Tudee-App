@@ -1,7 +1,7 @@
-package com.moscow.tudee.presentation.category.categoryTasksScreen
+package com.moscow.tudee.presentation.screen.category.categoryTasksScreen
 
 import com.moscow.tudee.domain.entity.Task
-import com.moscow.tudee.presentation.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
 
 interface CategoriesTasksInteractionListener {
     fun onUpdateCategory(newCategory: CategoriesScreenState.CategoryUi)

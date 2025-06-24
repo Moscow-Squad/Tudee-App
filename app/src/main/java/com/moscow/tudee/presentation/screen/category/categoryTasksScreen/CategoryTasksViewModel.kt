@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.category.categoryTasksScreen
+package com.moscow.tudee.presentation.screen.category.categoryTasksScreen
 
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
@@ -6,11 +6,11 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
-import com.moscow.tudee.presentation.category.CategoriesScreenState
-import com.moscow.tudee.presentation.category.CategoryTasksEvents
-import com.moscow.tudee.presentation.category.toCategory
-import com.moscow.tudee.presentation.category.toCategoryUi
-import com.moscow.tudee.presentation.category.toTaskUi
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.categoryTasksScreen.CategoryTasksEvents
+import com.moscow.tudee.presentation.screen.category.toCategory
+import com.moscow.tudee.presentation.screen.category.toCategoryUi
+import com.moscow.tudee.presentation.screen.category.toTaskUi
 
 class CategoryTasksViewModel(
     private val categoryId: Long,
