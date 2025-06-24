@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.ObserveAsEvent
+import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.EmptyScreen
@@ -54,8 +56,11 @@ import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.UtcOffset
 import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
 import java.time.format.TextStyle
 import java.util.Locale
@@ -85,6 +90,14 @@ fun TaskScreen(
             }
         }
     }
+
+    ObserveAsEvent(addTaskBottomSheetViewModel.uiEvent) { event ->
+        when (event) {
+            AddTaskBottomSheetEvents.NotifyTaskAdded -> Unit
+            AddTaskBottomSheetEvents.NotifyTaskNotAdded -> Unit
+        }
+    }
+
     Scaffold(
         topBar = {
             TudeeAppBar(
@@ -110,6 +123,8 @@ fun TaskScreen(
                     .fillMaxSize(),
                 interactionListener = viewModel,
                 uiState = uiState,
+                bottomSheetUiState = bottomSheetUiState,
+                bottomSheetListener = addTaskBottomSheetViewModel,
                 showDatePicker = showDatePicker,
             )
 
@@ -140,7 +155,9 @@ private fun TaskContent(
     modifier: Modifier = Modifier,
     interactionListener: TaskScreenInteractionListener,
     uiState: TaskUiState,
-    showDatePicker: Boolean
+    showDatePicker: Boolean,
+    bottomSheetUiState: AddTaskBottomSheetUiState,
+    bottomSheetListener: AddTaskBottomSheetViewModel
 ) {
     val selectedTabIndex = when (uiState.selectedStatus) {
         Task.Status.IN_PROGRESS -> 0
@@ -167,7 +184,6 @@ private fun TaskContent(
         val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
         if (index >= 0) lazyListState.animateScrollToItem(index)
     }
-
     Column(
         modifier = modifier
             .background(Theme.colors.surface)
@@ -271,6 +287,39 @@ private fun TaskContent(
                 onDismiss = { selectedTaskToDelete = null }
             )
         }
+
+        AddTaskBottomSheet(
+            isVisible = bottomSheetUiState.showAddTaskBottomSheet,
+            taskTitle = bottomSheetUiState.title,
+            onTaskTitleChange = { newTitle ->
+                bottomSheetListener.onTitleChange(newTitle)
+            },
+            taskDescription = bottomSheetUiState.description,
+            onTaskDescriptionChange = { newDescription ->
+                bottomSheetListener.onDescriptionChange(newDescription)
+            },
+            selectedPriority = bottomSheetUiState.priority,
+            onPrioritySelected = { newPriority ->
+                bottomSheetListener.onPriorityClick(newPriority)
+            },
+            categories = bottomSheetUiState.availableCategories,
+            selectedCategory = bottomSheetUiState.category,
+            onCategorySelected = { newCategory ->
+                bottomSheetListener.onCategoryClick(newCategory)
+            },
+            selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
+                .toEpochMilliseconds(),
+            onDateSelected = { newDate ->
+                newDate?.let {
+                    val instant = Instant.fromEpochMilliseconds(newDate)
+                    val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                    bottomSheetListener.onDateChange(date)
+                }
+            },
+            onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
+            onCancel = { bottomSheetListener.onCancelAddTask() },
+            onSaveTask = { bottomSheetListener.onAddTask() },
+        )
     }
 }
 
