@@ -22,12 +22,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task.Status
-import com.moscow.tudee.presentation.screen.category.toCategoryUi
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState
+import com.moscow.tudee.presentation.screen.home.getColor
+import com.moscow.tudee.presentation.screen.home.getIcon
+import com.moscow.tudee.presentation.screen.home.getText
 
 @Composable
 fun TaskListHeader(
@@ -45,7 +47,7 @@ fun TaskListHeader(
     ) {
         TudeeText(
             text = when (taskState) {
-                Status.IN_PROGRESS -> stringResource(R.string.in_progress_status)
+                Status.IN_PROGRESS -> stringResource(R.string.in_progress)
                 Status.TODO -> stringResource(R.string.to_do)
                 Status.DONE -> stringResource(R.string.done)
             },
@@ -77,14 +79,18 @@ fun TaskList(
                 modifier = modifier
                     .width(320.dp)
                     .clickable { onTaskClick(task) },
-                category = task.category!!.toCategoryUi(),
+                category = task.category!!,
                 title = task.title,
                 description = task.description,
             ) {
-                PriorityChip(
-                    priority = task.priority,
-                    selected = true
-                )
+                task.priority?.let {
+                    PriorityChip(
+                        text = task.priority.getText(),
+                        backgroundColor = task.priority.getColor(),
+                        icon = painterResource(id = task.priority.getIcon()),
+                        selected = true
+                    )
+                }
             }
         }
 

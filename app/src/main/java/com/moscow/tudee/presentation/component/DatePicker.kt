@@ -43,9 +43,12 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun DatePickerModal(
     onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    selectedDate: Long? = null
 ) {
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = selectedDate
+    )
 
     DatePickerDialog(
         onDismissRequest = onDismiss,
@@ -78,7 +81,6 @@ fun DatePickerModal(
                     style = Theme.textStyle.label.large,
                     fontSize = 16.sp
                 )
-
                 TudeeTextButton(
                     text = stringResource(R.string.ok),
                     onClick = {
@@ -226,7 +228,8 @@ fun TudeeDatePickerTextField(
     if (showDatePicker) {
         DatePickerModal(
             onDateSelected = onDateSelected,
-            onDismiss = { showDatePicker = false }
+            onDismiss = { showDatePicker = false },
+            selectedDate = selectedDate
         )
     }
 }

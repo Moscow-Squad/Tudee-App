@@ -9,6 +9,7 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toInstant
 
 @Composable
 fun Priority.getText(): String {
@@ -20,7 +21,8 @@ fun Priority.getText(): String {
 }
 
 @Composable
-@DrawableRes fun Priority.getIcon(): Int {
+@DrawableRes
+fun Priority.getIcon(): Int {
     return when (this) {
         Priority.HIGH -> R.drawable.ic_flag
         Priority.MEDIUM -> R.drawable.ic_alert
@@ -44,7 +46,7 @@ fun HomeState.HomeTask.toTask(): Task {
         id = id,
         title = title,
         description = description,
-        priority = priority,
+        priority = priority ?: Priority.LOW,
         category = category,
         status = status,
         date = date
@@ -78,6 +80,17 @@ fun Task.Status.getColor(): Color {
     }
 }
 fun LocalDateTime.asLong(): Long {
-    // TODO
-    return 0L
+    return this.toInstant(kotlinx.datetime.TimeZone.currentSystemDefault()).toEpochMilliseconds()
+}
+
+fun Task.toTaskItem(): HomeState.HomeTask {
+    return HomeState.HomeTask(
+        id = id,
+        title = title,
+        description = description,
+        priority = priority,
+        status = status,
+        category = category,
+        date = date
+    )
 }
