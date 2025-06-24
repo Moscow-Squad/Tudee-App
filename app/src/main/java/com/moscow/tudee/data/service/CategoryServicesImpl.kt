@@ -1,6 +1,6 @@
 package com.moscow.tudee.data.service
 
-import com.moscow.tudee.data.exception.DataException
+import com.moscow.tudee.domain.exception.Exceptions
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.mapper.toCategory
 import com.moscow.tudee.data.local.mapper.toCategoryEntity
@@ -28,6 +28,6 @@ class CategoryServicesImpl(
     }
 
     override suspend fun getCategoryById(categoryId: Long): Category {
-        return categoryDao.getCategoryById(categoryId)?.toCategory() ?: throw DataException.CategoryNotFound(categoryId)
+        return categoryDao.getCategoryById(categoryId)?.toCategory() ?: throw Exceptions.CategoryNotFound(categoryId)
     }
 }
