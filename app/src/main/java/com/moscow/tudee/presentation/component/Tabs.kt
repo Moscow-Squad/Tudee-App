@@ -10,7 +10,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,21 +38,18 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.modifier.bottomBorder
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
-import com.moscow.tudee.presentation.screen.category.component.Tab
-import com.moscow.tudee.presentation.screen.category.component.TabItem
 
-data class TabItem(val label: String, val count: Int, val status: Task.Status)
+data class Tab(val label: String, val count: Int)
 
 @Composable
 fun Tabs(
-    tabs: List<TabItem>,
-    selectedStatus: Task.Status,
-    onTabClick: (Task.Status) -> Unit,
-    modifier: Modifier = Modifier
+    tabs: List<Tab>,
+    onTabClick: (Int) -> Unit ,
+    modifier: Modifier = Modifier,
+    selectedTabIndex: Int = 0,
 ) {
     Row(
         modifier = modifier
@@ -61,13 +58,13 @@ fun Tabs(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        tabs.forEach { tab ->
+        tabs.forEachIndexed { index, tabData ->
             Tab(
                 modifier = Modifier.weight(1f),
-                tabLabel = tab.label,
-                counter = tab.count.toString(),
-                isSelected = tab.status == selectedStatus,
-                onClick = { onTabClick(tab.status) }
+                tabLabel = tabData.label,
+                counter = tabData.count.toString(),
+                isSelected = index == selectedTabIndex,
+                onClick = { onTabClick(index) }
             )
         }
     }
@@ -83,17 +80,17 @@ fun Tab(
 ) {
     val density = LocalDensity.current
     var contentWidth by remember { mutableStateOf(0.dp) }
+
     val underlineScale by animateFloatAsState(
         targetValue = if (isSelected) 1f else 0f,
-        animationSpec = tween(durationMillis = 200)
+        animationSpec = tween(durationMillis = 200),
+        label = ""
     )
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.clickable(
-            onClick = onClick,
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() },
-        )
+        modifier = modifier
+            .clickable(onClick = onClick)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -107,6 +104,7 @@ fun Tab(
                 style = if (isSelected) textStyle.label.medium else textStyle.label.small,
                 color = if (isSelected) colors.title else colors.hint
             )
+
             AnimatedVisibility(
                 visible = isSelected,
                 enter = fadeIn() + slideInHorizontally(),
@@ -123,12 +121,14 @@ fun Tab(
                     Text(
                         text = counter,
                         style = textStyle.label.medium,
-                        color = colors.body
+                        color = colors.body,
                     )
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Box(
             modifier = Modifier
                 .width(contentWidth)
@@ -145,17 +145,18 @@ fun Tab(
 @Preview(showBackground = true, apiLevel = 34)
 @Composable
 fun TabsPreview() {
-    var selectedStatus by rememberSaveable { mutableStateOf(Task.Status.TODO) }
+    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+
     val sampleTabs = listOf(
-        TabItem("To Do", 23, Task.Status.TODO),
-        TabItem("In progress", 14, Task.Status.IN_PROGRESS),
-        TabItem("Done", 58, Task.Status.DONE)
+        Tab(label = "In progress", count = 14),
+        Tab(label = "To Do", count = 23),
+        Tab(label = "Done", count = 58)
     )
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
         Tabs(
             tabs = sampleTabs,
-            selectedStatus = selectedStatus,
-            onTabClick = { selectedStatus = it }
+            selectedTabIndex = selectedTabIndex,
+            onTabClick = { selectedTabIndex = it }
         )
     }
 }

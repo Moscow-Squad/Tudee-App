@@ -31,6 +31,7 @@ import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
 import com.moscow.tudee.presentation.screen.category.getPriorityFromString
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import com.moscow.tudee.presentation.screen.category.component.CategoryPriorityChip
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
@@ -142,7 +143,7 @@ fun TaskCardWithoutDatePreview() {
             title = "Review Flashcards",
             description = "Study biology flashcards for 15 minutes",
         ) {
-            PriorityChip(
+            CategoryPriorityChip(
                 priority = getPriorityFromString(stringResource(R.string.high)),
             )
         }
@@ -164,7 +165,7 @@ fun TaskCardWithDatePreview() {
             description = "Review cell structure and functions for tomorrow...",
             date = "03/12/2025",
         ) {
-            PriorityChip(
+            CategoryPriorityChip(
                 priority = getPriorityFromString(stringResource(R.string.medium))
             )
         }
