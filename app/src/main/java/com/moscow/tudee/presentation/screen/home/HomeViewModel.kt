@@ -6,8 +6,10 @@ import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
 import com.moscow.tudee.presentation.mapper.toTask
 import com.moscow.tudee.presentation.mapper.toTaskUi
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 
 class HomeViewModel(
     private val tasksServices: TasksServices,
@@ -26,14 +28,14 @@ class HomeViewModel(
                     .filter { it.status == Task.Status.TODO }
                 val inProgressList = tasks.map { it.toTaskUi() }
                     .filter { it.status == Task.Status.IN_PROGRESS }
-                val doneList =  tasks.map { it.toTaskUi() }
+                val doneList = tasks.map { it.toTaskUi() }
                     .filter { it.status == Task.Status.DONE }
 
                 updateState {
                     it.copy(
-                        todoTasks = todoList ,
-                        inProgressTasks =inProgressList,
-                        doneTasks =doneList,
+                        todoTasks = todoList,
+                        inProgressTasks = inProgressList,
+                        doneTasks = doneList,
                         todoTasksCount = todoList.size,
                         inProgressTasksCount = inProgressList.size,
                         doneTasksCount = doneList.size,
@@ -44,87 +46,27 @@ class HomeViewModel(
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
-        launchWithResult(
-            action = { tasksServices.getTasksByStatus(Task.Status.IN_PROGRESS) },
-            onSuccess = { response ->
-                Log.e("BLA", response.toString())
-                getCategoryAndSaveTasks(response)
-            },
-            onError = { handleHomeError(it) },
-            onStart = { startLoading() },
-            onFinally = { endLoading() }
-        )
-        launchWithResult(
-            action = { tasksServices.getTasksByStatus(Task.Status.DONE) },
-            onSuccess = { response ->
-                Log.e("BLA", response.toString())
-                getCategoryAndSaveTasks(response)
-            },
-            onError = { handleHomeError(it) },
-            onStart = { startLoading() },
-            onFinally = { endLoading() }
-        )
-    }
-
-    private fun getCategoryAndSaveTasks(tasks: List<Task>) {
-        tasks.forEach { task ->
-            launchWithResult(
-                action = { categoryServices.getCategoryById(task.category.id) },
-                onSuccess = { response ->
-                    saveCategory(task, response)
-                },
-                onError = { handleHomeError(it) },
-                onStart = { startLoading() },
-                onFinally = { endLoading() }
-            )
-        }
-    }
-
-    private fun saveCategory(
-        task: Task,
-        response: Category
-    ) {
-        updateState { state ->
-            val newTask = HomeState.HomeTask(
-                id = task.id,
-                title = task.title,
-                description = task.description,
-                priority = task.priority,
-                status = task.status,
-                date = task.date,
-                category = response
-            )
-
-            val newTodoTasks = if (task.status == Task.Status.TODO) state.todoTasks + newTask else state.todoTasks
-            val newInProgressTasks = if (task.status == Task.Status.IN_PROGRESS) state.inProgressTasks + newTask else state.inProgressTasks
-            val newDoneTasks = if (task.status == Task.Status.DONE) state.doneTasks + newTask else state.doneTasks
-
-            val newSliderState = calculateSliderState(
-                newTodoTasks.size,
-                newInProgressTasks.size,
-                newDoneTasks.size
-            )
-
-            state.copy(
-                todoTasks = newTodoTasks,
-                inProgressTasks = newInProgressTasks,
-                doneTasks = newDoneTasks,
-                update = newSliderState
-            )
-        }
     }
 
 
     override fun onFloatingActionButtonClick() {
         updateState {
+            //TODO make added task nullable
             it.copy(
-                addedTask = HomeState.HomeTask(
+                addedTask = TaskUi(
                     id = null,
                     title = "",
                     description = "",
-                    priority = null,
+                    priority = Task.Priority.LOW,
                     status = Task.Status.TODO,
-                    category = null,
+                    category = CategoryUi(
+                        id = 1,
+                        title = "ggfgf",
+                        isPredefined = false,
+                        numberOfTasksInCategory = 5,
+                        iconUrl = "",
+                        countOfTasks = 10
+                    ),
                     date = java.time.LocalDateTime.now().toKotlinLocalDateTime()
                 ),
                 showAddTaskBottomSheet = true
@@ -134,12 +76,11 @@ class HomeViewModel(
 
     override fun onTaskClick(task: TaskUi) {
         updateState { it.copy(showTaskDetailsBottomSheet = true) }
-        updateState { it.copy(selectedTask = task) }
+        updateState { it.copy(addedTask = task) }
     }
 
     override fun onAddTask(task: TaskUi) {
-        if (task.title.isBlank() || task.description.isBlank() || task.category == null) {
-            Log.e("HomeViewModel", "Cannot add task: missing required fields")
+        if (task.title.isBlank() || task.description.isBlank()) {
             return
         }
 
@@ -147,8 +88,6 @@ class HomeViewModel(
             action = { tasksServices.addTask(task.toTask()) },
             onSuccess = { addedTask ->
                 updateState { state ->
-                    Log.d("HomeViewModel", "addedTask type: ${addedTask::class.simpleName}")
-                    Log.d("HomeViewModel", "addedTask value: $addedTask")
                     loadTasks()
 
                     state.copy(
@@ -173,14 +112,13 @@ class HomeViewModel(
     }
 
 
-
     override fun onUpdateStatusClick(task: TaskUi) {
 
         val nextStatus = getNextStatus(task.status)
 
         launchWithResult(
             action = {
-                task.id?.let { tasksServices.changeTaskStatus(it,nextStatus.name) }
+                task.id?.let { tasksServices.changeTaskStatus(it, nextStatus.name) }
             },
             onSuccess = {
                 updateState {
@@ -196,14 +134,15 @@ class HomeViewModel(
                             it.doneTasksCount - 1 else it.doneTasksCount
                     )
                 }
-                updateTaskStatus(task,nextStatus)
+                updateTaskStatus(task, nextStatus)
             },
             onError = { handleHomeError(it) },
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
     }
-    private fun updateTaskStatus(task: TaskUi,nextStatus:Task.Status){
+
+    private fun updateTaskStatus(task: TaskUi, nextStatus: Task.Status) {
         when (nextStatus) {
             Task.Status.IN_PROGRESS -> {
                 updateState {
@@ -223,7 +162,7 @@ class HomeViewModel(
                 }
             }
 
-            else -> {  }
+            else -> {}
         }
     }
 
@@ -270,7 +209,7 @@ class HomeViewModel(
         updateState { it.copy(addedTask = it.addedTask?.copy(date = newDate)) }
     }
 
-    override fun onCategoryClick(category: Category) {
+    override fun onCategoryClick(category: CategoryUi) {
         updateState { it.copy(addedTask = it.addedTask?.copy(category = category)) }
     }
 

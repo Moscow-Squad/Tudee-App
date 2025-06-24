@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.screen.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -82,13 +83,13 @@ fun HomeContent(
                         todoTasksCount = uiState.todoTasksCount,
                         inProgressTasksCount = uiState.inProgressTasksCount,
                         doneTasksCount = uiState.doneTasksCount,
-                        formattedDate =uiState.formattedDate?:"hhhhhhhhhh",
+                        formattedDate = uiState.formattedDate ?: "hhhhhhhhhh",
                     )
                 }
             }
             item {
                 if (uiState.todoTasks.isEmpty() &&
-                    uiState.inProgressTasks.isEmpty()  &&
+                    uiState.inProgressTasks.isEmpty() &&
                     uiState.doneTasks.isEmpty()
                 ) {
                     // TODO: handle empty State
@@ -141,106 +142,107 @@ fun HomeContent(
                 }
             }
 
-    }
-
-    CustomFAB(
-        onClick = { interactionListener.onFloatingActionButtonClick() },
-        icon = R.drawable.ic_add_task
-    )
-}
-
-if (uiState.showTaskDetailsBottomSheet) {
-    uiState.selectedTask?.let { task->
-        TaskDetailsBottomSheet(
-            task = task,
-            onDismiss = { interactionListener.onDismissDetailsBottomSheet() },
-            onEditClick = { interactionListener.onEditTaskIconClick(task) },
-            onMoveClick = { interactionListener.onUpdateStatusClick(task) }
-        )
-    }
-}
-
-if (uiState.showEditTaskBottomSheet) {
-    EditTaskBottomSheet(
-        modifier = Modifier,
-        isVisible = true,
-        taskTitle = uiState.selectedTask!!.title,
-        onTaskTitleChange = {
-            interactionListener.onTitleChange(it)
-        },
-        taskDescription = uiState.selectedTask.description,
-
-        onTaskDescriptionChange = {
-            interactionListener.onDescriptionChange(it)
-        },
-        selectedPriority = uiState.selectedTask.priority,
-        onPrioritySelected = {
-            interactionListener.onPriorityClick(it)
-        },
-        categories = uiState.categories,
-        selectedCategory = uiState.selectedTask.category ?: CategoryUi(
-            id = 0,
-            title = "",
-            iconUrl = "",
-            isPredefined = false,
-            countOfTasks = 10
-        ),
-        onCategorySelected = {
-            interactionListener.onCategoryClick(it)
-        },
-        selectedDate = uiState.selectedTask.date.asLong(),
-        onDateSelected = {
-            interactionListener.onDateChange(uiState.selectedTask.date)
-        },
-        onDismiss = {
-            interactionListener.onDismissEditBottomSheet()
-        },
-        onSaveTask = {
-            interactionListener.onSaveEditTaskClick(uiState.selectedTask)
-        },
-    )
-}
-
-if (uiState.showAddTaskBottomSheet) {
-    AddTaskBottomSheet(
-        modifier = Modifier,
-        isVisible = true,
-        taskTitle = uiState.selectedTask!!.title,
-        onTaskTitleChange = {
-            interactionListener.onTitleChange(it)
-        },
-        taskDescription = uiState.selectedTask.description,
-        onTaskDescriptionChange = {
-            interactionListener.onDescriptionChange(it)
-        },
-        selectedPriority = uiState.selectedTask.priority,
-        onPrioritySelected = {
-            interactionListener.onPriorityClick(it)
-        },
-        categories = uiState.categories,
-        selectedCategory = uiState.selectedTask.category ?: CategoryUi(
-            id = 0,
-            title = "",
-            iconUrl = "",
-            isPredefined = false,
-            countOfTasks = 10
-        ),
-        onCategorySelected = {
-            interactionListener.onCategoryClick(it)
-        },
-        selectedDate = uiState.selectedTask.date.asLong(),
-        onDateSelected = {
-            interactionListener.onDateChange(uiState.selectedTask.date)
-        },
-        onDismiss = {
-            interactionListener.onDismissAddBottomSheet()
-        },
-        onSaveTask = {
-            interactionListener.onAddTask(uiState.selectedTask)
         }
 
-    )
-}
+        CustomFAB(
+            onClick = { interactionListener.onFloatingActionButtonClick() },
+            icon = R.drawable.ic_add_task
+        )
+    }
+
+    if (uiState.showTaskDetailsBottomSheet) {
+        uiState.addedTask?.let { task ->
+            TaskDetailsBottomSheet(
+                task = task,
+                onDismiss = { interactionListener.onDismissDetailsBottomSheet() },
+                onEditClick = { interactionListener.onEditTaskIconClick(task) },
+                onMoveClick = { interactionListener.onUpdateStatusClick(task) }
+            )
+        }
+    }
+
+    if (uiState.showEditTaskBottomSheet) {
+        EditTaskBottomSheet(
+            modifier = Modifier,
+            isVisible = true,
+            taskTitle = uiState.addedTask?.title ?: "",
+            onTaskTitleChange = {
+                interactionListener.onTitleChange(it)
+            },
+            taskDescription = uiState.addedTask?.description  ?: "",
+
+            onTaskDescriptionChange = {
+                interactionListener.onDescriptionChange(it)
+            },
+            selectedPriority = uiState.addedTask?.priority,
+            onPrioritySelected = {
+                interactionListener.onPriorityClick(it)
+            },
+            categories = uiState.categories,
+            selectedCategory = uiState.addedTask?.category,
+            onCategorySelected = {
+                interactionListener.onCategoryClick(it)
+            },
+            selectedDate = uiState.addedTask?.date?.asLong(),
+            onDateSelected = { newDateMillis ->
+                if (newDateMillis != null) {
+                    val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
+                        .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
+                    interactionListener.onDateChange(newDate)
+                }
+            },
+            onDismiss = {
+                interactionListener.onDismissEditBottomSheet()
+            },
+            onSaveTask = {
+                uiState.addedTask?.let { task ->
+                    interactionListener.onSaveEditTaskClick(task)
+                }
+            },
+        )
+    }
+
+    if (uiState.showAddTaskBottomSheet) {
+        AddTaskBottomSheet(
+            modifier = Modifier,
+            isVisible = true,
+            taskTitle = uiState.addedTask?.title ?: "",
+            onTaskTitleChange = {
+                Log.e("hdhhdhdhdhhd", "HomeContent: $it", )
+                interactionListener.onTitleChange(it)
+            },
+            taskDescription = uiState.addedTask?.description ?: "",
+            onTaskDescriptionChange = {
+                interactionListener.onDescriptionChange(it)
+            },
+            selectedPriority = uiState.addedTask?.priority,
+            onPrioritySelected = {
+                interactionListener.onPriorityClick(it)
+            },
+            categories = uiState.categories,
+            selectedCategory = uiState.addedTask?.category,
+            onCategorySelected = {
+                interactionListener.onCategoryClick(it)
+            },
+            selectedDate = uiState.addedTask?.date?.asLong(),
+            onDateSelected = { newDateMillis ->
+                if (newDateMillis != null) {
+                    val newDate = kotlinx.datetime.Instant.fromEpochMilliseconds(newDateMillis)
+                        .toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault())
+                    interactionListener.onDateChange(newDate)
+                }
+            },
+            onDismiss = {
+                interactionListener.onDismissAddBottomSheet()
+            },
+            onSaveTask = {
+                uiState.addedTask?.let { task ->
+                    interactionListener.onAddTask(task)
+                }
+            }
+
+        )
+    }
 }
 
 

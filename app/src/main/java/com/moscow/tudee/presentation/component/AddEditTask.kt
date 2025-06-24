@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,27 +17,29 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
@@ -219,7 +222,7 @@ fun TaskBottomSheet(
                                             icon = if (category.isPredefined) painterResource(
                                                 getPredefinedIconRes(category.title)
                                             )
-                                            else rememberAsyncImagePainter(category.iconUri),
+                                            else rememberAsyncImagePainter(category.iconUrl),
                                             label = category.title,
                                             selected = selectedCategory?.id == category.id,
                                             modifier = Modifier
@@ -338,7 +341,7 @@ fun EditTaskBottomSheet(
     onTaskTitleChange: (String) -> Unit,
     taskDescription: String,
     onTaskDescriptionChange: (String) -> Unit,
-    selectedPriority: Priority,
+    selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
     categories: List<CategoryUi>,
     selectedCategory: CategoryUi?,
@@ -377,9 +380,9 @@ fun EditTaskBottomSheet(
 @Composable
 fun TaskBottomSheetPreview() {
     val mockCategories = listOf(
-        Category(id = 1, title = "Work", iconUri = "", isPredefined = false, countOfTasks = 0),
-        Category(id = 2, title = "Personal", iconUri = "", isPredefined = false, countOfTasks = 0),
-        Category(id = 3, title = "Study", iconUri = "", isPredefined = false, countOfTasks = 0)
+        CategoryUi(id = 1, title = "Work", iconUrl = "", isPredefined = false, countOfTasks = 0),
+        CategoryUi(id = 2, title = "Personal", iconUrl = "", isPredefined = false, countOfTasks = 0),
+        CategoryUi(id = 3, title = "Study", iconUrl = "", isPredefined = false, countOfTasks = 0)
     )
 
     var taskTitle by remember { mutableStateOf("My Task") }

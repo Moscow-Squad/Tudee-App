@@ -14,6 +14,7 @@ data class HomeState(
     val doneTasksCount: Int = 0,
     val inProgressTasksCount: Int = 0,
     val selectedTask: TaskUi? = null,
+    val addedTask: TaskUi? = null,
     val categories: List<CategoryUi> = emptyList(),
     val showAddTaskBottomSheet: Boolean = false,
     val showEditTaskBottomSheet: Boolean = false,

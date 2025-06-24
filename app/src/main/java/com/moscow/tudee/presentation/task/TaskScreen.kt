@@ -33,7 +33,6 @@ import com.moscow.tudee.presentation.component.Tab
 import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.asLong
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
@@ -258,38 +257,38 @@ private fun TaskContent(
                 }
             } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
 
-            AddTaskBottomSheet(
-                isVisible = bottomSheetUiState.showAddTaskBottomSheet,
-                taskTitle = bottomSheetUiState.title,
-                onTaskTitleChange = { newTitle ->
-                    bottomSheetListener.onTitleChange(newTitle)
-                },
-                taskDescription = bottomSheetUiState.description,
-                onTaskDescriptionChange = { newDescription ->
-                    bottomSheetListener.onDescriptionChange(newDescription)
-                },
-                selectedPriority = bottomSheetUiState.priority,
-                onPrioritySelected = { newPriority ->
-                    bottomSheetListener.onPriorityClick(newPriority)
-                },
-                categories = bottomSheetUiState.availableCategories,
-                selectedCategory = bottomSheetUiState.category,
-                onCategorySelected = { newCategory ->
-                    bottomSheetListener.onCategoryClick(newCategory)
-                },
-                selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
-                    .toEpochMilliseconds(),
-                onDateSelected = { newDate ->
-                    newDate?.let {
-                        val instant = Instant.fromEpochMilliseconds(newDate)
-                        val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-                        bottomSheetListener.onDateChange(date)
-                    }
-                },
-                onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
-                onCancel = { bottomSheetListener.onCancelAddTask() },
-                onSaveTask = { bottomSheetListener.onAddTask() },
-            )
+//            AddTaskBottomSheet(
+//                isVisible = bottomSheetUiState.showAddTaskBottomSheet,
+//                taskTitle = bottomSheetUiState.title,
+//                onTaskTitleChange = { newTitle ->
+//                    bottomSheetListener.onTitleChange(newTitle)
+//                },
+//                taskDescription = bottomSheetUiState.description,
+//                onTaskDescriptionChange = { newDescription ->
+//                    bottomSheetListener.onDescriptionChange(newDescription)
+//                },
+//                selectedPriority = bottomSheetUiState.priority,
+//                onPrioritySelected = { newPriority ->
+//                    bottomSheetListener.onPriorityClick(newPriority)
+//                },
+//                categories = bottomSheetUiState.availableCategories,
+//                selectedCategory = bottomSheetUiState.category,
+//                onCategorySelected = { newCategory ->
+//                    bottomSheetListener.onCategoryClick(newCategory)
+//                },
+//                selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
+//                    .toEpochMilliseconds(),
+//                onDateSelected = { newDate ->
+//                    newDate?.let {
+//                        val instant = Instant.fromEpochMilliseconds(newDate)
+//                        val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+//                        bottomSheetListener.onDateChange(date)
+//                    }
+//                },
+//                onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
+//                onCancel = { bottomSheetListener.onCancelAddTask() },
+//                onSaveTask = { bottomSheetListener.onAddTask() },
+//            )
         }
     }
 }
