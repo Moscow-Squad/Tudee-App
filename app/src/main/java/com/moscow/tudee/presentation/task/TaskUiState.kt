@@ -1,13 +1,11 @@
 package com.moscow.tudee.presentation.task
 
 import kotlinx.datetime.LocalDate
-
 import com.moscow.tudee.domain.entity.Task
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-
 
 data class TaskUiState(
     val selectedDate: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
@@ -18,5 +16,5 @@ data class TaskUiState(
     val currentYear: Int = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year,
     val monthDays: List<LocalDate> = emptyList(),
     val showDeletedTaskNotification: Boolean = false,
-    val isTaskDeleted: Boolean? = null
+    val isTaskDeleted: Boolean? = null,
 )
