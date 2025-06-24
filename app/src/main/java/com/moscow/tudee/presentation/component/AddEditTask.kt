@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task.Priority
@@ -39,6 +40,7 @@ import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
 fun TaskBottomSheet(
@@ -49,7 +51,7 @@ fun TaskBottomSheet(
     onTaskTitleChange: (String) -> Unit,
     taskDescription: String,
     onTaskDescriptionChange: (String) -> Unit,
-    selectedPriority: Priority,
+    selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
     categories: List<Category>,
     selectedCategory: Category?,
@@ -57,6 +59,7 @@ fun TaskBottomSheet(
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
+    onCancel: () -> Unit = onDismiss,
     onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {},
     addSuccessMessage: String = stringResource(R.string.add_task_successfully),
@@ -72,10 +75,12 @@ fun TaskBottomSheet(
 
             val isTitleValid = taskTitle.trim().isNotBlank()
             val isDescriptionValid = taskDescription.trim().isNotBlank()
+            val isPriorityValid = selectedPriority != null
             val isDateValid = selectedDate != null
             val isCategoryValid =
                 selectedCategory != null && selectedCategory.id != null && selectedCategory.id!! > 0
-            val isFormValid = isTitleValid && isDescriptionValid && isDateValid && isCategoryValid
+            val isFormValid =
+                isTitleValid && isDescriptionValid && isDateValid && isCategoryValid && isPriorityValid
 
 
             Box(modifier = modifier.fillMaxSize()) {
@@ -220,7 +225,10 @@ fun TaskBottomSheet(
                                         modifier = Modifier.weight(1f)
                                     ) {
                                         CategoryCard(
-                                            icon = painterResource(id = R.drawable.ic_flag),
+                                            icon = if (category.isPredefined) painterResource(
+                                                getPredefinedIconRes(category.title)
+                                            )
+                                            else rememberAsyncImagePainter(category.iconUri),
                                             label = category.title,
                                             selected = selectedCategory?.id == category.id,
                                             modifier = Modifier
@@ -280,7 +288,7 @@ fun TaskBottomSheet(
 
                     SecondaryButton(
                         text = stringResource(R.string.cancel),
-                        onClick = { onDismiss() },
+                        onClick = { onCancel },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 12.dp)
@@ -299,7 +307,7 @@ fun AddTaskBottomSheet(
     onTaskTitleChange: (String) -> Unit,
     taskDescription: String,
     onTaskDescriptionChange: (String) -> Unit,
-    selectedPriority: Priority,
+    selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
     categories: List<Category>,
     selectedCategory: Category?,
@@ -307,6 +315,7 @@ fun AddTaskBottomSheet(
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
+    onCancel: () -> Unit = onDismiss,
     onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {},
 ) {
@@ -326,6 +335,7 @@ fun AddTaskBottomSheet(
         selectedDate = selectedDate,
         onDateSelected = onDateSelected,
         onDismiss = onDismiss,
+        onCancel = onCancel,
         onSaveTask = onSaveTask,
         onShowSnackBar = onShowSnackBar,
         addSuccessMessage = stringResource(R.string.add_task_successfully),
