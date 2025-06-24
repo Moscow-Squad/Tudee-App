@@ -258,45 +258,40 @@ private fun TaskContent(
                 }
             } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
 
-            if (bottomSheetUiState.showAddTaskBottomSheet) {
-                bottomSheetUiState.priority?.let { onTaskDescriptionChange ->
-                    bottomSheetUiState.category?.let { categories ->
-                        AddTaskBottomSheet(
-                            isVisible = bottomSheetUiState.showAddTaskBottomSheet,
-                            taskTitle = bottomSheetUiState.title,
-                            onTaskTitleChange = { newTitle ->
-                                bottomSheetListener.onTitleChange(newTitle)
-                            },
-                            taskDescription = bottomSheetUiState.description,
-                            onTaskDescriptionChange = { newDescription ->
-                                bottomSheetListener.onDescriptionChange(newDescription)
-                            },
-                            selectedPriority = onTaskDescriptionChange,
-                            onPrioritySelected = { newPriority ->
-                                bottomSheetListener.onPriorityClick(newPriority)
-                            },
-                            categories = bottomSheetUiState.availableCategories,
-                            selectedCategory = categories,
-                            onCategorySelected = { newCategory ->
-                                bottomSheetListener.onCategoryClick(newCategory)
-                            },
-                            selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
-                                .toEpochMilliseconds(),
-                            onDateSelected = { newDate ->
-                                val instant = Instant.fromEpochMilliseconds(newDate)
-                                val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-                                bottomSheetListener.onDateChange(date)
-                            },
-                            onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
-                            onSaveTask = { bottomSheetListener.onAddTask() },
-                        )
+            AddTaskBottomSheet(
+                isVisible = bottomSheetUiState.showAddTaskBottomSheet,
+                taskTitle = bottomSheetUiState.title,
+                onTaskTitleChange = { newTitle ->
+                    bottomSheetListener.onTitleChange(newTitle)
+                },
+                taskDescription = bottomSheetUiState.description,
+                onTaskDescriptionChange = { newDescription ->
+                    bottomSheetListener.onDescriptionChange(newDescription)
+                },
+                selectedPriority = bottomSheetUiState.priority,
+                onPrioritySelected = { newPriority ->
+                    bottomSheetListener.onPriorityClick(newPriority)
+                },
+                categories = bottomSheetUiState.availableCategories,
+                selectedCategory = bottomSheetUiState.category,
+                onCategorySelected = { newCategory ->
+                    bottomSheetListener.onCategoryClick(newCategory)
+                },
+                selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
+                    .toEpochMilliseconds(),
+                onDateSelected = { newDate ->
+                    newDate?.let {
+                        val instant = Instant.fromEpochMilliseconds(newDate)
+                        val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                        bottomSheetListener.onDateChange(date)
                     }
-                }
-            }
-
+                },
+                onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
+                onCancel = { bottomSheetListener.onCancelAddTask() },
+                onSaveTask = { bottomSheetListener.onAddTask() },
+            )
         }
     }
-
 }
 
 @Preview(showBackground = true, apiLevel = 34)

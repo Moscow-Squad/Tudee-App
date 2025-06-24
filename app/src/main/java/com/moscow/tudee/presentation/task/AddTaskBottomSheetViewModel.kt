@@ -61,6 +61,10 @@ class AddTaskBottomSheetViewModel(
         updateState { it.copy(category = category) }
     }
 
+    override fun onCancelAddTask() {
+        updateState { AddTaskBottomSheetUiState() }
+    }
+
     override fun onAddTask() {
         launchWithResult(
             action = {
@@ -80,21 +84,84 @@ class AddTaskBottomSheetViewModel(
                     )
                 )
             },
-            onSuccess = {
-                updateState { it.copy(showAddTaskBottomSheet = false) }
-                sendEvent(AddTaskBottomSheetEvents.NotifyTaskAdded)
-            },
-            onError = {
-                onErrorAddTask(message = "Some error happened")
-                sendEvent(AddTaskBottomSheetEvents.NotifyTaskNotAdded)
-            },
-            onStart = { startLoading() },
-            onFinally = { endLoading() }
+            onSuccess = ::onAddTaskSuccess,
+            onError = ::onAddTaskError,
+            onStart = ::startLoading,
+            onFinally = ::endLoading
         )
+    }
+
+    private fun onAddTaskSuccess(response: Unit) {
+        updateState { AddTaskBottomSheetUiState() }
+        sendEvent(AddTaskBottomSheetEvents.NotifyTaskAdded)
+    }
+
+    private fun onAddTaskError(throwable: Throwable) {
+        onErrorAddTask(
+            message = "Error in adding task: ${throwable.message}"
+        )
+        sendEvent(AddTaskBottomSheetEvents.NotifyTaskNotAdded)
     }
 
     private fun onErrorAddTask(message: String) {
         updateState { it.copy(errorMessage = message) }
+    }
+
+    private fun loadCategories() {
+        launchWithResult(
+            action = ::loadCategoriesAction,
+            onSuccess = ::onLoadCategoriesSuccess,
+            onError = ::onLoadCategoriesError,
+            onStart = ::startLoading,
+            onFinally = ::endLoading
+        )
+    }
+
+    private suspend fun loadCategoriesAction(): List<Category> {
+        return categoryServices.getCategories()
+    }
+
+    private fun onLoadCategoriesSuccess(response: List<Category>) {
+        updateState { it.copy(availableCategories = response) }
+    }
+
+    private fun onLoadCategoriesError(throwable: Throwable) {
+        onErrorLoadCategories(
+            errorMessage = "Error in loading available categories: ${throwable.message}"
+        )
+    }
+
+    private fun onErrorLoadCategories(errorMessage: String) {
+        updateState { it.copy(errorMessage = errorMessage) }
+    }
+
+
+    private fun loadCategories() {
+        launchWithResult(
+            action = ::loadCategoriesAction,
+            onSuccess = ::onLoadCategoriesSuccess,
+            onError = ::onLoadCategoriesError,
+            onStart = ::startLoading,
+            onFinally = ::endLoading
+        )
+    }
+
+    private suspend fun loadCategoriesAction(): List<Category> {
+        return categoryServices.getCategories()
+    }
+
+    private fun onLoadCategoriesSuccess(response: List<Category>) {
+        updateState { it.copy(availableCategories = response) }
+    }
+
+    private fun onLoadCategoriesError(throwable: Throwable) {
+        onErrorLoadCategories(
+            errorMessage = "Error in loading available categories: ${throwable.message}"
+        )
+    }
+
+    private fun onErrorLoadCategories(errorMessage: String) {
+        updateState { it.copy(errorMessage = errorMessage) }
     }
 
     private fun startLoading() {
