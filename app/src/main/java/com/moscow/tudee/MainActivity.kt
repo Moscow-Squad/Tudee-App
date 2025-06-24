@@ -11,8 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.moscow.tudee.presentation.designSystem.theme.ThemeState
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import com.moscow.tudee.presentation.task.TaskScreen
-import com.moscow.tudee.presentation.task.mockTaskViewModel
+import com.moscow.tudee.presentation.navigation.TudeeGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +29,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             TudeeTheme(state = themeState) {
-                TaskScreen(mockTaskViewModel())
-                //TudeeGraph()
+                TudeeGraph()
             }
         }
     }
