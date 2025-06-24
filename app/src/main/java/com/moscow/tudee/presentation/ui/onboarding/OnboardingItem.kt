@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,66 +25,61 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 
 @Composable
 fun OnboardingItem(
+    modifier: Modifier = Modifier,
     data: OnboardingData,
     onNext: () -> Unit
 ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = modifier
+            .padding(
+                top = 32.dp,
+                bottom = 60.dp
+            )
     ) {
-        Image(
-            painter = painterResource(id = data.imageRes),
-            contentDescription = "Tudee onboarding image",
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(37.dp))
-
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Surface(
+            shape = RoundedCornerShape(32.dp),
+            color = colors.onPrimaryCard,
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .border(
+                    width = 1.dp,
+                    color = colors.onPrimaryStroke,
+                    shape = RoundedCornerShape(32.dp)
+                )
+        ) {
             Column(
-                modifier = Modifier
-                    .padding(bottom = 27.dp)
-                    .fillMaxWidth()
-                    .background(color = colors.onPrimaryCard, shape = RoundedCornerShape(32.dp))
-                    .border(1.dp, colors.onPrimaryStroke, RoundedCornerShape(32.dp))
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 24.dp,
-                        bottom = 48.dp
-                    ),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.padding(
+                    top = 24.dp,
+                    bottom = 48.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                )
             ) {
                 TudeeText(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp),
                     text = data.title,
                     style = Theme.textStyle.title.medium,
                     color = colors.title,
+                    modifier = Modifier.padding(bottom = 16.dp),
                     textAlign = TextAlign.Center,
-                    maxLines = 2
                 )
                 TudeeText(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
                     text = data.description,
                     style = Theme.textStyle.body.medium,
                     color = colors.body,
                     textAlign = TextAlign.Center,
-                    maxLines = 3
                 )
             }
+        }
             val layoutDirection = LocalLayoutDirection.current
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
+                    .offset(y = (28).dp)
                     .graphicsLayer {
                         if (layoutDirection == LayoutDirection.Rtl) {
                             scaleX = -1f
@@ -97,19 +93,19 @@ fun OnboardingItem(
                     icon = R.drawable.arrow_right_double
                 )
             }
-        }
     }
 }
 
 @Preview
 @Composable
-private fun OnboardingItemPreview() {
+fun OnboardingItemPreview() {
     OnboardingItem(
         data = OnboardingData(
-            imageRes = R.drawable.image_container_1,
+            imageRes = R.drawable.splash_logo_img,
             title = "Welcome to Tudee",
-            description = "Your personal assistant for managing tasks and staying organized."
+            description = "Your personal task manager to help you stay organized and productive."
         ),
         onNext = {}
     )
 }
+

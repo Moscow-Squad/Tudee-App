@@ -40,7 +40,7 @@ fun DotsIndicator(
                 modifier = Modifier
                     .weight(1f)
                     .height(dotHeight)
-                    .clip(RoundedCornerShape(percent = 50))
+                    .clip(RoundedCornerShape(100.dp))
                     .background(if (index == selectedIndex) selectedColor else unSelectedColor)
             )
         }
@@ -57,8 +57,8 @@ fun DotsIndicatorPreview() {
             .padding(16.dp)
     ) {
         DotsIndicator(
-            totalDots = 5,
-            selectedIndex = 2,
+            totalDots = 3,
+            selectedIndex = 1,
             modifier = Modifier.align(Alignment.Center),
             dotSpacing = 12.dp,
             dotHeight = 6.dp

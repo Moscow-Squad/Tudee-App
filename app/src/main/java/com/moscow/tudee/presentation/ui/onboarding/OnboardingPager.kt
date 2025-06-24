@@ -1,8 +1,10 @@
 package com.moscow.tudee.presentation.ui.onboarding
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -13,41 +15,44 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnboardingPager(
     pages: List<OnboardingData>,
-    pagerState: PagerState,
     onComplete: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val pagerState = rememberPagerState(initialPage = 0) { pages.size }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth()
-        ) { page ->
-            OnboardingItem(
-                data = pages[page],
-                onNext = {
-                    scope.launch {
-                        if (page < pages.lastIndex) {
-                            pagerState.animateScrollToPage(page + 1)
-                        } else {
-                            onComplete()
-                        }
-                    }
-                }
+            modifier = Modifier.weight(1f)
+        ) { index ->
+            OnBoardingImage(
+                page = pages[index],
             )
         }
-
-        DotsIndicator(
-            totalDots = pages.size,
-            selectedIndex = pagerState.currentPage,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 24.dp)
+        OnboardingItem(
+            data = pages[pagerState.currentPage],
+            onNext = {
+                scope.launch {
+                    if (pagerState.currentPage < pages.lastIndex){
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
+                    else {
+                        onComplete()
+                    }
+                }
+            }
         )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            DotsIndicator(
+                totalDots = pages.size,
+                selectedIndex = pagerState.currentPage
+            )
+        }
     }
 }
