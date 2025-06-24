@@ -77,3 +77,7 @@ fun Task.Status.getColor(): Color {
         Task.Status.DONE -> Theme.colors.greenAccent
     }
 }
+fun LocalDateTime.asLong(): Long {
+    // TODO
+    return 0L
+}
