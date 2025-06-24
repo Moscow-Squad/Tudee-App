@@ -32,8 +32,8 @@
     <string name="calendar_icon">Calendar Icon</string>
     <string name="right_arrow">right arrow</string>
     <string name="done">Done</string>
-    <string name="in_progress">In progress</string>
-    <string name="to_do">To-Do</string>
+    <string name="in_progress_status">In progress</string>
+    <string name="to_do">To Do</string>
     <string name="today">today, %1$s</string>
     <string name="delete_item">Delete item</string>
     <string name="splash_background">background light</string>
