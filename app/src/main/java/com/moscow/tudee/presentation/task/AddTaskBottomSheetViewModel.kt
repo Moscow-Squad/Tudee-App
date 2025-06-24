@@ -76,7 +76,7 @@ class AddTaskBottomSheetViewModel(
     }
 
     private fun onAddTaskSuccess(response: Unit) {
-        updateState { it.copy(showAddTaskBottomSheet = false) }
+        updateState { AddTaskBottomSheetUiState() }
     }
 
     private fun onAddTaskError(throwable: Throwable) {

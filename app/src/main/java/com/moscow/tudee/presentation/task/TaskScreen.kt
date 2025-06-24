@@ -280,6 +280,7 @@ private fun TaskContent(
                     }
                 },
                 onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
+                onCancel = { bottomSheetListener.onCancelAddTask() },
                 onSaveTask = { bottomSheetListener.onAddTask() },
             )
         }
