@@ -276,9 +276,11 @@ private fun TaskContent(
                             selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
                                 .toEpochMilliseconds(),
                             onDateSelected = { newDate ->
-                                val instant = Instant.fromEpochMilliseconds(newDate)
-                                val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-                                bottomSheetListener.onDateChange(date)
+                                newDate?.let {
+                                    val instant = Instant.fromEpochMilliseconds(newDate)
+                                    val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                                    bottomSheetListener.onDateChange(date)
+                                }
                             },
                             onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
                             onSaveTask = { bottomSheetListener.onAddTask() },
@@ -286,10 +288,8 @@ private fun TaskContent(
                     }
                 }
             }
-
         }
     }
-
 }
 
 @Preview(showBackground = true, apiLevel = 34)
