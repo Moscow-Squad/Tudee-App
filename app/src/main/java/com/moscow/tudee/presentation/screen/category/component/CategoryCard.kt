@@ -1,5 +1,6 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.screen.category.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut

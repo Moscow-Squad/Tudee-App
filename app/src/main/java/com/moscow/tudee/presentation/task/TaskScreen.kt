@@ -24,8 +24,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.DayItem
-import com.moscow.tudee.presentation.component.Tab
-import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.task.components.EmptyScreen

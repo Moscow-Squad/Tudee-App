@@ -55,7 +55,7 @@ fun HomeState.HomeTask.toTask(): Task {
 fun Task.Status.getText(): String {
     return when (this) {
         Task.Status.TODO -> stringResource(R.string.to_do)
-        Task.Status.IN_PROGRESS -> stringResource(R.string.in_progress)
+        Task.Status.IN_PROGRESS -> stringResource(R.string.in_progress_status)
         Task.Status.DONE -> stringResource(R.string.done)
     }
 }
@@ -77,7 +77,6 @@ fun Task.Status.getColor(): Color {
         Task.Status.DONE -> Theme.colors.greenAccent
     }
 }
-
 fun LocalDateTime.asLong(): Long {
     // TODO
     return 0L

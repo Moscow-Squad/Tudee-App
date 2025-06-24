@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.component
+package com.moscow.tudee.presentation.screen.category.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -10,6 +10,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +46,7 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 data class TabItem(val label: String, val count: Int, val status: Task.Status)
 
 @Composable
-fun Tabs(
+fun CategoryTabs(
     tabs: List<TabItem>,
     selectedStatus: Task.Status,
     onTabClick: (Task.Status) -> Unit,
@@ -86,7 +87,11 @@ fun Tab(
     )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.clickable(onClick = onClick)
+        modifier = modifier.clickable(
+            onClick = onClick,
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() },
+        )
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -145,7 +150,7 @@ fun TabsPreview() {
         TabItem("Done", 58, Task.Status.DONE)
     )
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        Tabs(
+        CategoryTabs(
             tabs = sampleTabs,
             selectedStatus = selectedStatus,
             onTabClick = { selectedStatus = it }
