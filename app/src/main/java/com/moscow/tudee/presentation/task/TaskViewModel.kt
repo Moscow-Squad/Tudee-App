@@ -100,16 +100,25 @@ open class TaskViewModel(
         }
     }
 
+
     private fun updateMonth(date: LocalDate) {
+        val newMonthDays = generateMonthDays(date.year, date.monthNumber)
+
         _uiState.update {
+            val newSelectedDate = if (it.selectedDate.year == date.year && it.selectedDate.month == date.month) {
+                it.selectedDate
+            } else {
+                date
+            }
             it.copy(
                 currentMonth = date.month,
                 currentYear = date.year,
-                monthDays = generateMonthDays(date.year, date.monthNumber),
-                selectedDate = date
+                monthDays = newMonthDays,
+                selectedDate = newSelectedDate
             )
         }
-        selectDate(date)
+
+        selectDate(_uiState.value.selectedDate)
     }
 
     private fun generateMonthDays(year: Int, month: Int): List<LocalDate> {

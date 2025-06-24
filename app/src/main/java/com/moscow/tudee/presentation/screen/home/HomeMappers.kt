@@ -38,12 +38,14 @@ fun Priority.getColor(): Color {
 }
 
 fun HomeState.HomeTask.toTask(): Task {
+    val category = category
+        ?: throw IllegalStateException("Cannot map HomeTask(id=$id) → Task: category was null")
     return Task(
         id = id,
         title = title,
         description = description,
         priority = priority,
-        categoryId = category!!.id!!,
+        category = category,
         status = status,
         date = date
     )
