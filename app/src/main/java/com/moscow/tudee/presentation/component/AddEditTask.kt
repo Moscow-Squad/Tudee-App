@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task.Priority
-import com.moscow.tudee.presentation.category.getPriorityFromString
+import com.moscow.tudee.presentation.screen.category.getPriorityFromString
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard

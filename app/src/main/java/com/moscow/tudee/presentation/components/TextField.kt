@@ -97,7 +97,7 @@ fun TudeeTextField(
                 interactionSource = interactionSource,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             )
         }
     }
@@ -123,7 +123,7 @@ private fun TudeeBasicTextField(
             color = Theme.colors.body,
         ),
         cursorBrush = SolidColor(Theme.colors.primary),
-        modifier = modifier
+        modifier = modifier,
     ) { innerTextField ->
         Box {
             if (value.isEmpty()) {

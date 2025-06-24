@@ -31,7 +31,6 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState
 import com.moscow.tudee.presentation.screen.home.getBackgroundColor
 import com.moscow.tudee.presentation.screen.home.getColor
-import com.moscow.tudee.presentation.screen.home.getIcon
 import com.moscow.tudee.presentation.screen.home.getText
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import kotlinx.datetime.toKotlinLocalDateTime

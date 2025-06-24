@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.category.CategoriesScreenState
-import com.moscow.tudee.presentation.category.getPriorityFromString
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.getPriorityFromString
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
