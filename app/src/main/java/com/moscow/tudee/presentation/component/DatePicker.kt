@@ -108,7 +108,10 @@ fun DatePickerModal(
                 selectedDayContainerColor = Theme.colors.primary,
                 todayContentColor = Theme.colors.primary,
                 todayDateBorderColor = Theme.colors.primary,
-                yearContentColor = Theme.colors.body
+                yearContentColor = Theme.colors.body,
+                dayContentColor = Theme.colors.title,
+                currentYearContentColor = Theme.colors.title,
+                navigationContentColor = Theme.colors.title,
             )
         )
     }

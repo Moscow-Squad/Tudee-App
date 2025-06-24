@@ -7,10 +7,8 @@ import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 sealed interface TaskUiEvent {
-
-    data class ShowDeleteResult(val success: Boolean) : TaskUiEvent
     data class ShowSnackBar(
-        val type: SnackBarType,
+        val snackBarUi: SnackBarUi
     ) : TaskUiEvent
 }
 data class SnackBar(

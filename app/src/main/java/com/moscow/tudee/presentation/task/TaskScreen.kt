@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
-import com.moscow.tudee.presentation.ObserveAsEvent
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
@@ -58,6 +57,7 @@ import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.task.components.Header
 import com.moscow.tudee.presentation.util.getPriorityBackground
 import com.moscow.tudee.presentation.util.iconRes
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -79,12 +79,19 @@ fun TaskScreen(
     val coroutineScope = rememberCoroutineScope()
     val showDatePicker by viewModel.showDatePicker.collectAsStateWithLifecycle()
     var showCustomSnackBar by remember { mutableStateOf(false) }
-    var snackBarType by remember { mutableStateOf(SnackBarType.SUCCESS) }
+    var snackBar: SnackBarUi by remember {
+        mutableStateOf(
+            SnackBarUi(
+                type = SnackBarType.SUCCESS,
+                messageId = R.string.add_task_successfully
+            )
+        )
+    }
 
     LaunchedEffect(Unit) {
-        viewModel.uiEvent.collect { event ->
+        viewModel.uiEvent.collectLatest { event ->
             if (event is TaskUiEvent.ShowSnackBar) {
-                snackBarType = event.type
+                snackBar = event.snackBarUi
                 showCustomSnackBar = true
                 coroutineScope.launch {
                     kotlinx.coroutines.delay(3000)
@@ -94,10 +101,18 @@ fun TaskScreen(
         }
     }
 
-    ObserveAsEvent(addTaskBottomSheetViewModel.uiEvent) { event ->
-        when (event) {
-            AddTaskBottomSheetEvents.NotifyTaskAdded -> Unit
-            AddTaskBottomSheetEvents.NotifyTaskNotAdded -> Unit
+    LaunchedEffect(Unit) {
+        addTaskBottomSheetViewModel.uiEvent.collect { event ->
+            snackBar = event.snackBarUi
+            showCustomSnackBar = true
+            when (event) {
+                AddTaskBottomSheetEvents.NotifyTaskAdded -> viewModel.selectDate(uiState.selectedDate.date)
+                AddTaskBottomSheetEvents.NotifyTaskNotAdded -> Unit
+            }
+            coroutineScope.launch {
+                kotlinx.coroutines.delay(3000)
+                showCustomSnackBar = false
+            }
         }
     }
 
@@ -112,9 +127,7 @@ fun TaskScreen(
                 Text(
                     text = "Task",
                     style = Theme.textStyle.title.large,
-                    color = Theme.colors.title.copy(
-                        alpha = 0.87f
-                    )
+                    color = Theme.colors.title
                 )
             }
         },
@@ -126,9 +139,10 @@ fun TaskScreen(
             )
         }
     ) { innerPadding ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
             TaskContent(
                 modifier = Modifier
@@ -140,22 +154,29 @@ fun TaskScreen(
                 showDatePicker = showDatePicker,
             )
             if (showCustomSnackBar) {
-                val visuals = getSnackBarVisuals(snackBarType)
+                val visuals = getSnackBarVisuals(snackBar.type)
                 AnimatedVisibility(
                     visible = true,
                     enter = slideInVertically { -100 } + fadeIn(),
                     exit = slideOutVertically { -100 } + fadeOut(),
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(top = 16.dp)
                 ) {
                     SnackBar(
                         icon = painterResource(id = visuals.icon),
-                        message = visuals.message,
+                        message = stringResource(snackBar.messageId),
                         iconBackground = visuals.iconBackground,
                         iconTint = visuals.iconTint
                     )
                 }
+            }
+
+            if (showDatePicker) {
+                DatePickerModal(
+                    onDateSelected = { viewModel.updateMonthFromPicker(it) },
+                    onDismiss = viewModel::dismissDatePicker,
+                    selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO).toEpochMilliseconds()
+                )
             }
         }
     }
@@ -176,7 +197,8 @@ private fun TaskContent(
         Task.Status.DONE -> 2
     }
 
-    val inProgressCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.IN_PROGRESS }
+    val inProgressCount =
+        uiState.allTasksForSelectedDate.count { it.status == Task.Status.IN_PROGRESS }
     val todoCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.TODO }
     val doneCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.DONE }
 
@@ -186,7 +208,12 @@ private fun TaskContent(
         Tab("Done", doneCount)
     )
 
-    val currentMonthYear = "${uiState.currentMonth.getDisplayName(TextStyle.FULL, Locale.getDefault())}, ${uiState.currentYear}"
+    val currentMonthYear = "${
+        uiState.currentMonth.getDisplayName(
+            TextStyle.FULL,
+            Locale.getDefault()
+        )
+    }, ${uiState.currentYear}"
     val lazyListState = rememberLazyListState()
     val isAtStart by remember { derivedStateOf { lazyListState.firstVisibleItemIndex == 0 } }
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
@@ -200,14 +227,6 @@ private fun TaskContent(
             .background(Theme.colors.surface)
             .fillMaxSize()
     ) {
-        if (showDatePicker) {
-            DatePickerModal(
-                onDateSelected = { interactionListener.updateMonthFromPicker(it) },
-                onDismiss = interactionListener::dismissDatePicker,
-                selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO).toEpochMilliseconds()
-            )
-        }
-
         Header(
             date = currentMonthYear,
             onBackClick = interactionListener::previousMonth,
@@ -227,7 +246,8 @@ private fun TaskContent(
                 )
         ) {
             items(uiState.monthDays) { date ->
-                val dayName = date.dayOfWeek.name.take(3).lowercase().replaceFirstChar { it.titlecase(Locale.ROOT) }
+                val dayName = date.dayOfWeek.name.take(3).lowercase()
+                    .replaceFirstChar { it.titlecase(Locale.ROOT) }
                 val isSelected = date == uiState.selectedDate.date
                 DayItem(
                     day = dayName,
@@ -270,7 +290,8 @@ private fun TaskContent(
                             description = task.description,
                         ) {
                             PriorityChip(
-                                text = task.priority.name.lowercase().replaceFirstChar { it.uppercase() },
+                                text = task.priority.name.lowercase()
+                                    .replaceFirstChar { it.uppercase() },
                                 backgroundColor = task.priority.getPriorityBackground(),
                                 icon = painterResource(task.priority.iconRes()),
                                 selected = true
@@ -328,8 +349,8 @@ private fun TaskContent(
     }
 }
 
-@Preview(showBackground = true,apiLevel = 33, uiMode = UI_MODE_NIGHT_NO)
-@Preview(showBackground = true,apiLevel = 33, uiMode = UI_MODE_NIGHT_YES)
+@Preview(showBackground = true, apiLevel = 33, uiMode = UI_MODE_NIGHT_NO)
+@Preview(showBackground = true, apiLevel = 33, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun TaskScreenPreview() {
     TudeeTheme {

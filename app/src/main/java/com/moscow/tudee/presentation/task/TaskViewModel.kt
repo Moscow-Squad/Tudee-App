@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.task
 
 import androidx.lifecycle.viewModelScope
+import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
@@ -22,23 +23,14 @@ import kotlinx.datetime.toLocalDateTime
 open class TaskViewModel(
     private val taskService: TasksServices
 ) : BaseViewModel<TaskUiState, TaskUiEvent>(TaskUiState()),
-    TaskScreenInteractionListener
-{
-    private val today: LocalDateTime =
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    TaskScreenInteractionListener {
     private val _showDatePicker = MutableStateFlow(false)
     val showDatePicker: StateFlow<Boolean> = _showDatePicker.asStateFlow()
 
     init {
-        updateState {
-            it.copy(
-                selectedDate = today,
-                monthDays = generateMonthDays(today.year, today.month.value),
-                currentMonth = today.month,
-                currentYear = today.year
-            )
-        }
+        loadTasks()
     }
+
     override fun showDatePicker() {
         _showDatePicker.value = true
     }
@@ -51,7 +43,7 @@ open class TaskViewModel(
         viewModelScope.launch {
             val tasksForDate = taskService.getTasksByDate(date)
             val selectedDate = LocalDateTime(date, LocalTime(0, 0, 0))
-            updateState  {
+            updateState {
                 it.copy(
                     selectedDate = selectedDate,
                     allTasksForSelectedDate = tasksForDate,
@@ -62,7 +54,7 @@ open class TaskViewModel(
     }
 
     override fun selectStatus(status: Task.Status) {
-        updateState {currentState ->
+        updateState { currentState ->
             val filtered = filterTasksByStatus(currentState.allTasksForSelectedDate, status)
             currentState.copy(
                 selectedStatus = status,
@@ -70,6 +62,7 @@ open class TaskViewModel(
             )
         }
     }
+
     override fun deleteTask(task: Task) {
         launchWithResult(
             action = { task.id?.let { taskService.deleteTask(it) } },
@@ -86,15 +79,23 @@ open class TaskViewModel(
                 }
                 sendEvent(
                     TaskUiEvent.ShowSnackBar(
-                        type = SnackBarType.SUCCESS,
+                        SnackBarUi(
+                            type = SnackBarType.SUCCESS,
+                            messageId = R.string.deleted_task_successfully
+                        )
                     )
                 )
 
 
             },
             onError = {
-                TaskUiEvent.ShowSnackBar(
-                    type = SnackBarType.ERROR,
+                sendEvent(
+                    TaskUiEvent.ShowSnackBar(
+                        SnackBarUi(
+                            type = SnackBarType.ERROR,
+                            messageId = R.string.some_error_happened
+                        )
+                    )
                 )
             }
         )
@@ -122,6 +123,22 @@ open class TaskViewModel(
             updateMonth(date)
         }
     }
+
+    private fun loadTasks() {
+        val today: LocalDateTime = Clock.System.now()
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+
+        updateState {
+            it.copy(
+                selectedDate = today,
+                monthDays = generateMonthDays(today.year, today.month.value),
+                currentMonth = today.month,
+                currentYear = today.year
+            )
+        }
+        selectDate(date = uiState.value.selectedDate.date)
+    }
+
     private fun updateMonth(date: LocalDate) {
         val newMonthDays = generateMonthDays(date.year, date.monthNumber)
         updateState {
