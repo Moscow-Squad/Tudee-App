@@ -1,5 +1,7 @@
 package com.moscow.tudee.presentation.designSystem.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,12 +43,12 @@ fun SnackBar(
             .padding(16.dp)
             .fillMaxWidth()
             .shadow(
-                elevation = 6.dp,
+                elevation = 4.dp,
                 shape = RoundedCornerShape(16.dp),
                 clip = false
             )
             .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
+            .background(Theme.colors.surfaceHigh)
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -72,7 +74,8 @@ fun SnackBar(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true,uiMode = UI_MODE_NIGHT_YES, apiLevel = 33)
+@Preview(showBackground = true,uiMode = UI_MODE_NIGHT_NO, apiLevel = 33)
 @Composable
 fun CustomSnackBarPreview() {
     TudeeTheme {

@@ -272,7 +272,8 @@ private fun TaskContent(
                             PriorityChip(
                                 text = task.priority.name.lowercase().replaceFirstChar { it.uppercase() },
                                 backgroundColor = task.priority.getPriorityBackground(),
-                                icon = painterResource(task.priority.iconRes())
+                                icon = painterResource(task.priority.iconRes()),
+                                selected = true
                             )
                         }
                     }
