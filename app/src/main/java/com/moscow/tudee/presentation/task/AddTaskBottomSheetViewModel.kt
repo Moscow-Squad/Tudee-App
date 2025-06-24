@@ -46,7 +46,7 @@ class AddTaskBottomSheetViewModel(
     }
 
     override fun onCancelAddTask() {
-        updateState { AddTaskBottomSheetUiState() }
+        updateState { AddTaskBottomSheetUiState(availableCategories = it.availableCategories) }
     }
 
     override fun onAddTask() {
@@ -76,7 +76,7 @@ class AddTaskBottomSheetViewModel(
     }
 
     private fun onAddTaskSuccess(response: Unit) {
-        updateState { AddTaskBottomSheetUiState() }
+        updateState { AddTaskBottomSheetUiState(availableCategories = it.availableCategories) }
         sendEvent(AddTaskBottomSheetEvents.NotifyTaskAdded)
     }
 
