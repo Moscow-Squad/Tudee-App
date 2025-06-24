@@ -1,5 +1,6 @@
 package com.moscow.tudee.data.service
 
+import com.moscow.tudee.data.exception.DataException
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.mapper.toCategory
@@ -22,7 +23,7 @@ class TasksServicesImpl(
 
         return allTaskEntities.map { taskEntity ->
             val categoryEntity = categoriesById[taskEntity.categoryId]
-                ?: throw IllegalStateException("No Category for id=${taskEntity.categoryId}")
+                ?: throw DataException.CategoryNotFound(taskEntity.categoryId)
             val domainCategory = categoryEntity.toCategory()
             taskEntity.toTask(domainCategory)
         }
@@ -36,7 +37,7 @@ class TasksServicesImpl(
 
         return taskEntitiesOnDate.map { taskEntity ->
             val categoryEntity = categoriesById[taskEntity.categoryId]
-                ?: throw IllegalStateException("No Category for id=${taskEntity.categoryId}")
+                ?: throw DataException.CategoryNotFound(taskEntity.categoryId)
             val domainCategory = categoryEntity.toCategory()
             taskEntity.toTask(domainCategory)
         }
@@ -44,16 +45,16 @@ class TasksServicesImpl(
 
     override suspend fun getTaskById(taskId: Long): Task {
         val taskEntity = taskDao.getTaskById(taskId)
-            ?: throw Exception("Task not found with id=$taskId")
+            ?: throw DataException.TaskNotFound(taskId)
         val categoryEntity = categoryDao.getCategoryById(taskEntity.categoryId)
-            ?: throw Exception("Category not found for id=${taskEntity.categoryId}")
+            ?: throw DataException.CategoryNotFound(taskEntity.categoryId)
         val domainCategory = categoryEntity.toCategory()
         return taskEntity.toTask(domainCategory)
     }
 
     override suspend fun changeTaskStatus(taskId: Long) {
         val taskEntity = taskDao.getTaskById(taskId)
-            ?: throw Exception("Task not found with id=$taskId")
+            ?: throw DataException.TaskNotFound(taskId)
 
         val currentStatus = Task.Status.valueOf(taskEntity.status)
         val nextStatus = when (currentStatus) {
@@ -70,7 +71,6 @@ class TasksServicesImpl(
         taskDao.addTask(task.toTaskEntity())
 
         val taskCategoryId = task.category.id
-            ?: throw IllegalStateException("Cannot add Task without a Category id")
         categoryDao.incrementTaskCount(taskCategoryId)
     }
 
@@ -80,7 +80,7 @@ class TasksServicesImpl(
 
     override suspend fun deleteTask(taskId: Long) {
         val taskEntityToDelete = taskDao.getTaskById(taskId)
-            ?: throw Exception("Task not found with id=$taskId")
+            ?: throw DataException.TaskNotFound(taskId)
 
         taskDao.deleteTask(taskId)
         categoryDao.decrementTaskCount(taskEntityToDelete.categoryId)
@@ -89,7 +89,7 @@ class TasksServicesImpl(
     override suspend fun getTasksByCategory(categoryId: Long): List<Task> {
         val taskEntities = taskDao.getTasksByCategory(categoryId)
         val categoryEntity = categoryDao.getCategoryById(categoryId)
-            ?: throw IllegalStateException("No Category for id=$categoryId")
+            ?: throw DataException.CategoryNotFound(categoryId)
         val domainCategory = categoryEntity.toCategory()
 
         return taskEntities.map { taskEntity ->
@@ -105,7 +105,7 @@ class TasksServicesImpl(
 
         return taskEntities.map { taskEntity ->
             val categoryEntity = categoriesById[taskEntity.categoryId]
-                ?: throw IllegalStateException("No Category for id=${taskEntity.categoryId}")
+                ?: throw DataException.CategoryNotFound(taskEntity.categoryId)
             val domainCategory = categoryEntity.toCategory()
             taskEntity.toTask(domainCategory)
         }
@@ -123,7 +123,7 @@ class TasksServicesImpl(
 
         return taskEntitiesOnDate.map { taskEntity ->
             val categoryEntity = categoriesById[taskEntity.categoryId]
-                ?: throw IllegalStateException("No Category for id=${taskEntity.categoryId}")
+                ?: throw DataException.CategoryNotFound(taskEntity.categoryId)
             val domainCategory = categoryEntity.toCategory()
             taskEntity.toTask(domainCategory)
         }
@@ -136,7 +136,7 @@ class TasksServicesImpl(
         val taskEntitiesOnDate =
             taskDao.getTasksByDateAndCategory(date.toString(), categoryId)
         val categoryEntity = categoryDao.getCategoryById(categoryId)
-            ?: throw IllegalStateException("No Category for id=$categoryId")
+            ?: throw DataException.CategoryNotFound(categoryId)
         val domainCategory = categoryEntity.toCategory()
 
         return taskEntitiesOnDate.map { taskEntity ->
@@ -151,7 +151,7 @@ class TasksServicesImpl(
         val taskEntities =
             taskDao.getTasksByCategoryAndStatus(categoryId, status.name)
         val categoryEntity = categoryDao.getCategoryById(categoryId)
-            ?: throw IllegalStateException("No Category for id=$categoryId")
+            ?: throw DataException.CategoryNotFound(categoryId)
         val domainCategory = categoryEntity.toCategory()
 
         return taskEntities.map { taskEntity ->
