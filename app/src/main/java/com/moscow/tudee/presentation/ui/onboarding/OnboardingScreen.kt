@@ -1,6 +1,5 @@
 package com.moscow.tudee.presentation.ui.onboarding
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +28,7 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.ui.splash.viewmodel.SplashViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun OnboardingScreen(
