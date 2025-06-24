@@ -20,4 +20,6 @@ interface AddTaskInteractionListener {
     fun onPriorityClick(taskPriority: Priority)
 
     fun onCategoryClick(category: Category)
+
+    fun onCancelAddTask()
 }

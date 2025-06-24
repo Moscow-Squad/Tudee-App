@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,7 +37,7 @@ fun CategoryCard(
     modifier: Modifier = Modifier,
     count: Int? = null,
     selected: Boolean = false,
-    iconTint: androidx.compose.ui.graphics.Color = Theme.colors.greenAccent
+    iconTint: Color = Color.Unspecified
 ) {
     Column(
         modifier = modifier

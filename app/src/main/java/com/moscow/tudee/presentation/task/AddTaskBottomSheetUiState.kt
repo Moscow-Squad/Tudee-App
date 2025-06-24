@@ -9,7 +9,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 data class AddTaskBottomSheetUiState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val title: String = "",
     val description: String = "",
     val priority: Priority? = null,
