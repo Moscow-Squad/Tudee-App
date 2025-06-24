@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.OutlinedIconButton
 import com.moscow.tudee.presentation.component.SecondaryButton
@@ -39,7 +40,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun TaskDetailsBottomSheet(
-    task: HomeState.HomeTask,
+    task: Task,
     onDismiss: () -> Unit,
     onEditClick: () -> Unit,
     onMoveClick: () -> Unit,
@@ -156,12 +157,18 @@ fun TaskDetailsBottomSheet(
 @Composable
 private fun TaskDetailsBottomSheetPreview() {
     TaskDetailsBottomSheet(
-        task = HomeState.HomeTask(
+        task = Task(
             id = 1,
             title = "Organize Study Desk",
             description = "Solve all exercises from page 45 to 50 in the textbook, Solve all exercises from page 45 to 50 in the textbook.",
             priority = Task.Priority.HIGH,
             status = Task.Status.IN_PROGRESS,
+            category = Category(
+                id = 0,
+                title = "",
+                iconUri = "",
+                isPredefined = false,
+            ),
             date = LocalDateTime.now().toKotlinLocalDateTime(),
 
             ),

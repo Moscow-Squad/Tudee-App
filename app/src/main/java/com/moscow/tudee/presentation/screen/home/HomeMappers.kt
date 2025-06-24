@@ -37,7 +37,7 @@ fun Priority.getColor(): Color {
     }
 }
 
-fun HomeState.HomeTask.toTask(): Task {
+/*fun HomeState.HomeTask.toTask(): Task {
     val category = category
         ?: throw IllegalStateException("Cannot map HomeTask(id=$id) → Task: category was null")
     return Task(
@@ -49,7 +49,7 @@ fun HomeState.HomeTask.toTask(): Task {
         status = status,
         date = date
     )
-}
+}*/
 
 @Composable
 fun Task.Status.getText(): String {

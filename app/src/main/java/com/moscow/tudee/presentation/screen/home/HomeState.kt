@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.screen.home
 
 import com.moscow.tudee.domain.entity.Category
+import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.domain.entity.Task.Status
 import kotlinx.datetime.LocalDateTime
@@ -8,11 +9,11 @@ import kotlinx.datetime.LocalDateTime
 data class HomeState(
     val isLoading: Boolean = true,
     val date: String? = null,
-    val update: SliderState = SliderState.NOTHING_ON_YOUR_LIST,
-    val doneTasks: List<HomeTask> = emptyList(),
-    val inProgressTasks: List<HomeTask> = emptyList(),
-    val todoTasks: List<HomeTask> = emptyList(),
-    val selectedTask: HomeTask? = null,
+    val sliderState: SliderState = SliderState.NOTHING_ON_YOUR_LIST,
+    val doneTasks: List<Task> = emptyList(),
+    val inProgressTasks: List<Task> = emptyList(),
+    val todoTasks: List<Task> = emptyList(),
+    val selectedTask: Task? = null,
     val categories: List<Category> = emptyList(),
     val showAddTaskBottomSheet: Boolean = false,
     val showEditTaskBottomSheet: Boolean = false,
@@ -25,7 +26,7 @@ data class HomeState(
         NOTHING_ON_YOUR_LIST
     }
 
-    data class HomeTask(
+    /*data class Task(
         val id: Long? = null,
         val title: String,
         val description: String,
@@ -33,5 +34,5 @@ data class HomeState(
         val status: Status,
         val date: LocalDateTime,
         val category: Category
-    )
+    )*/
 }

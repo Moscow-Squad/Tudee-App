@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
@@ -21,12 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.HomeState
 import com.moscow.tudee.presentation.screen.home.getColor
 import com.moscow.tudee.presentation.screen.home.getIcon
 import com.moscow.tudee.presentation.screen.home.getText
@@ -60,8 +61,8 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    tasks: List<HomeState.HomeTask>,
-    onTaskClick: (HomeState.HomeTask) -> Unit,
+    tasks: List<Task>,
+    onTaskClick: (Task) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
@@ -76,7 +77,7 @@ fun TaskList(
 
         items(tasks) { task ->
             TaskCard(
-                modifier = modifier
+                modifier = Modifier
                     .width(320.dp)
                     .clickable { onTaskClick(task) },
                 category = task.category!!,
@@ -104,9 +105,10 @@ fun TaskListCount(
 ) {
     Row(
         modifier
+            .clickable { onCountClick() }
             .background(color = Theme.colors.surfaceHigh, shape = CircleShape)
             .padding(vertical = 6.dp, horizontal = 8.dp)
-            .clickable { onCountClick() },
+           ,
         verticalAlignment = Alignment.CenterVertically
     ) {
         TudeeText(

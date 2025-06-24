@@ -29,9 +29,9 @@ import java.util.Locale
 @Composable
 fun OverviewSection(
     sliderState: SliderState,
-    todoTasks: List<Task>,
-    inProgressTasks: List<Task>,
     doneTasks: List<Task>,
+    inProgressTasks: List<Task>,
+    todoTasks: List<Task>,
     modifier: Modifier = Modifier
 ) {
     val todayDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
@@ -52,7 +52,7 @@ fun OverviewSection(
                 .padding(top = 8.dp)
         )
 
-        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 12.dp))
+        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 6.dp))
 
         TudeeText(
             text = stringResource(R.string.overview),
@@ -69,21 +69,10 @@ fun OverviewSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            Task.Status.entries.forEach { status ->
-                val tasks = when (status) {
-                    Task.Status.TODO -> todoTasks
-                    Task.Status.IN_PROGRESS -> inProgressTasks
-                    Task.Status.DONE -> doneTasks
-                }
+                OverviewCard(Task.Status.DONE, doneTasks.count(), modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.IN_PROGRESS, inProgressTasks.count(), modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.TODO, todoTasks.count(), modifier = Modifier.weight(1f))
 
-                if (tasks.isNotEmpty()) {
-                    val tasksForEachState = tasks.filter { it.status == status }
-                    OverviewCard(status, tasksForEachState.count(), modifier = Modifier.weight(1f))
-
-                } else {
-                    OverviewCard(status, 0, modifier = Modifier.weight(1f))
-                }
-            }
         }
     }
 }

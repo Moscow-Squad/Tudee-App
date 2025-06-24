@@ -10,17 +10,17 @@ interface HomeInteractionListener {
 
     //fun onSwitchColorTheme()
 
-    fun onTaskClick(task: HomeState.HomeTask)
+    fun onTaskClick(task: Task)
 
-    fun onAddTask(task: HomeState.HomeTask)
+    fun onAddTask(task: Task)
 
     fun onViewAllClick(taskStatus: Task.Status)
 
-    fun onEditTaskIconClick(task: HomeState.HomeTask)
+    fun onEditTaskIconClick(task: Task)
 
-    fun onMoveTaskClick(task: HomeState.HomeTask)
+    fun onMoveTaskClick(task: Task)
 
-    fun onSaveEditTaskClick(task: HomeState.HomeTask)
+    fun onSaveEditTaskClick(task: Task)
 
     fun onPriorityClick(taskPriority: Task.Priority)
 
