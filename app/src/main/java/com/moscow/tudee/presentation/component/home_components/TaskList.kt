@@ -45,7 +45,7 @@ fun TaskListHeader(
     ) {
         TudeeText(
             text = when (taskState) {
-                Status.IN_PROGRESS -> stringResource(R.string.in_progress)
+                Status.IN_PROGRESS -> stringResource(R.string.in_progress_status)
                 Status.TODO -> stringResource(R.string.to_do)
                 Status.DONE -> stringResource(R.string.done)
             },
