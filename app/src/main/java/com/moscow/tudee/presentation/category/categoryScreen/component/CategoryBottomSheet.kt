@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -123,7 +124,7 @@ fun CategoryBottomSheet(
                 if (selectedImageUri != null) {
                     Box(
                         Modifier
-                            .background(Color(0x1A000000), RoundedCornerShape(16.dp))
+                            .background(Theme.colors.stroke, RoundedCornerShape(16.dp))
                             .clip(RoundedCornerShape(16.dp))
                     ) {
                         AsyncImage(
@@ -132,15 +133,16 @@ fun CategoryBottomSheet(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.size(112.dp, 112.dp)
                         )
-                        Image(
-                            painter = painterResource(R.drawable.ic_pencil_edit),
+                        Icon(
+                            painter = painterResource(R.drawable.ic_pencil_edit_filled),
                             contentDescription = "Replace Image",
+                            tint = Theme.colors.secondary,
                             modifier = Modifier
                                 .align(Alignment.Center)
-                                .padding(6.dp)
-                                .size(20.dp)
+                                .padding(32.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(Theme.colors.surfaceHigh)
+                                .padding(6.dp)
                         )
                     }
                 } else {
