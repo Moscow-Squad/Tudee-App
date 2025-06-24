@@ -24,7 +24,6 @@ import com.moscow.tudee.presentation.component.home_components.TaskList
 import com.moscow.tudee.presentation.component.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.mapper.asLong
-import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import kotlinx.datetime.toLocalDateTime
@@ -169,7 +168,7 @@ fun HomeContent(
             onTaskTitleChange = {
                 interactionListener.onTitleChange(it)
             },
-            taskDescription = uiState.addedTask?.description  ?: "",
+            taskDescription = uiState.addedTask?.description ?: "",
 
             onTaskDescriptionChange = {
                 interactionListener.onDescriptionChange(it)
@@ -208,7 +207,7 @@ fun HomeContent(
             isVisible = true,
             taskTitle = uiState.addedTask?.title ?: "",
             onTaskTitleChange = {
-                Log.e("hdhhdhdhdhhd", "HomeContent: $it", )
+                Log.e("hdhhdhdhdhhd", "HomeContent: $it")
                 interactionListener.onTitleChange(it)
             },
             taskDescription = uiState.addedTask?.description ?: "",
