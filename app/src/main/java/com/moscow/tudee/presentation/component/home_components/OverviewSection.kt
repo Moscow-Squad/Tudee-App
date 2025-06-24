@@ -28,16 +28,13 @@ import java.util.Locale
 
 @Composable
 fun OverviewSection(
+    formattedDate: String,
     sliderState: SliderState,
-    todoTasks: List<Task>,
-    inProgressTasks: List<Task>,
-    doneTasks: List<Task>,
+    todoTasksCount: Int,
+    inProgressTasksCount: Int,
+    doneTasksCount: Int,
     modifier: Modifier = Modifier
 ) {
-    val todayDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-    val formattedDate = todayDate.toJavaLocalDateTime()
-        .format(DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.US))
-
     Column(
         modifier
             .fillMaxWidth()
@@ -70,19 +67,12 @@ fun OverviewSection(
         ) {
 
             Task.Status.entries.forEach { status ->
-                val tasks = when (status) {
-                    Task.Status.TODO -> todoTasks
-                    Task.Status.IN_PROGRESS -> inProgressTasks
-                    Task.Status.DONE -> doneTasks
+                val tasksCount = when (status) {
+                    Task.Status.TODO -> todoTasksCount
+                    Task.Status.IN_PROGRESS -> inProgressTasksCount
+                    Task.Status.DONE -> doneTasksCount
                 }
-
-                if (tasks.isNotEmpty()) {
-                    val tasksForEachState = tasks.filter { it.status == status }
-                    OverviewCard(status, tasksForEachState.count(), modifier = Modifier.weight(1f))
-
-                } else {
-                    OverviewCard(status, 0, modifier = Modifier.weight(1f))
-                }
+                OverviewCard(status, tasksCount, modifier = Modifier.weight(1f))
             }
         }
     }

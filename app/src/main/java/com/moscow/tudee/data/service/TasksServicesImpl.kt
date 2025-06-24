@@ -51,18 +51,8 @@ class TasksServicesImpl(
         return taskEntity.toTask(domainCategory)
     }
 
-    override suspend fun changeTaskStatus(taskId: Long) {
-        val taskEntity = taskDao.getTaskById(taskId)
-            ?: throw Exception("Task not found with id=$taskId")
-
-        val currentStatus = Task.Status.valueOf(taskEntity.status)
-        val nextStatus = when (currentStatus) {
-            Task.Status.TODO -> Task.Status.IN_PROGRESS
-            Task.Status.IN_PROGRESS -> Task.Status.DONE
-            Task.Status.DONE -> return
-        }
-
-        taskDao.updateTaskStatus(taskId, nextStatus.name)
+    override suspend fun changeTaskStatus(taskId: Long,updatedStatus: String) {
+        taskDao.updateTaskStatus(taskId, updatedStatus)
     }
 
     override suspend fun addTask(task: Task) {

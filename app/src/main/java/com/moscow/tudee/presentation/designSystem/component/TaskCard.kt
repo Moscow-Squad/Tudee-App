@@ -20,28 +20,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
 fun TaskCard(
-    category: Category,
+    category: CategoryUi?,
     title: String,
     description: String,
     modifier: Modifier = Modifier,
     date: String? = null,
-    priorityChip: @Composable () -> Unit
+    priorityChip: @Composable (() -> Unit)
 ) {
     Column(
         modifier = modifier
@@ -57,8 +55,8 @@ fun TaskCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = if (category.isPredefined) painterResource(getPredefinedIconRes(category.title))
-                    else rememberAsyncImagePainter(category.iconUri),
+                painter = if (category?.isPredefined == true) painterResource(getPredefinedIconRes(category.title))
+                    else rememberAsyncImagePainter(category?.iconUrl),
                 contentDescription = stringResource(R.string.task_card_icon),
                 modifier = Modifier
                     .size(56.dp)
@@ -129,11 +127,12 @@ fun TaskCard(
 fun TaskCardWithoutDatePreview() {
     TudeeTheme {
         TaskCard(
-            category = Category(
+            category = CategoryUi(
                 id = 1,
                 title = "Study",
-                iconUri = "",
-                isPredefined = true
+                iconUrl = "",
+                isPredefined = true,
+                countOfTasks = 10
             ),
             title = "Review Flashcards",
             description = "Study biology flashcards for 15 minutes",
@@ -152,11 +151,12 @@ fun TaskCardWithoutDatePreview() {
 fun TaskCardWithDatePreview() {
     TudeeTheme {
         TaskCard(
-            category = Category(
+            category = CategoryUi(
                 id = 1,
                 title = "Study",
-                iconUri = "",
-                isPredefined = true
+                iconUrl = "",
+                isPredefined = true,
+                countOfTasks = 10
             ),
             title = "Organize Study Desk",
             description = "Review cell structure and functions for tomorrow...",
