@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,10 +17,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -84,10 +87,13 @@ fun CategoryBottomSheet(
                 )
                 AnimatedVisibility(visible = isEdit) {
                     Text(
-                        text = "Delete",
+                        text = stringResource(R.string.delete),
                         style = Theme.textStyle.label.large,
                         color = Theme.colors.error,
-                        modifier = Modifier.clickable(onClick = onShowDeleteCategory)
+                        modifier = Modifier.clickable(
+                            onClick = onShowDeleteCategory, indication = null,
+                            interactionSource = remember { MutableInteractionSource() },
+                        )
                     )
                 }
             }
@@ -149,9 +155,10 @@ fun CategoryBottomSheet(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(
+                        Icon(
                             painter = painterResource(R.drawable.ic_image_add),
-                            contentDescription = "Add Image"
+                            contentDescription = "Add Image",
+                            tint = Theme.colors.hint
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
@@ -184,7 +191,7 @@ fun CategoryBottomSheet(
                     Theme.colors.stroke.copy(0.12f),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp, horizontal = 16.dp)
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp)
             )
 
             SecondaryButton(
