@@ -32,6 +32,7 @@ import com.moscow.tudee.presentation.component.Tab
 import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.screen.home.asLong
 import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.task.components.Header
 import kotlinx.datetime.Clock
@@ -106,7 +107,7 @@ private fun TaskContent(
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
 
     LaunchedEffect(uiState.selectedDate) {
-        val index = uiState.monthDays.indexOf(uiState.selectedDate)
+        val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
         if (index >= 0) {
             lazyListState.animateScrollToItem(index)
         }
@@ -127,53 +128,50 @@ private fun TaskContent(
                 .background(Theme.colors.surface)
         ) {
 
-            if (showDatePicker) {
-                DatePickerModal(
-                    onDateSelected = { epochMillis ->
-                        interactionListener.updateMonthFromPicker(epochMillis)
+        if (showDatePicker) {
+            DatePickerModal(
+                onDateSelected = { epochMillis ->
+                    interactionListener.updateMonthFromPicker(epochMillis)
+                },
+                onDismiss = interactionListener::dismissDatePicker,
+                selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO).toEpochMilliseconds()
+            )
+        }
+
+        Header(
+            currentMonthYear,
+            onBackClick = interactionListener::previousMonth,
+            onNextClick = interactionListener::nextMonth,
+            onDownClick = interactionListener::showDatePicker
+        )
+        LazyRow(
+            state = lazyListState,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .background(Theme.colors.surfaceHigh)
+                .padding(
+                    start = if (isAtStart) 16.dp else 0.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 8.dp
+                ),
+        ) {
+            items(uiState.monthDays) { date ->
+                val dayName = date.dayOfWeek.name.take(3)
+                    .lowercase()
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+                val isSelected = date == uiState.selectedDate.date
+                DayItem(
+                    day = dayName,
+                    dayDate = date.dayOfMonth,
+                    isSelected = isSelected,
+                    onDayClick = {
+                        interactionListener.selectDate(date)
                     },
-                    onDismiss = interactionListener::dismissDatePicker,
-                    selectedDate = uiState.selectedDate
-                        .atStartOfDayIn(TimeZone.currentSystemDefault())
-                        .toEpochMilliseconds()
+                    isToday = isSelected
                 )
             }
-
-            Header(
-                currentMonthYear,
-                onBackClick = interactionListener::previousMonth,
-                onNextClick = interactionListener::nextMonth,
-                onDownClick = interactionListener::showDatePicker
-            )
-            LazyRow(
-                state = lazyListState,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .background(Theme.colors.surfaceHigh)
-                    .padding(
-                        start = if (isAtStart) 16.dp else 0.dp,
-                        end = 16.dp,
-                        top = 8.dp,
-                        bottom = 8.dp
-                    ),
-            ) {
-                items(uiState.monthDays) { date ->
-                    val dayName = date.dayOfWeek.name.take(3)
-                        .lowercase()
-                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-                    val isSelected = date == uiState.selectedDate
-                    val isToday = date == today
-                    DayItem(
-                        day = dayName,
-                        dayDate = date.dayOfMonth,
-                        isSelected = isSelected,
-                        onDayClick = {
-                            interactionListener.selectDate(date)
-                        },
-                        isToday = isToday
-                    )
-                }
-            }
+        }
 
             Tabs(
                 tabs = allTabs,
