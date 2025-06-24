@@ -17,22 +17,6 @@ class AddTaskBottomSheetViewModel(
         loadCategories()
     }
 
-    private fun loadCategories() {
-        launchWithResult(
-            action = { categoryServices.getCategories() },
-            onSuccess = { response ->
-                updateState { it.copy(availableCategories = response) }
-            },
-            onError = { onErrorLoadCategories(errorMessage = "Error in loading available categories") },
-            onStart = { startLoading() },
-            onFinally = { endLoading() }
-        )
-    }
-
-    private fun onErrorLoadCategories(errorMessage: String) {
-        updateState { it.copy(errorMessage = errorMessage) }
-    }
-
     override fun onShowAddTaskBottomSheet() {
         updateState { it.copy(showAddTaskBottomSheet = true) }
     }
@@ -106,35 +90,6 @@ class AddTaskBottomSheetViewModel(
     private fun onErrorAddTask(message: String) {
         updateState { it.copy(errorMessage = message) }
     }
-
-    private fun loadCategories() {
-        launchWithResult(
-            action = ::loadCategoriesAction,
-            onSuccess = ::onLoadCategoriesSuccess,
-            onError = ::onLoadCategoriesError,
-            onStart = ::startLoading,
-            onFinally = ::endLoading
-        )
-    }
-
-    private suspend fun loadCategoriesAction(): List<Category> {
-        return categoryServices.getCategories()
-    }
-
-    private fun onLoadCategoriesSuccess(response: List<Category>) {
-        updateState { it.copy(availableCategories = response) }
-    }
-
-    private fun onLoadCategoriesError(throwable: Throwable) {
-        onErrorLoadCategories(
-            errorMessage = "Error in loading available categories: ${throwable.message}"
-        )
-    }
-
-    private fun onErrorLoadCategories(errorMessage: String) {
-        updateState { it.copy(errorMessage = errorMessage) }
-    }
-
 
     private fun loadCategories() {
         launchWithResult(
