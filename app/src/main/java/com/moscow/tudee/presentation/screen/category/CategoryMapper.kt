@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.category
+package com.moscow.tudee.presentation.screen.category
 
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
