@@ -6,7 +6,7 @@ import com.moscow.tudee.presentation.model.TaskUi
 data class HomeState(
     val isLoading: Boolean = true,
     val date: String? = null,
-    val update: SliderState = SliderState.NOTHING_ON_YOUR_LIST,
+    val sliderState: SliderState = SliderState.NOTHING_ON_YOUR_LIST,
     val doneTasks: List<TaskUi> = mutableListOf(),
     val inProgressTasks: List<TaskUi> = mutableListOf(),
     val todoTasks: List<TaskUi> = mutableListOf(),

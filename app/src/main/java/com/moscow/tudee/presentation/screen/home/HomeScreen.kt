@@ -1,11 +1,12 @@
 package com.moscow.tudee.presentation.screen.home
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,13 +21,13 @@ import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.EditTaskBottomSheet
 import com.moscow.tudee.presentation.screen.home.home_components.OverviewSection
 import com.moscow.tudee.presentation.screen.home.home_components.TaskList
+import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.mapper.asLong
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import org.koin.androidx.compose.koinViewModel
-
-import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
+import kotlinx.datetime.toLocalDateTime
 
 
 @Composable
@@ -87,10 +88,11 @@ fun HomeContent(
                         )
 
                         OverviewSection(
+                            formattedDate = uiState.formattedDate ?: "",
                             sliderState = uiState.sliderState,
-                            todoTasks = uiState.todoTasks,
-                            inProgressTasks = uiState.inProgressTasks,
-                            doneTasks = uiState.doneTasks
+                            todoTasksCount = uiState.todoTasks.size,
+                            inProgressTasksCount = uiState.inProgressTasks.size,
+                            doneTasksCount = uiState.doneTasks.size
                         )
                     }
                 }
@@ -160,7 +162,7 @@ fun HomeContent(
             onTaskTitleChange = {
                 interactionListener.onTitleChange(it)
             },
-            taskDescription = uiState.addedTask?.description  ?: "",
+            taskDescription = uiState.addedTask?.description ?: "",
 
             onTaskDescriptionChange = {
                 interactionListener.onDescriptionChange(it)
@@ -199,7 +201,6 @@ fun HomeContent(
             isVisible = true,
             taskTitle = uiState.addedTask?.title ?: "",
             onTaskTitleChange = {
-                Log.e("hdhhdhdhdhhd", "HomeContent: $it", )
                 interactionListener.onTitleChange(it)
             },
             taskDescription = uiState.addedTask?.description ?: "",
@@ -235,6 +236,7 @@ fun HomeContent(
         )
     }
 }
+
 
 
 @Preview
