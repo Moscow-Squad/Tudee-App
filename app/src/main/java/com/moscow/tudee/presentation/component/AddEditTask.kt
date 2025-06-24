@@ -288,7 +288,7 @@ fun TaskBottomSheet(
 
                     SecondaryButton(
                         text = stringResource(R.string.cancel),
-                        onClick = { onCancel },
+                        onClick = { onCancel() },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 12.dp)
