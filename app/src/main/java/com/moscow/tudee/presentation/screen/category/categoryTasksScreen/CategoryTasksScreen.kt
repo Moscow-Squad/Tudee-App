@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.category.categoryTasksScreen
+package com.moscow.tudee.presentation.screen.category.categoryTasksScreen
 
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -16,15 +16,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.ObserveAsEvent
-import com.moscow.tudee.presentation.category.CategoriesScreenState
-import com.moscow.tudee.presentation.category.CategoryTasksEvents
-import com.moscow.tudee.presentation.category.categoryScreen.component.CategoryBottomSheet
-import com.moscow.tudee.presentation.category.categoryScreen.component.CategorySnackBar
-import com.moscow.tudee.presentation.category.categoryScreen.component.DeleteCategoryBottomSheet
-import com.moscow.tudee.presentation.component.TabItem
-import com.moscow.tudee.presentation.component.Tabs
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.component.CategoryBottomSheet
+import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
+import com.moscow.tudee.presentation.screen.category.component.DeleteCategoryBottomSheet
+import com.moscow.tudee.presentation.screen.category.component.TabItem
+import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
 import com.moscow.tudee.presentation.designSystem.component.*
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.screen.category.component.CategoryPriorityChip
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -104,7 +104,7 @@ private fun TasksTopBar(
             onEndClick = listener::onShowEditCategoryBottomSheet
             , onStartClick = { listener.onBackPress() }
         )
-        Tabs(
+        CategoryTabs(
             tabs = tabs,
             selectedStatus = selectedStatus,
             onTabClick = { status -> listener.onTasksStatusClick(categoryId, status) },
@@ -130,7 +130,7 @@ private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modif
                 description = task.description,
                 date = task.date,
             ) {
-                PriorityChip(priority = task.priority)
+                CategoryPriorityChip(priority = task.priority)
             }
         }
     }

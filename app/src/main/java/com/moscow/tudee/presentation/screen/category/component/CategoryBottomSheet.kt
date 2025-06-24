@@ -1,8 +1,7 @@
-package com.moscow.tudee.presentation.category.categoryScreen.component
+package com.moscow.tudee.presentation.screen.category.component
 
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -100,7 +98,11 @@ fun CategoryBottomSheet(
 
             TudeeTextField(
                 value = categoryTitle,
-                onValueChange = { categoryTitle = it },
+                onValueChange = {
+                    if (it.length <= 20) {
+                        categoryTitle = it
+                    }
+                },
                 singleLine = true,
                 hint = stringResource(R.string.category_title),
                 startIcon = painterResource(R.drawable.ic_menu_circle_outlined),
@@ -108,7 +110,7 @@ fun CategoryBottomSheet(
                     .fillMaxWidth()
                     .padding(vertical = 12.dp)
                     .height(56.dp),
-                keyboardOptions = KeyboardOptions.Default
+                keyboardOptions = KeyboardOptions.Default,
             )
 
             Text(

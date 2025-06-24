@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.category.categoryScreen
+package com.moscow.tudee.presentation.screen.category.categoriesScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,18 +23,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.ObserveAsEvent
-import com.moscow.tudee.presentation.category.CategoriesEvents
-import com.moscow.tudee.presentation.category.CategoriesScreenState
-import com.moscow.tudee.presentation.category.categoryScreen.component.CategoryBottomSheet
-import com.moscow.tudee.presentation.category.categoryScreen.component.CategorySnackBar
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.component.CategoryBottomSheet
+import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
 import com.moscow.tudee.presentation.component.CustomFAB
-import com.moscow.tudee.presentation.designSystem.component.CategoryCard
+import com.moscow.tudee.presentation.screen.category.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import com.moscow.tudee.presentation.util.saveUriToInternalStorage
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CategoryScreen(

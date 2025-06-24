@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.screen.category.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -21,7 +21,7 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 
 @Composable
-fun PriorityChip(
+fun CategoryPriorityChip(
     modifier: Modifier = Modifier,
     priority: Task.Priority = Task.Priority.LOW,
     selected: Boolean = true,

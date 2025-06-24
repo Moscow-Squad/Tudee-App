@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.component
+package com.moscow.tudee.presentation.screen.category.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -46,7 +46,7 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 data class TabItem(val label: String, val count: Int, val status: Task.Status)
 
 @Composable
-fun Tabs(
+fun CategoryTabs(
     tabs: List<TabItem>,
     selectedStatus: Task.Status,
     onTabClick: (Task.Status) -> Unit,
@@ -150,7 +150,7 @@ fun TabsPreview() {
         TabItem("Done", 58, Task.Status.DONE)
     )
     Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        Tabs(
+        CategoryTabs(
             tabs = sampleTabs,
             selectedStatus = selectedStatus,
             onTabClick = { selectedStatus = it }
