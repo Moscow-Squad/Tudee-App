@@ -13,6 +13,7 @@ data class HomeState(
     val inProgressTasks: List<HomeTask> = emptyList(),
     val todoTasks: List<HomeTask> = emptyList(),
     val selectedTask: HomeTask? = null,
+    val addedTask: HomeTask? = null,
     val categories: List<Category> = emptyList(),
     val showAddTaskBottomSheet: Boolean = false,
     val showEditTaskBottomSheet: Boolean = false,
@@ -29,7 +30,7 @@ data class HomeState(
         val id: Long? = null,
         val title: String,
         val description: String,
-        val priority: Priority,
+        val priority: Priority? = null,
         val status: Status,
         val date: LocalDateTime,
         val category: Category? = null
