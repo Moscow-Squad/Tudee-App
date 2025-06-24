@@ -46,9 +46,6 @@ fun MainScreen(
         MainNavGraph(
             navController = navController,
             paddingValues = innerPadding,
-            appBar = {
-                mainViewModel.onEvent(MainScreenEvents.UpdateAppBar(it))
-            },
             isBottomNavigationVisible = {
                 mainViewModel.onEvent(MainScreenEvents.UpdateBottomBarVisibility(it))
             }
