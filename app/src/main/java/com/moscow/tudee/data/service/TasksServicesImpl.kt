@@ -1,5 +1,6 @@
 package com.moscow.tudee.data.service
 
+import android.util.Log
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.mapper.toCategory
@@ -29,6 +30,7 @@ class TasksServicesImpl(
     }
 
     override suspend fun getTasksByDate(date: LocalDate): List<Task> {
+        Log.d("TAG", "getTasksByDate: $date")
         val taskEntitiesOnDate = taskDao.getTasksByDate(date.toString())
         val categoriesById = categoryDao
             .getCategories()

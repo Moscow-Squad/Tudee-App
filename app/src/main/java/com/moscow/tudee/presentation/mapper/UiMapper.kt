@@ -12,6 +12,7 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toInstant
 
 fun Task.toTaskUi() = TaskUi(
     id = id,
@@ -109,6 +110,5 @@ fun Task.Status.getColor(): Color {
 }
 
 fun LocalDateTime.asLong(): Long {
-    // TODO
-    return 0L
+    return this.toInstant(kotlinx.datetime.TimeZone.currentSystemDefault()).toEpochMilliseconds()
 }

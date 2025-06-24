@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.component.home_components
+package com.moscow.tudee.presentation.screen.home.home_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,12 +19,6 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.slider.TudeeSlider
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toLocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @Composable
 fun OverviewSection(
@@ -66,14 +60,9 @@ fun OverviewSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            Task.Status.entries.forEach { status ->
-                val tasksCount = when (status) {
-                    Task.Status.TODO -> todoTasksCount
-                    Task.Status.IN_PROGRESS -> inProgressTasksCount
-                    Task.Status.DONE -> doneTasksCount
-                }
-                OverviewCard(status, tasksCount, modifier = Modifier.weight(1f))
-            }
+                OverviewCard(Task.Status.DONE, doneTasksCount, modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.IN_PROGRESS, inProgressTasksCount, modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.TODO, todoTasksCount, modifier = Modifier.weight(1f))
         }
     }
 }

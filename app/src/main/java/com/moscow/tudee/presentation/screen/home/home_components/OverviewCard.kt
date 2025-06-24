@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.component.home_components
+package com.moscow.tudee.presentation.screen.home.home_components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -61,11 +62,11 @@ fun OverviewCard(taskState: Status, count: Int, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .border(
                         1.dp,
-                        Theme.colors.surfaceHigh.copy(alpha = 0.12f),
+                       Color.White.copy(alpha = 0.12f),
                         RoundedCornerShape(12.dp)
                     )
                     .background(
-                        Theme.colors.surfaceHigh.copy(alpha = 0.24f),
+                        Color.White.copy(alpha = 0.24f),
                         RoundedCornerShape(12.dp)
                     )
                     .padding(8.dp)

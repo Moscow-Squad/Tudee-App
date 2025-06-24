@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.component.home_components
+package com.moscow.tudee.presentation.screen.home.home_components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -67,7 +69,8 @@ fun TaskList(
     LazyHorizontalGrid(
         modifier = modifier
             .fillMaxWidth()
-            .height(250.dp),
+            .wrapContentHeight()
+            .heightIn(min = 121.dp, max = 250.dp),
         rows = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -83,7 +86,7 @@ fun TaskList(
                 title = task.title,
                 description = task.description,
             ) {
-                task.priority?.let {
+                task.priority.let {
                     PriorityChip(
                         text = task.priority.getText(),
                         backgroundColor = task.priority.getColor(),
@@ -106,9 +109,10 @@ fun TaskListCount(
 ) {
     Row(
         modifier
+            .clickable { onCountClick() }
             .background(color = Theme.colors.surfaceHigh, shape = CircleShape)
             .padding(vertical = 6.dp, horizontal = 8.dp)
-            .clickable { onCountClick() },
+           ,
         verticalAlignment = Alignment.CenterVertically
     ) {
         TudeeText(

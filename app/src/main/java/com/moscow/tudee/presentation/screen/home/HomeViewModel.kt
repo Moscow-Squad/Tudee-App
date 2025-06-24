@@ -1,15 +1,23 @@
 package com.moscow.tudee.presentation.screen.home
 
+
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import com.moscow.tudee.presentation.mapper.toCategoryUi
 import com.moscow.tudee.presentation.mapper.toTask
 import com.moscow.tudee.presentation.mapper.toTaskUi
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.datetime.toLocalDateTime
+import java.time.format.DateTimeFormatter
 
 class HomeViewModel(
     private val tasksServices: TasksServices,
@@ -17,41 +25,68 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(HomeState()), HomeInteractionListener {
 
     init {
+        getTodayDate()
         loadTasks()
     }
 
+
     private fun loadTasks() {
         launchWithResult(
-            action = { tasksServices.getTasks() },
-            onSuccess = { tasks ->
-                val todoList = tasks.map { it.toTaskUi() }
-                    .filter { it.status == Task.Status.TODO }
-                val inProgressList = tasks.map { it.toTaskUi() }
-                    .filter { it.status == Task.Status.IN_PROGRESS }
-                val doneList = tasks.map { it.toTaskUi() }
-                    .filter { it.status == Task.Status.DONE }
-
-                updateState {
-                    it.copy(
-                        todoTasks = todoList,
-                        inProgressTasks = inProgressList,
-                        doneTasks = doneList,
-                        todoTasksCount = todoList.size,
-                        inProgressTasksCount = inProgressList.size,
-                        doneTasksCount = doneList.size,
-                    )
-                }
-            },
-            onError = { handleHomeError(it) },
-            onStart = { startLoading() },
+            action    = { tasksServices.getTasksByDate(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date).map { it.toTaskUi() } },
+            onSuccess = ::onSuccessLoadingTasks ,
+            onError   = { handleHomeError(it) },
+            onStart   = { startLoading() },
             onFinally = { endLoading() }
         )
     }
 
+    private fun getTodayDate(){
+        updateState { it.copy(formattedDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.toJavaLocalDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()) }
+    }
+    private fun onSuccessLoadingTasks(tasks:List<TaskUi>){
+        val groupedTasks = tasks.groupBy{ it.status }
+        updateState {
+            it.copy(
+                todoTasks = groupedTasks[Status.TODO].orEmpty() ,
+                doneTasks = groupedTasks[Status.DONE].orEmpty(),
+                inProgressTasks = groupedTasks[Status.IN_PROGRESS].orEmpty(),
+                 sliderState = updateSliderState(groupedTasks)
+
+            )
+        }
+    }
+
+    private fun updateSliderState(groupedTasks: Map<Status, List<TaskUi>>): HomeState.SliderState {
+        val todoTasks = groupedTasks[Status.TODO]?.size ?: 0
+        val inProgressTasks = groupedTasks[Status.IN_PROGRESS]?.size ?: 0
+        val doneTasks = groupedTasks[Status.DONE]?.size ?: 0
+        val totalTasks = todoTasks + inProgressTasks + doneTasks
+        return when {
+            totalTasks == 0 -> HomeState.SliderState.NOTHING_ON_YOUR_LIST
+            doneTasks == totalTasks -> HomeState.SliderState.TADAA
+            todoTasks > 0 && doneTasks == 0 && inProgressTasks == 0 -> HomeState.SliderState.ZERO_PROGRESS
+            todoTasks > 0 && doneTasks > 0 -> HomeState.SliderState.STAY_WORKING
+            else -> HomeState.SliderState.STAY_WORKING
+        }
+
+    }
+    private fun getCategories() {
+        if(uiState.value.categories.isEmpty()) {
+            launchWithResult(
+                action = { categoryServices.getCategories() },
+                onSuccess = { response ->
+                    updateState { it.copy(categories = response.map { it.toCategoryUi() }) }
+                },
+                onError = { handleHomeError(it) },
+                onStart = { startLoading() },
+                onFinally = { endLoading() }
+            )
+        }
+    }
 
     override fun onFloatingActionButtonClick() {
+        getCategories()
         updateState {
-            //TODO make added task nullable
             it.copy(
                 addedTask = TaskUi(
                     id = null,
@@ -107,10 +142,10 @@ class HomeViewModel(
     }
 
     override fun onEditTaskIconClick(task: TaskUi) {
+        getCategories()
         updateState { it.copy(addedTask = task) }
         updateState { it.copy(showEditTaskBottomSheet = true) }
     }
-
 
     override fun onUpdateStatusClick(task: TaskUi) {
 
@@ -126,12 +161,6 @@ class HomeViewModel(
                         showTaskDetailsBottomSheet = false,
                         inProgressTasks = it.inProgressTasks.filter { it.id != task.id },
                         todoTasks = it.todoTasks.filter { it.id != task.id },
-                        inProgressTasksCount = if (task.status == Task.Status.IN_PROGRESS)
-                            it.inProgressTasksCount - 1 else it.inProgressTasksCount,
-                        todoTasksCount = if (task.status == Task.Status.TODO)
-                            it.todoTasksCount - 1 else it.todoTasksCount,
-                        doneTasksCount = if (task.status == Task.Status.DONE)
-                            it.doneTasksCount - 1 else it.doneTasksCount
                     )
                 }
                 updateTaskStatus(task, nextStatus)
@@ -148,7 +177,7 @@ class HomeViewModel(
                 updateState {
                     it.copy(
                         inProgressTasks = it.inProgressTasks + task.copy(status = nextStatus),
-                        inProgressTasksCount = it.inProgressTasksCount + 1
+
                     )
                 }
             }
@@ -157,7 +186,7 @@ class HomeViewModel(
                 updateState {
                     it.copy(
                         doneTasks = it.doneTasks + task.copy(status = nextStatus),
-                        doneTasksCount = it.doneTasksCount + 1
+
                     )
                 }
             }
