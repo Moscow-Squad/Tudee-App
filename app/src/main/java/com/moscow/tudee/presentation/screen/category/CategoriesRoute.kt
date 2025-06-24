@@ -1,9 +1,9 @@
-package com.moscow.tudee.presentation.category
+package com.moscow.tudee.presentation.screen.category
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.toRoute
-import com.moscow.tudee.presentation.category.categoryScreen.CategoryScreen
-import com.moscow.tudee.presentation.category.categoryTasksScreen.CategoryTasksScreen
+import com.moscow.tudee.presentation.screen.category.categoriesScreen.CategoryScreen
+import com.moscow.tudee.presentation.screen.category.categoryTasksScreen.CategoryTasksScreen
 import com.moscow.tudee.presentation.navigation.entry.BottomNavigationType
 import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
 import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable

@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.moscow.tudee.presentation.category.CategoryTasks
-import com.moscow.tudee.presentation.category.categoriesRoute
-import com.moscow.tudee.presentation.category.categoryTasksRoute
+import com.moscow.tudee.presentation.screen.category.CategoryTasks
+import com.moscow.tudee.presentation.screen.category.categoriesRoute
+import com.moscow.tudee.presentation.screen.category.categoryTasksRoute
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
