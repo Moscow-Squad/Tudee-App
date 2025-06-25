@@ -29,12 +29,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.screen.home.HomeState
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
 fun TaskCard(
-    category: CategoryUi?,
+    category: HomeState.CategoryUi?,
     title: String,
     description: String,
     modifier: Modifier = Modifier,
@@ -127,7 +127,7 @@ fun TaskCard(
 fun TaskCardWithoutDatePreview() {
     TudeeTheme {
         TaskCard(
-            category = CategoryUi(
+            category = HomeState.CategoryUi(
                 id = 1,
                 title = "Study",
                 iconUrl = "",
@@ -151,7 +151,7 @@ fun TaskCardWithoutDatePreview() {
 fun TaskCardWithDatePreview() {
     TudeeTheme {
         TaskCard(
-            category = CategoryUi(
+            category = HomeState.CategoryUi(
                 id = 1,
                 title = "Study",
                 iconUrl = "",

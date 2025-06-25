@@ -28,19 +28,19 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.mapper.getBackgroundColor
-import com.moscow.tudee.presentation.mapper.getColor
-import com.moscow.tudee.presentation.mapper.getIcon
-import com.moscow.tudee.presentation.mapper.getText
-import com.moscow.tudee.presentation.model.CategoryUi
-import com.moscow.tudee.presentation.model.TaskUi
+import com.moscow.tudee.presentation.screen.home.getBackgroundColor
+import com.moscow.tudee.presentation.screen.home.getColor
+import com.moscow.tudee.presentation.screen.home.getIcon
+import com.moscow.tudee.presentation.screen.home.getText
+import com.moscow.tudee.presentation.screen.home.HomeState
+
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 
 @Composable
 fun TaskDetailsBottomSheet(
-    task: TaskUi,
+    task: HomeState.TaskUi,
     onDismiss: () -> Unit,
     onEditClick: () -> Unit,
     onMoveClick: () -> Unit,
@@ -159,14 +159,14 @@ fun TaskDetailsBottomSheet(
 @Composable
 private fun TaskDetailsBottomSheetPreview() {
     TaskDetailsBottomSheet(
-        task = TaskUi(
+        task = HomeState.TaskUi(
             id = 1,
             title = "Organize Study Desk",
             description = "Solve all exercises from page 45 to 50 in the textbook, Solve all exercises from page 45 to 50 in the textbook.",
             priority = Task.Priority.HIGH,
             status = Task.Status.IN_PROGRESS,
             date = LocalDateTime.now().toKotlinLocalDateTime(),
-            category = CategoryUi(
+            category = HomeState.CategoryUi(
                 id = 0,
                 title = "",
                 iconUrl = "",

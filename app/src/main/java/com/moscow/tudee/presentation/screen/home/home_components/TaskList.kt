@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -28,10 +26,10 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.mapper.getColor
-import com.moscow.tudee.presentation.mapper.getIcon
-import com.moscow.tudee.presentation.mapper.getText
-import com.moscow.tudee.presentation.model.TaskUi
+import com.moscow.tudee.presentation.screen.home.getColor
+import com.moscow.tudee.presentation.screen.home.getIcon
+import com.moscow.tudee.presentation.screen.home.getText
+import com.moscow.tudee.presentation.screen.home.HomeState
 
 @Composable
 fun TaskListHeader(
@@ -62,8 +60,8 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    tasks: List<TaskUi>,
-    onTaskClick: (TaskUi) -> Unit,
+    tasks: List<HomeState.TaskUi>,
+    onTaskClick: (HomeState.TaskUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(

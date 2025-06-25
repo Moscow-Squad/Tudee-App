@@ -39,7 +39,7 @@ import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.screen.home.HomeState
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
@@ -53,9 +53,9 @@ fun TaskBottomSheet(
     onTaskDescriptionChange: (String) -> Unit,
     selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
-    categories: List<CategoryUi>,
-    selectedCategory: CategoryUi?,
-    onCategorySelected: (CategoryUi) -> Unit,
+    categories: List<HomeState.CategoryUi>,
+    selectedCategory: HomeState.CategoryUi?,
+    onCategorySelected: (HomeState.CategoryUi) -> Unit,
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
@@ -299,9 +299,9 @@ fun AddTaskBottomSheet(
     onTaskDescriptionChange: (String) -> Unit,
     selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
-    categories: List<CategoryUi>,
-    selectedCategory: CategoryUi?,
-    onCategorySelected: (CategoryUi) -> Unit,
+    categories: List<HomeState.CategoryUi>,
+    selectedCategory: HomeState.CategoryUi?,
+    onCategorySelected: (HomeState.CategoryUi) -> Unit,
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
@@ -343,9 +343,9 @@ fun EditTaskBottomSheet(
     onTaskDescriptionChange: (String) -> Unit,
     selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
-    categories: List<CategoryUi>,
-    selectedCategory: CategoryUi?,
-    onCategorySelected: (CategoryUi) -> Unit,
+    categories: List<HomeState.CategoryUi>,
+    selectedCategory: HomeState.CategoryUi?,
+    onCategorySelected: (HomeState.CategoryUi) -> Unit,
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
@@ -380,9 +380,9 @@ fun EditTaskBottomSheet(
 @Composable
 fun TaskBottomSheetPreview() {
     val mockCategories = listOf(
-        CategoryUi(id = 1, title = "Work", iconUrl = "", isPredefined = false, countOfTasks = 0),
-        CategoryUi(id = 2, title = "Personal", iconUrl = "", isPredefined = false, countOfTasks = 0),
-        CategoryUi(id = 3, title = "Study", iconUrl = "", isPredefined = false, countOfTasks = 0)
+        HomeState.CategoryUi(id = 1, title = "Work", iconUrl = "", isPredefined = false, countOfTasks = 0),
+        HomeState.CategoryUi(id = 2, title = "Personal", iconUrl = "", isPredefined = false, countOfTasks = 0),
+        HomeState.CategoryUi(id = 3, title = "Study", iconUrl = "", isPredefined = false, countOfTasks = 0)
     )
 
     var taskTitle by remember { mutableStateOf("My Task") }

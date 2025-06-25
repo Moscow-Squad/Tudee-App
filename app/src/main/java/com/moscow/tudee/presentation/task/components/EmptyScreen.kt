@@ -27,7 +27,10 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 @Composable
-fun EmptyScreen(modifier: Modifier = Modifier) {
+fun EmptyScreen(
+    title: String,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.BottomEnd,
@@ -56,7 +59,10 @@ fun EmptyScreen(modifier: Modifier = Modifier) {
                     .padding(top = 65.dp, start = 19.dp)
             )
         }
-        MessageBox(modifier = Modifier.padding(bottom = 90.dp, end = 147.dp))
+        MessageBox(
+            title = title,
+            modifier = Modifier.padding(bottom = 90.dp, end = 147.dp)
+        )
     }
 }
 
@@ -85,7 +91,10 @@ fun ColumnOfDots(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MessageBox(modifier: Modifier = Modifier) {
+fun MessageBox(
+    title: String,
+    modifier: Modifier = Modifier
+) {
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -103,7 +112,7 @@ fun MessageBox(modifier: Modifier = Modifier) {
             .padding(vertical = 12.dp, horizontal = 8.dp)
     ) {
         Text(
-            text = "No tasks here!",
+            text = title,
             style = Theme.textStyle.title.small,
             color = Theme.colors.body
         )
@@ -120,7 +129,10 @@ fun MessageBox(modifier: Modifier = Modifier) {
 @Composable
 private fun EmptyScreenPreview() {
     TudeeTheme {
-        EmptyScreen(modifier = Modifier.background(Theme.colors.surface))
+        EmptyScreen(
+            "blaalla",
+            modifier = Modifier.background(Theme.colors.surface)
+        )
     }
 
 }
@@ -138,7 +150,9 @@ private fun ColumnOfDotsPreview() {
 @Composable
 private fun MessageBoxPreview() {
     TudeeTheme {
-        MessageBox()
+        MessageBox(
+            title = "blablabla",
+        )
     }
 
 }

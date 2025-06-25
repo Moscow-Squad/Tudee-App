@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.mapper
+package com.moscow.tudee.presentation.screen.home
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
@@ -9,12 +9,12 @@ import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.model.CategoryUi
-import com.moscow.tudee.presentation.model.TaskUi
+
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
-fun Task.toTaskUi() = TaskUi(
+fun Task.toTaskUi() = HomeState.TaskUi(
     id = id,
     title = title,
     description = description,
@@ -24,7 +24,7 @@ fun Task.toTaskUi() = TaskUi(
     category = category.toCategoryUi()
 )
 
-fun Category.toCategoryUi() = CategoryUi(
+fun Category.toCategoryUi() = HomeState.CategoryUi(
     id = id,
     title = title,
     iconUrl = iconUri,
@@ -33,7 +33,7 @@ fun Category.toCategoryUi() = CategoryUi(
     countOfTasks = countOfTasks
 )
 
-fun TaskUi.toTask(): Task =
+fun HomeState.TaskUi.toTask(): Task =
     Task(
         id = id,
         title = title,
@@ -44,7 +44,7 @@ fun TaskUi.toTask(): Task =
         date = date
     )
 
-fun CategoryUi.toCategory() =
+fun HomeState.CategoryUi.toCategory() =
     Category(
         id = id,
         title = title,
@@ -110,5 +110,5 @@ fun Task.Status.getColor(): Color {
 }
 
 fun LocalDateTime.asLong(): Long {
-    return this.toInstant(kotlinx.datetime.TimeZone.currentSystemDefault()).toEpochMilliseconds()
+    return this.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 }

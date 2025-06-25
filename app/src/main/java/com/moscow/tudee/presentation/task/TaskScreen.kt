@@ -255,7 +255,10 @@ private fun TaskContent(
                         }
                     }
                 }
-            } else EmptyScreen(modifier = Modifier.padding(start = 16.dp, top = 121.dp))
+            } else EmptyScreen(
+                title = "",
+                modifier = Modifier.padding(start = 16.dp, top = 121.dp)
+            )
 
 //            AddTaskBottomSheet(
 //                isVisible = bottomSheetUiState.showAddTaskBottomSheet,

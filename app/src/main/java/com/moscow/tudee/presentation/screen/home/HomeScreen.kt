@@ -25,7 +25,7 @@ import com.moscow.tudee.presentation.screen.home.home_components.OverviewSection
 import com.moscow.tudee.presentation.screen.home.home_components.TaskList
 import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.mapper.asLong
+import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
 import org.koin.androidx.compose.koinViewModel
@@ -144,6 +144,9 @@ fun HomeContent(
 
                     } else {
                         // TODO: handle empty State
+                        EmptyScreen(
+                            title = "No tasks for today!",
+                        )
                     }
                 }
 
