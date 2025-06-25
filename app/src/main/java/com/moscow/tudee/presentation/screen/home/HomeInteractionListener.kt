@@ -1,6 +1,8 @@
 package com.moscow.tudee.presentation.screen.home
 
 import com.moscow.tudee.domain.entity.Task
+import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.LocalDateTime
 
 interface HomeInteractionListener {
@@ -9,17 +11,17 @@ interface HomeInteractionListener {
 
     //fun onSwitchColorTheme()
 
-    fun onTaskClick(task: HomeState.TaskUi)
+    fun onTaskClick(task: TaskUi)
 
-    fun onAddTask(task: HomeState.TaskUi)
+    fun onAddTask(task: TaskUi)
 
     fun onViewAllClick(taskStatus: Task.Status)
 
-    fun onEditTaskIconClick(task: HomeState.TaskUi)
+    fun onEditTaskIconClick(task: TaskUi)
 
-    fun onUpdateStatusClick(task: HomeState.TaskUi)
+    fun onUpdateStatusClick(task: TaskUi)
 
-    fun onSaveEditTaskClick(task: HomeState.TaskUi)
+    fun onSaveEditTaskClick(task: TaskUi)
 
     fun onPriorityClick(taskPriority: Task.Priority)
 
@@ -29,7 +31,7 @@ interface HomeInteractionListener {
 
     fun onDateChange(newDate: LocalDateTime)
 
-    fun onCategoryClick(category: HomeState.CategoryUi)
+    fun onCategoryClick(category: CategoryUi)
 
     fun onShowAddBottomSheet()
 

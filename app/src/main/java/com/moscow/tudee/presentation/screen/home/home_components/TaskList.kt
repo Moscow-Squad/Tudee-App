@@ -26,9 +26,10 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.getColor
-import com.moscow.tudee.presentation.screen.home.getIcon
-import com.moscow.tudee.presentation.screen.home.getText
+import com.moscow.tudee.presentation.mapper.getColor
+import com.moscow.tudee.presentation.mapper.getIcon
+import com.moscow.tudee.presentation.mapper.getText
+import com.moscow.tudee.presentation.model.TaskUi
 import com.moscow.tudee.presentation.screen.home.HomeState
 
 @Composable
@@ -47,7 +48,7 @@ fun TaskListHeader(
     ) {
         TudeeText(
             text = when (taskState) {
-                Status.IN_PROGRESS -> stringResource(R.string.in_progress)
+                Status.IN_PROGRESS -> stringResource(R.string.in_progress_status)
                 Status.TODO -> stringResource(R.string.to_do)
                 Status.DONE -> stringResource(R.string.done)
             },
@@ -60,8 +61,8 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    tasks: List<HomeState.TaskUi>,
-    onTaskClick: (HomeState.TaskUi) -> Unit,
+    tasks: List<TaskUi>,
+    onTaskClick: (TaskUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(

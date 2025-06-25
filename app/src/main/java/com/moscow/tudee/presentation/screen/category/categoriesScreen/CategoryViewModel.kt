@@ -4,10 +4,10 @@ import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.presentation.BaseViewModel
-import com.moscow.tudee.presentation.screen.category.categoriesScreen.CategoriesEvents
+import com.moscow.tudee.presentation.mapper.toCategory
+import com.moscow.tudee.presentation.mapper.toCategoryUi
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
-import com.moscow.tudee.presentation.screen.category.toCategory
-import com.moscow.tudee.presentation.screen.category.toCategoryUi
 
 class CategoryViewModel(
     private val categoryServices: CategoryServices,
@@ -58,7 +58,7 @@ class CategoryViewModel(
         }
     }
 
-    override fun onAddCategory(categoryUi: CategoriesScreenState.CategoryUi) {
+    override fun onAddCategory(categoryUi: CategoryUi) {
         launchWithResult(
             action = { categoryServices.addCategory(categoryUi.toCategory()) },
             onSuccess = { onAddCategorySuccess() },

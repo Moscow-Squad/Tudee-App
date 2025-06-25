@@ -20,16 +20,17 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.EditTaskBottomSheet
+import com.moscow.tudee.presentation.component.EmptyScreen
 import com.moscow.tudee.presentation.designSystem.component.topbar.HomeTopAppBar
+import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.mapper.asLong
 import com.moscow.tudee.presentation.screen.home.home_components.OverviewSection
 import com.moscow.tudee.presentation.screen.home.home_components.TaskList
 import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
-import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.task.components.EmptyScreen
 import com.moscow.tudee.presentation.ui.home.TaskDetailsBottomSheet
 import com.moscow.tudee.presentation.utils.ObserveAsEvent
-import org.koin.androidx.compose.koinViewModel
 import kotlinx.datetime.toLocalDateTime
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
@@ -57,6 +58,7 @@ fun HomeContent(
     interactionListener: HomeInteractionListener,
 ) {
     Scaffold(
+        containerColor = Theme.colors.surface,
         topBar = {
             HomeTopAppBar(
                 title = stringResource(id = R.string.tudee),

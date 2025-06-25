@@ -29,8 +29,8 @@ import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 @Composable
 fun EmptyScreen(
-    title: String = stringResource(R.string.no_tasks_here),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.no_tasks_here)
 ) {
     Box(
         modifier = modifier,
@@ -131,7 +131,7 @@ fun MessageBox(
 private fun EmptyScreenPreview() {
     TudeeTheme {
         EmptyScreen(
-            "blaalla",
+            title = "blaalla",
             modifier = Modifier.background(Theme.colors.surface)
         )
     }

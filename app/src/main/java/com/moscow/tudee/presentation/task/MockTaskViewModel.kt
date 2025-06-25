@@ -19,7 +19,7 @@ fun mockTaskViewModel(): TaskViewModel {
                 return mockTasks.filter { it.date.date == date }
             }
             override suspend fun getTaskById(taskId: Long): Task = mockTasks[0]
-            override suspend fun changeTaskStatus(taskId: Long) {}
+            override suspend fun changeTaskStatus(taskId: Long,updatedStatus: Task.Status) {}
             override suspend fun addTask(task: Task) {}
             override suspend fun updateTask(task: Task) {}
             override suspend fun deleteTask(taskId: Long) {}

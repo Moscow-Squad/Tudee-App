@@ -4,6 +4,11 @@ import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import com.moscow.tudee.presentation.mapper.toCategoryUi
+import com.moscow.tudee.presentation.mapper.toTask
+import com.moscow.tudee.presentation.mapper.toTaskUi
+import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -36,7 +41,7 @@ class HomeViewModel(
     private fun getTodayDate(){
         updateState { it.copy(formattedDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.toJavaLocalDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()) }
     }
-    private fun onSuccessLoadingTasks(tasks:List<HomeState.TaskUi>){
+    private fun onSuccessLoadingTasks(tasks:List<TaskUi>){
         val groupedTasks = tasks.groupBy{ it.status }
 
         updateState {
@@ -79,13 +84,13 @@ class HomeViewModel(
         getCategories()
         updateState {
             it.copy(
-                addedTask = HomeState.TaskUi(
+                addedTask = TaskUi(
                     id = null,
                     title = "",
                     description = "",
                     priority = Task.Priority.LOW,
-                    status = Task.Status.TODO,
-                    category = HomeState.CategoryUi(
+                    status = Status.TODO,
+                    category = CategoryUi(
                         id = 1,
                         title = "ggfgf",
                         isPredefined = false,
@@ -100,12 +105,12 @@ class HomeViewModel(
         }
     }
 
-    override fun onTaskClick(task: HomeState.TaskUi) {
+    override fun onTaskClick(task: TaskUi) {
         updateState { it.copy(showTaskDetailsBottomSheet = true) }
         updateState { it.copy(addedTask = task) }
     }
 
-    override fun onAddTask(task: HomeState.TaskUi) {
+    override fun onAddTask(task: TaskUi) {
         if (task.title.isBlank() || task.description.isBlank()) {
             return
         }
@@ -132,13 +137,13 @@ class HomeViewModel(
         sendEvent(HomeEvent.ViewAll(taskStatus))
     }
 
-    override fun onEditTaskIconClick(task: HomeState.TaskUi) {
+    override fun onEditTaskIconClick(task: TaskUi) {
         getCategories()
         updateState { it.copy(addedTask = task) }
         updateState { it.copy(showEditTaskBottomSheet = true) }
     }
 
-    override fun onUpdateStatusClick(task: HomeState.TaskUi) {
+    override fun onUpdateStatusClick(task: TaskUi) {
 
         val nextStatus = getNextStatus(task.status)
 
@@ -162,7 +167,7 @@ class HomeViewModel(
         )
     }
 
-    private fun updateTaskStatus(task: HomeState.TaskUi, nextStatus: Task.Status) {
+    private fun updateTaskStatus(task: TaskUi, nextStatus: Task.Status) {
         when (nextStatus) {
             Status.IN_PROGRESS -> {
                 updateState {
@@ -194,7 +199,7 @@ class HomeViewModel(
         }
     }
 
-    override fun onSaveEditTaskClick(task: HomeState.TaskUi) {
+    override fun onSaveEditTaskClick(task: TaskUi) {
         launchWithResult(
             action = { tasksServices.updateTask(task.toTask()) },
             onSuccess = {
@@ -229,7 +234,7 @@ class HomeViewModel(
         updateState { it.copy(addedTask = it.addedTask?.copy(date = newDate)) }
     }
 
-    override fun onCategoryClick(category: HomeState.CategoryUi) {
+    override fun onCategoryClick(category: CategoryUi) {
         updateState { it.copy(addedTask = it.addedTask?.copy(category = category)) }
     }
 

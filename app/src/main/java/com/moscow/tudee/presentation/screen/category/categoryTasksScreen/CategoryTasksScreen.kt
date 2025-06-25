@@ -1,30 +1,37 @@
 package com.moscow.tudee.presentation.screen.category.categoryTasksScreen
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.ObserveAsEvent
+import com.moscow.tudee.presentation.component.EmptyScreen
+import com.moscow.tudee.presentation.designSystem.component.TaskCard
+import com.moscow.tudee.presentation.designSystem.component.TopBar
+import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
 import com.moscow.tudee.presentation.screen.category.component.CategoryBottomSheet
+import com.moscow.tudee.presentation.screen.category.component.CategoryPriorityChip
 import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
+import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
 import com.moscow.tudee.presentation.screen.category.component.DeleteCategoryBottomSheet
 import com.moscow.tudee.presentation.screen.category.component.TabItem
-import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
-import com.moscow.tudee.presentation.designSystem.component.*
-import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.category.component.CategoryPriorityChip
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -38,15 +45,15 @@ fun CategoryTasksScreen(
     val viewModel: CategoryTasksViewModel = koinViewModel(parameters = { parametersOf(categoryId) })
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     ObserveAsEvent(viewModel.uiEvent) { event ->
-         when(event){
-             is CategoryTasksEvents.NavigateBack-> {
-                 navigateBack()
-             }
+        when (event) {
+            is CategoryTasksEvents.NavigateBack -> {
+                navigateBack()
+            }
 
-             is CategoryTasksEvents.NavigateBackWithResult -> {
-                 navigateBackToCategoryScreen(event.messageID)
-             }
-         }
+            is CategoryTasksEvents.NavigateBackWithResult -> {
+                navigateBackToCategoryScreen(event.messageID)
+            }
+        }
     }
     CategoryTasksContent(categoryId = categoryId, uiState = uiState, listener = viewModel)
 }
@@ -101,8 +108,8 @@ private fun TasksTopBar(
             title = uiState.category.title,
             startIcon = painterResource(id = R.drawable.ic_arrow_head_back),
             endIcon = if (uiState.category.isPredefined) null else painterResource(id = R.drawable.ic_pencil_edit),
-            onEndClick = listener::onShowEditCategoryBottomSheet
-            , onStartClick = { listener.onBackPress() }
+            onEndClick = listener::onShowEditCategoryBottomSheet,
+            onStartClick = { listener.onBackPress() }
         )
         CategoryTabs(
             tabs = tabs,
@@ -117,20 +124,26 @@ private fun TasksTopBar(
 
 @Composable
 private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modifier) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        items(uiState.tasks) { task ->
-            TaskCard(
-                category = task.category,
-                title = task.title,
-                description = task.description,
-                date = task.date,
-            ) {
-                CategoryPriorityChip(priority = task.priority)
+    AnimatedContent(uiState.tasks.isEmpty()) {
+        if (it){
+            EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
+        }
+        else
+            LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            items(uiState.tasks) { task ->
+                TaskCard(
+                    category = task.category,
+                    title = task.title,
+                    description = task.description,
+                    date = task.date.toString(),
+                ) {
+                    CategoryPriorityChip(priority = task.priority)
+                }
             }
         }
     }
@@ -191,49 +204,10 @@ private fun HandleSnackBarAppearance(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CategoryTasksPreview() {
-    val sampleState = CategoriesScreenState(
-        category = CategoriesScreenState.CategoryUi(
-            id = 1L,
-            title = "Study",
-            iconUrl = "",
-            isPredefined = false
-        ),
-        tasks = listOf(
-            CategoriesScreenState.TaskUi(
-                title = "Review Flashcards",
-                description = "Biology deck - Chapter 4",
-                priority = Task.Priority.LOW,
-                date = "03/12/2025"
-            ),
-            CategoriesScreenState.TaskUi(
-                title = "Write Essay",
-                description = "History on WW2 - 1000 words",
-                priority = Task.Priority.HIGH,
-                date = "03/13/2025"
-            ),
-            CategoriesScreenState.TaskUi(
-                title = "Practice Math",
-                description = "Algebra exercises",
-                priority = Task.Priority.MEDIUM,
-                date = "03/14/2025"
-            )
-        ),
-        selectedStatus = Task.Status.TODO,
-    )
-
-    CategoryTasksContent(
-        categoryId = 1L,
-        uiState = sampleState,
-        listener = FakeCategoryTasksListener
-    )
-}
 
 private val FakeCategoryTasksListener = object : CategoriesTasksInteractionListener {
-    override fun onUpdateCategory(newCategory: CategoriesScreenState.CategoryUi) {}
-    override fun onDeleteCategory(category: CategoriesScreenState.CategoryUi) {}
+    override fun onUpdateCategory(newCategory: CategoryUi) {}
+    override fun onDeleteCategory(category: CategoryUi) {}
     override fun onTasksStatusClick(categoryID: Long, status: Task.Status) {}
     override fun onShowEditCategoryBottomSheet() {}
     override fun onHideEditCategoryBottomSheet() {}

@@ -22,8 +22,7 @@ fun MainScreen(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding(),
+            .fillMaxSize(),
         containerColor = Theme.colors.surface,
         bottomBar = {
             if (state.isBottomNavigationVisible){
