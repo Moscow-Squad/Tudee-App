@@ -18,9 +18,11 @@ import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
 @Composable
 fun TudeeSlider(
     state: SliderState,
+    totalTasks:Int,
+    doneTasks:Int,
     modifier: Modifier = Modifier
 ) {
-    val content = SliderContent.from(state)
+    val content = SliderContent.from(state ,totalTasks,doneTasks)
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -49,7 +51,7 @@ fun TudeeSlider(
             }
 
             Text(
-                text = stringResource(id = content.description),
+                text = stringResource(id = content.description,content.totalTasks,content.doneTasks),
                 color = colors.body,
                 style = DefaultTextStyle.body.small
             )
@@ -77,6 +79,8 @@ fun TudeeSlider(
 @Composable
 fun TudeeSliderPreview() {
     TudeeSlider(
-        state = SliderState.ZERO_PROGRESS
+        state = SliderState.ZERO_PROGRESS,
+        0,
+        0
     )
 }

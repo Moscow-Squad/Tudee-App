@@ -5,11 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.CustomFAB
@@ -19,63 +25,87 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 
 @Composable
 fun OnboardingItem(
+    modifier: Modifier = Modifier,
     data: OnboardingData,
     onNext: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+
+    Box(
+        modifier = modifier
+            .padding(
+                top = 32.dp,
+                bottom = 60.dp
+            )
     ) {
-        Image(
-            painter = painterResource(id = data.imageRes),
-            contentDescription = "Tudee onboarding image",
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(37.dp))
-
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Surface(
+            shape = RoundedCornerShape(32.dp),
+            color = colors.onPrimaryCard,
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .border(
+                    width = 1.dp,
+                    color = colors.onPrimaryStroke,
+                    shape = RoundedCornerShape(32.dp)
+                )
+        ) {
             Column(
-                modifier = Modifier
-                    .padding(bottom = 27.dp)
-                    .fillMaxWidth()
-                    .background(color = colors.onPrimaryCard, shape = RoundedCornerShape(32.dp))
-                    .border(1.dp, colors.onPrimaryStroke, RoundedCornerShape(32.dp))
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 24.dp,
-                        bottom = 48.dp
-                    ),
-                verticalArrangement = Arrangement.spacedBy(32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.padding(
+                    top = 24.dp,
+                    bottom = 48.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                )
             ) {
                 TudeeText(
                     text = data.title,
                     style = Theme.textStyle.title.medium,
                     color = colors.title,
+                    modifier = Modifier.padding(bottom = 16.dp),
                     textAlign = TextAlign.Center,
-                    maxLines = 2
                 )
                 TudeeText(
                     text = data.description,
                     style = Theme.textStyle.body.medium,
                     color = colors.body,
                     textAlign = TextAlign.Center,
-                    maxLines = 3
                 )
             }
-
-            CustomFAB(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                onClick = onNext,
-                isLoading = false,
-                isEnabled = true,
-                icon = R.drawable.arrow_right_double
-            )
         }
+            val layoutDirection = LocalLayoutDirection.current
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .offset(y = (28).dp)
+                    .graphicsLayer {
+                        if (layoutDirection == LayoutDirection.Rtl) {
+                            scaleX = -1f
+                        }
+                    }
+            ) {
+                CustomFAB(
+                    onClick = onNext,
+                    isLoading = false,
+                    isEnabled = true,
+                    icon = R.drawable.arrow_right_double
+                )
+            }
     }
 }
+
+@Preview
+@Composable
+fun OnboardingItemPreview() {
+    OnboardingItem(
+        data = OnboardingData(
+            imageRes = R.drawable.splash_logo_img,
+            title = "Welcome to Tudee",
+            description = "Your personal task manager to help you stay organized and productive."
+        ),
+        onNext = {}
+    )
+}
+

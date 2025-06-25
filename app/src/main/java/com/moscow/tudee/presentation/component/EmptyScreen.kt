@@ -28,7 +28,10 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 
 @Composable
-fun EmptyScreen(modifier: Modifier = Modifier) {
+fun EmptyScreen(
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.no_tasks_here)
+) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.BottomEnd,
@@ -57,7 +60,10 @@ fun EmptyScreen(modifier: Modifier = Modifier) {
                     .padding(top = 65.dp, start = 19.dp)
             )
         }
-        MessageBox(modifier = Modifier.padding(bottom = 90.dp, end = 147.dp))
+        MessageBox(
+            title = title,
+            modifier = Modifier.padding(bottom = 90.dp, end = 147.dp)
+        )
     }
 }
 
@@ -87,8 +93,8 @@ fun ColumnOfDots(modifier: Modifier = Modifier) {
 
 @Composable
 fun MessageBox(
+    title: String,
     modifier: Modifier = Modifier,
-    title: String = stringResource(R.string.no_tasks_here),
     ) {
     Column(
         horizontalAlignment = Alignment.Start,
@@ -124,7 +130,10 @@ fun MessageBox(
 @Composable
 private fun EmptyScreenPreview() {
     TudeeTheme {
-        EmptyScreen(modifier = Modifier.background(Theme.colors.surface))
+        EmptyScreen(
+            title = "blaalla",
+            modifier = Modifier.background(Theme.colors.surface)
+        )
     }
 
 }
@@ -142,7 +151,9 @@ private fun ColumnOfDotsPreview() {
 @Composable
 private fun MessageBoxPreview() {
     TudeeTheme {
-        MessageBox()
+        MessageBox(
+            title = "blablabla",
+        )
     }
 
 }

@@ -27,16 +27,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
-import com.moscow.tudee.presentation.screen.category.getPriorityFromString
+import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.screen.category.component.CategoryPriorityChip
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
 fun TaskCard(
-    category: CategoriesScreenState.CategoryUi,
+    category: CategoryUi,
     title: String,
     description: String,
     modifier: Modifier = Modifier,
@@ -134,7 +134,7 @@ fun TaskCard(
 fun TaskCardWithoutDatePreview() {
     TudeeTheme {
         TaskCard(
-            category = CategoriesScreenState.CategoryUi(
+            category = CategoryUi(
                 id = 1,
                 title = "Study",
                 iconUrl = "",
@@ -144,7 +144,7 @@ fun TaskCardWithoutDatePreview() {
             description = "Study biology flashcards for 15 minutes",
         ) {
             CategoryPriorityChip(
-                priority = getPriorityFromString(stringResource(R.string.high)),
+                priority = Priority.HIGH,
             )
         }
     }
@@ -155,18 +155,18 @@ fun TaskCardWithoutDatePreview() {
 fun TaskCardWithDatePreview() {
     TudeeTheme {
         TaskCard(
-            category = CategoriesScreenState.CategoryUi(
+            category = CategoryUi(
                 id = 1,
                 title = "Study",
                 iconUrl = "",
-                isPredefined = true
+                isPredefined = true,
             ),
             title = "Organize Study Desk",
             description = "Review cell structure and functions for tomorrow...",
             date = "03/12/2025",
         ) {
             CategoryPriorityChip(
-                priority = getPriorityFromString(stringResource(R.string.medium))
+                priority = Priority.HIGH,
             )
         }
     }

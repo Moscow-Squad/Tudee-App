@@ -1,15 +1,58 @@
-package com.moscow.tudee.presentation.screen.home
+package com.moscow.tudee.presentation.mapper
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+
+fun Task.toTaskUi() = TaskUi(
+    id = id,
+    title = title,
+    description = description,
+    date = date,
+    priority = priority,
+    status = status,
+    category = category.toCategoryUi()
+)
+
+fun Category.toCategoryUi() = CategoryUi(
+    id = id,
+    title = title,
+    iconUrl = iconUri,
+    numberOfTasksInCategory = countOfTasks,
+    isPredefined = isPredefined,
+    countOfTasks = countOfTasks
+)
+
+fun TaskUi.toTask(): Task =
+    Task(
+        id = id,
+        title = title,
+        description = description,
+        priority = priority,
+        category = category.toCategory(),
+        status = status,
+        date = date
+    )
+
+fun CategoryUi.toCategory() =
+    Category(
+        id = id,
+        title = title,
+        iconUri = iconUrl,
+        isPredefined = isPredefined,
+        countOfTasks = countOfTasks,
+    )
 
 @Composable
 fun Priority.getText(): String {
@@ -39,19 +82,6 @@ fun Priority.getColor(): Color {
     }
 }
 
-fun HomeState.HomeTask.toTask(): Task {
-    val category = category
-        ?: throw IllegalStateException("Cannot map HomeTask(id=$id) → Task: category was null")
-    return Task(
-        id = id,
-        title = title,
-        description = description,
-        priority = priority ?: Priority.LOW,
-        category = category,
-        status = status,
-        date = date
-    )
-}
 
 @Composable
 fun Task.Status.getText(): String {
@@ -80,17 +110,5 @@ fun Task.Status.getColor(): Color {
     }
 }
 fun LocalDateTime.asLong(): Long {
-    return this.toInstant(kotlinx.datetime.TimeZone.currentSystemDefault()).toEpochMilliseconds()
-}
-
-fun Task.toTaskItem(): HomeState.HomeTask {
-    return HomeState.HomeTask(
-        id = id,
-        title = title,
-        description = description,
-        priority = priority,
-        status = status,
-        category = category,
-        date = date
-    )
+    return this.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 }

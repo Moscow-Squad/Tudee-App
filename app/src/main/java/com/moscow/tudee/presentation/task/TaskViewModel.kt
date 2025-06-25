@@ -44,11 +44,17 @@ open class TaskViewModel(
         viewModelScope.launch {
             val tasksForDate = taskService.getTasksByDate(date)
             val selectedDate = LocalDateTime(date, LocalTime(0, 0, 0))
+            val newMonthDays = generateMonthDays(date.year, date.monthNumber)
+
+
             updateState {
                 it.copy(
                     selectedDate = selectedDate,
                     allTasksForSelectedDate = tasksForDate,
-                    tasksForSelectedState = filterTasksByStatus(tasksForDate, it.selectedStatus)
+                    tasksForSelectedState = filterTasksByStatus(tasksForDate, it.selectedStatus),
+                    currentMonth = date.month,
+                    currentYear = date.year,
+                    monthDays = newMonthDays
                 )
             }
         }
