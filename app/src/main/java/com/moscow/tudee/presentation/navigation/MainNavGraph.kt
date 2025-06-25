@@ -7,20 +7,20 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.moscow.tudee.presentation.navigation.entry.CategoryTasks
+import com.moscow.tudee.presentation.screen.category.CategoryTasks
+import com.moscow.tudee.presentation.screen.category.categoriesRoute
+import com.moscow.tudee.presentation.screen.category.categoryTasksRoute
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
 import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
-import com.moscow.tudee.presentation.ui.categories.categoriesRoute
 import com.moscow.tudee.presentation.ui.home.homeRoute
 import com.moscow.tudee.presentation.ui.tasks.tasksRoute
 
 @Composable
 fun MainNavGraph(
     navController: NavHostController = rememberNavController(),
-    appBar: (TudeeAppBar) -> Unit,
     isBottomNavigationVisible: (Boolean) -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -32,7 +32,6 @@ fun MainNavGraph(
     )
     {
         homeRoute(
-            appBar = appBar,
             isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToTaskScreen = {
                 navController.navigateSafe(
@@ -43,22 +42,34 @@ fun MainNavGraph(
         )
 
         tasksRoute(
-            appBar = appBar,
             isBottomNavigationVisible = isBottomNavigationVisible
         )
 
         categoriesRoute(
-            appBar = appBar,
-            isBottomNavigationVisible = isBottomNavigationVisible,
-            navigateToCategoryTasks = {categoryID->
+            navigateToCategoryTasks = { categoryID ->
                 navController.navigateSafe(
-                    route =  CategoryTasks(categoryID),
+                    route = CategoryTasks(categoryID),
                     builder = {}
                 )
             }
         )
 
-//        categoriesTasksRoute()
+        categoryTasksRoute(
+            isBottomNavigationType=isBottomNavigationVisible,
+            navigateBackToCategoryScreen = { messageId ->
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("result_message", messageId)
+
+                navController.popBackStack()
+            }
+            , navigateBack ={
+                navController.navigateSafe(
+                    route=navController.popBackStack(),
+                    builder = {}
+                )
+            }
+        )
     }
 }
 

@@ -9,7 +9,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.presentation.designSystem.component.BottomNavBar
-import com.moscow.tudee.presentation.designSystem.component.topbar.TudeeAppBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.BottomNavigationDestination
 import com.moscow.tudee.presentation.navigation.MainNavGraph
@@ -23,16 +22,8 @@ fun MainScreen(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding(),
+            .fillMaxSize(),
         containerColor = Theme.colors.surface,
-        topBar = {
-
-            TudeeAppBar(
-                appBar = state.appBar
-            )
-
-        },
         bottomBar = {
             if (state.isBottomNavigationVisible){
                 BottomNavBar(
@@ -46,9 +37,6 @@ fun MainScreen(
         MainNavGraph(
             navController = navController,
             paddingValues = innerPadding,
-            appBar = {
-                mainViewModel.onEvent(MainScreenEvents.UpdateAppBar(it))
-            },
             isBottomNavigationVisible = {
                 mainViewModel.onEvent(MainScreenEvents.UpdateBottomBarVisibility(it))
             }
@@ -56,4 +44,3 @@ fun MainScreen(
 
     }
 }
-

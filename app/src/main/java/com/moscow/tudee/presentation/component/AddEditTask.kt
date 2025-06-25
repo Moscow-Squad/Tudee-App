@@ -33,13 +33,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
-import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.components.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 
 @Composable
@@ -53,9 +53,9 @@ fun TaskBottomSheet(
     onTaskDescriptionChange: (String) -> Unit,
     selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
-    categories: List<Category>,
-    selectedCategory: Category?,
-    onCategorySelected: (Category) -> Unit,
+    categories: List<CategoryUi>,
+    selectedCategory: CategoryUi?,
+    onCategorySelected: (CategoryUi) -> Unit,
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
@@ -78,7 +78,7 @@ fun TaskBottomSheet(
             val isPriorityValid = selectedPriority != null
             val isDateValid = selectedDate != null
             val isCategoryValid =
-                selectedCategory != null && selectedCategory.id != null && selectedCategory.id!! > 0
+                selectedCategory != null && selectedCategory.id!! > 0
             val isFormValid =
                 isTitleValid && isDescriptionValid && isDateValid && isCategoryValid && isPriorityValid
 
@@ -106,7 +106,6 @@ fun TaskBottomSheet(
                     TudeeTextField(
                         value = taskTitle,
                         onValueChange = { newTitle ->
-                            Log.d("TaskBottomSheet_Debug", "📝 Title changed: '$newTitle'")
                             onTaskTitleChange(newTitle)
                         },
                         keyboardOptions = KeyboardOptions.Default,
@@ -122,10 +121,6 @@ fun TaskBottomSheet(
                     TudeeTextField(
                         value = taskDescription,
                         onValueChange = { newDescription ->
-                            Log.d(
-                                "TaskBottomSheet_Debug",
-                                "📄 Description changed: '$newDescription'"
-                            )
                             onTaskDescriptionChange(newDescription)
                         },
                         keyboardOptions = KeyboardOptions.Default,
@@ -166,7 +161,6 @@ fun TaskBottomSheet(
                             backgroundColor = Theme.colors.pinkAccent,
                             icon = painterResource(id = R.drawable.ic_flag),
                             modifier = Modifier.clickable {
-                                Log.d("TaskBottomSheet_Debug", "🔥 Priority changed: HIGH")
                                 onPrioritySelected(Priority.HIGH)
                             }
                         )
@@ -228,7 +222,7 @@ fun TaskBottomSheet(
                                             icon = if (category.isPredefined) painterResource(
                                                 getPredefinedIconRes(category.title)
                                             )
-                                            else rememberAsyncImagePainter(category.iconUri),
+                                            else rememberAsyncImagePainter(category.iconUrl),
                                             label = category.title,
                                             selected = selectedCategory?.id == category.id,
                                             modifier = Modifier
@@ -270,10 +264,6 @@ fun TaskBottomSheet(
                         ),
                         textColor = if (isFormValid) Color.White else Theme.colors.stroke,
                         onClick = {
-                            Log.d(
-                                "TaskBottomSheet_Debug",
-                                "🚀 Save button clicked! Valid: $isFormValid"
-                            )
                             if (isFormValid) {
                                 onSaveTask()
                                 onShowSnackBar(
@@ -309,16 +299,16 @@ fun AddTaskBottomSheet(
     onTaskDescriptionChange: (String) -> Unit,
     selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
-    categories: List<Category>,
-    selectedCategory: Category?,
-    onCategorySelected: (Category) -> Unit,
+    categories: List<CategoryUi>,
+    selectedCategory: CategoryUi?,
+    onCategorySelected: (CategoryUi) -> Unit,
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
     onCancel: () -> Unit = onDismiss,
     onSaveTask: () -> Unit,
     onShowSnackBar: (String) -> Unit = {},
-) {
+    ) {
     TaskBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
@@ -351,11 +341,11 @@ fun EditTaskBottomSheet(
     onTaskTitleChange: (String) -> Unit,
     taskDescription: String,
     onTaskDescriptionChange: (String) -> Unit,
-    selectedPriority: Priority,
+    selectedPriority: Priority?,
     onPrioritySelected: (Priority) -> Unit,
-    categories: List<Category>,
-    selectedCategory: Category?,
-    onCategorySelected: (Category) -> Unit,
+    categories: List<CategoryUi>,
+    selectedCategory: CategoryUi?,
+    onCategorySelected: (CategoryUi) -> Unit,
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
@@ -390,9 +380,9 @@ fun EditTaskBottomSheet(
 @Composable
 fun TaskBottomSheetPreview() {
     val mockCategories = listOf(
-        Category(id = 1, title = "Work", iconUri = "", isPredefined = false, countOfTasks = 0),
-        Category(id = 2, title = "Personal", iconUri = "", isPredefined = false, countOfTasks = 0),
-        Category(id = 3, title = "Study", iconUri = "", isPredefined = false, countOfTasks = 0)
+        CategoryUi(id = 1, title = "Work", iconUrl = "", isPredefined = false, countOfTasks = 0),
+        CategoryUi(id = 2, title = "Personal", iconUrl = "", isPredefined = false, countOfTasks = 0),
+        CategoryUi(id = 3, title = "Study", iconUrl = "", isPredefined = false, countOfTasks = 0)
     )
 
     var taskTitle by remember { mutableStateOf("My Task") }

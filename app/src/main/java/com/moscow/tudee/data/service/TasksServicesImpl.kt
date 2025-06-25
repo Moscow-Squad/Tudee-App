@@ -1,6 +1,7 @@
 package com.moscow.tudee.data.service
 
 import com.moscow.tudee.domain.exception.Exceptions
+import android.util.Log
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.mapper.toCategory
@@ -30,6 +31,7 @@ class TasksServicesImpl(
     }
 
     override suspend fun getTasksByDate(date: LocalDate): List<Task> {
+        Log.d("TAG", "getTasksByDate: $date")
         val taskEntitiesOnDate = taskDao.getTasksByDate(date.toString())
         val categoriesById = categoryDao
             .getCategories()
@@ -52,18 +54,8 @@ class TasksServicesImpl(
         return taskEntity.toTask(domainCategory)
     }
 
-    override suspend fun changeTaskStatus(taskId: Long) {
-        val taskEntity = taskDao.getTaskById(taskId)
-            ?: throw Exceptions.TaskNotFound(taskId)
-
-        val currentStatus = Task.Status.valueOf(taskEntity.status)
-        val nextStatus = when (currentStatus) {
-            Task.Status.TODO -> Task.Status.IN_PROGRESS
-            Task.Status.IN_PROGRESS -> Task.Status.DONE
-            Task.Status.DONE -> return
-        }
-
-        taskDao.updateTaskStatus(taskId, nextStatus.name)
+    override suspend fun changeTaskStatus(taskId: Long,updatedStatus: Task.Status) {
+        taskDao.updateTaskStatus(taskId, updatedStatus.name)
     }
 
     override suspend fun addTask(task: Task) {

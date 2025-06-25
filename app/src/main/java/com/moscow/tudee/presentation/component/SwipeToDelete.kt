@@ -1,10 +1,12 @@
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -17,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -36,26 +39,37 @@ fun SwipeToDeleteItem(
     backgroundColor: Color = Theme.colors.errorVariant,
     content: @Composable () -> Unit
 ) {
-    val swipeState = rememberSwipeToDismissBoxState()
+    val swipeState = rememberSwipeToDismissBoxState(
+        confirmValueChange = {
+            if (it == SwipeToDismissBoxValue.EndToStart) {
+                onDelete()
+            }
+            false
+        }
+    )
     var visible by remember { mutableStateOf(true) }
-
     AnimatedVisibility(
-        visible = visible, modifier = modifier, exit = shrinkVertically() + fadeOut()
+        visible = visible,
+        modifier = modifier,
+        exit = shrinkVertically(animationSpec = tween(animationDuration.toInt())) + fadeOut()
     ) {
         SwipeToDismissBox(
-            state = swipeState, enableDismissFromStartToEnd = false, backgroundContent = {
+            state = swipeState,
+            enableDismissFromStartToEnd = false,
+                    backgroundContent = {
                 SwipeBackground(
                     icon = icon, backgroundColor = backgroundColor
                 )
-            }) {
+            },
+        ) {
             content()
         }
     }
 
     if (swipeState.currentValue == SwipeToDismissBoxValue.EndToStart && visible) {
-        visible = false
         LaunchedEffect(Unit) {
             delay(animationDuration)
+            visible = false
             onDelete()
         }
     }
@@ -69,6 +83,9 @@ private fun SwipeBackground(
         contentAlignment = Alignment.CenterEnd,
         modifier = Modifier
             .fillMaxSize()
+            .clip(
+                RoundedCornerShape(16.dp)
+            )
             .background(backgroundColor)
     ) {
         Icon(
