@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.service.CategoryServices
-import com.moscow.tudee.presentation.screen.category.toCategoryUi
+import com.moscow.tudee.presentation.mapper.toCategoryUi
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
