@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,10 +28,10 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import com.moscow.tudee.presentation.screen.home.HomeState
-import com.moscow.tudee.presentation.screen.home.getColor
-import com.moscow.tudee.presentation.screen.home.getIcon
-import com.moscow.tudee.presentation.screen.home.getText
+import com.moscow.tudee.presentation.mapper.getColor
+import com.moscow.tudee.presentation.mapper.getIcon
+import com.moscow.tudee.presentation.mapper.getText
+import com.moscow.tudee.presentation.model.TaskUi
 
 @Composable
 fun TaskListHeader(
@@ -60,14 +62,14 @@ fun TaskListHeader(
 
 @Composable
 fun TaskList(
-    tasks: List<HomeState.HomeTask>,
-    onTaskClick: (HomeState.HomeTask) -> Unit,
+    tasks: List<TaskUi>,
+    onTaskClick: (TaskUi) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
         modifier = modifier
             .fillMaxWidth()
-            .height(250.dp),
+            .height(230.dp),
         rows = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -79,16 +81,18 @@ fun TaskList(
                 modifier = modifier
                     .width(320.dp)
                     .clickable { onTaskClick(task) },
-                category = task.category!!,
+                category = task.category,
                 title = task.title,
                 description = task.description,
             ) {
-                PriorityChip(
-                    text = task.priority.getText(),
-                    backgroundColor = task.priority.getColor(),
-                    icon = painterResource(id = task.priority.getIcon()),
-                    selected = true
-                )
+                task.priority.let {
+                    PriorityChip(
+                        text = task.priority.getText(),
+                        backgroundColor = task.priority.getColor(),
+                        icon = painterResource(id = task.priority.getIcon()),
+                        selected = true
+                    )
+                }
             }
         }
 
@@ -104,9 +108,10 @@ fun TaskListCount(
 ) {
     Row(
         modifier
+            .clickable { onCountClick() }
             .background(color = Theme.colors.surfaceHigh, shape = CircleShape)
             .padding(vertical = 6.dp, horizontal = 8.dp)
-            .clickable { onCountClick() },
+           ,
         verticalAlignment = Alignment.CenterVertically
     ) {
         TudeeText(

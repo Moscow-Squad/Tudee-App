@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
@@ -32,8 +34,9 @@ fun OnboardingScreen(
     onFinish: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val backgroundImage: Painter = if (isSystemInDarkTheme()) {
+    val backgroundImage: Painter = if (state.isSystemDark ?: isSystemInDarkTheme()){
         painterResource(id = R.drawable.background_splash_dark)
     } else {
         painterResource(id = R.drawable.background_splash_light)

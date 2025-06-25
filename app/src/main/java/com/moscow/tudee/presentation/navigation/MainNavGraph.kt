@@ -20,7 +20,6 @@ import com.moscow.tudee.presentation.ui.tasks.tasksRoute
 @Composable
 fun MainNavGraph(
     navController: NavHostController = rememberNavController(),
-    appBar: (TudeeAppBar) -> Unit,
     isBottomNavigationVisible: (Boolean) -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -32,7 +31,6 @@ fun MainNavGraph(
     )
     {
         homeRoute(
-            appBar = appBar,
             isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToTaskScreen = {
                 navController.navigateSafe(
@@ -43,12 +41,10 @@ fun MainNavGraph(
         )
 
         tasksRoute(
-            appBar = appBar,
             isBottomNavigationVisible = isBottomNavigationVisible
         )
 
         categoriesRoute(
-            appBar = appBar,
             isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToCategoryTasks = {categoryID->
                 navController.navigateSafe(

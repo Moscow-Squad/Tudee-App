@@ -11,7 +11,6 @@ import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 
 fun NavGraphBuilder.categoriesRoute(
-    appBar: (TudeeAppBar) -> Unit,
     isBottomNavigationVisible: (Boolean) -> Unit,
     navigateToCategoryTasks: (Long) -> Unit
 ) {

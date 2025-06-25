@@ -8,11 +8,9 @@ import com.moscow.tudee.presentation.task.TaskScreen
 import com.moscow.tudee.presentation.task.TaskScreen
 
 fun NavGraphBuilder.tasksRoute(
-    appBar: (TudeeAppBar) -> Unit,
     isBottomNavigationVisible: (Boolean) -> Unit,
 ){
     tudeeComposable<TasksScreen>{
-        appBar(TasksScreen.appBar)
         isBottomNavigationVisible(TasksScreen.isBottomNavigationVisible)
         TaskScreen()
     }

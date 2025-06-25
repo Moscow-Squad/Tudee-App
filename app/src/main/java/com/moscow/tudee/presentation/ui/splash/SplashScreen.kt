@@ -33,7 +33,7 @@ fun SplashScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val hasSeenOnboarding = state.hasSeenOnboarding
-    val backgroundImage: Painter = if (isSystemInDarkTheme()) {
+    val backgroundImage: Painter = if (state.isSystemDark ?: isSystemInDarkTheme()) {
         painterResource(id = R.drawable.background_splash_dark)
     } else {
         painterResource(id = R.drawable.background_splash_light)
