@@ -32,8 +32,8 @@
     <string name="calendar_icon">Calendar Icon</string>
     <string name="right_arrow">right arrow</string>
     <string name="done">Done</string>
-    <string name="in_progress">In progress</string>
-    <string name="to_do">To-Do</string>
+    <string name="in_progress_status">In progress</string>
+    <string name="to_do">To Do</string>
     <string name="today">today, %1$s</string>
     <string name="delete_item">Delete item</string>
     <string name="splash_background">background light</string>
@@ -65,5 +65,30 @@
     <string name="add_task">Add Task</string>
     <string name="edited_task_successfully">Edited task successfully</string>
     <string name="add_task_successfully">Add task successfully</string>
-
+    <string name="priority_high">High</string>
+    <string name="priority_medium">Medium</string>
+    <string name="priority_low">Low</string>
+    <string name="category_added_successfully">Category added successfully</string>
+    <string name="category_added_failed">Category added failed</string>
+    <string name="get_category_failed">Category fetching failed</string>
+    <string name="get_tasks_failed">Tasks fetching failed</string>
+    <string name="category_deleted_successfully">Category deleted successfully</string>
+    <string name="category_deleted_failed">Category deleted failed</string>
+    <string name="category_updated_successfully">Category updated successfully</string>
+    <string name="category_updated_failed">Category updated failed</string>
+    <string name="edit_category">Edit category</string>
+    <string name="add_new_category">Add new category</string>
+    <string name="category_title">Category title</string>
+    <string name="category_image">Category image</string>
+    <string name="add_bottom_sheet">Add</string>
+    <string name="cancel_bottom_sheet">Cancel</string>
+    <string name="delete_task">Delete task</string>
+    <string name="show_bottom_sheet">Show bottom sheet</string>
+    <string name="no_tasks_here">No tasks here!</string>
+    <string name="tap_the_button_to_add_your_first_one">Tap the + button to add your first one.</string>
+    <string name="circle_big">circle big</string>
+    <string name="circle_medium">circle medium</string>
+    <string name="circle_small">circle small</string>
+    <string name="deleted_task_successfully">Deleted Task Successfully.</string>
+    <string name="some_error_happened">Some error happened</string>
 </resources>

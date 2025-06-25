@@ -9,7 +9,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.presentation.designSystem.component.BottomNavBar
-import com.moscow.tudee.presentation.designSystem.component.topbar.TudeeAppBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.BottomNavigationDestination
 import com.moscow.tudee.presentation.navigation.MainNavGraph
@@ -28,9 +27,9 @@ fun MainScreen(
         containerColor = Theme.colors.surface,
         topBar = {
 
-            TudeeAppBar(
-                appBar = state.appBar
-            )
+//            TudeeAppBar(
+//                appBar = state.appBar
+//            )
 
         },
         bottomBar = {
@@ -56,4 +55,3 @@ fun MainScreen(
 
     }
 }
-

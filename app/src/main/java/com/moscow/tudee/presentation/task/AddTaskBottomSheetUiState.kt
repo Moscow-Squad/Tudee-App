@@ -15,7 +15,7 @@ data class AddTaskBottomSheetUiState(
     val priority: Priority? = null,
     val status: Status = Status.TODO,
     val date: LocalDateTime = Clock.System.now()
-        .toLocalDateTime(timeZone = TimeZone.currentSystemDefault()),
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
     val category: Category? = null,
     val availableCategories: List<Category> = emptyList(),
     val showAddTaskBottomSheet: Boolean = false,

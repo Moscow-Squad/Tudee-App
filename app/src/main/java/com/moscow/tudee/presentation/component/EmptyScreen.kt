@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.task.components
+package com.moscow.tudee.presentation.component
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
@@ -65,19 +66,19 @@ fun ColumnOfDots(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Icon(
             painter = painterResource(R.drawable.ic_moon_pit_big),
-            contentDescription = "circle big",
+            contentDescription = stringResource(R.string.circle_big),
             tint = (Theme.colors.surfaceHigh),
             modifier = Modifier.padding(end = 9.dp, bottom = 3.dp)
         )
         Icon(
             painter = painterResource(R.drawable.ic_moon_pit_medium),
-            contentDescription = "circle medium",
+            contentDescription = stringResource(R.string.circle_medium),
             tint = (Theme.colors.surfaceHigh),
             modifier = Modifier.padding(start = 10.dp)
         )
         Icon(
             painter = painterResource(R.drawable.ic_moon_pit_small),
-            contentDescription = "circle small",
+            contentDescription = stringResource(R.string.circle_small),
             tint = (Theme.colors.surfaceHigh),
             modifier = Modifier.padding(top = 5.dp, start = 18.dp, bottom = 1.dp)
         )
@@ -85,7 +86,10 @@ fun ColumnOfDots(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MessageBox(modifier: Modifier = Modifier) {
+fun MessageBox(
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.no_tasks_here),
+    ) {
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -103,12 +107,12 @@ fun MessageBox(modifier: Modifier = Modifier) {
             .padding(vertical = 12.dp, horizontal = 8.dp)
     ) {
         Text(
-            text = "No tasks here!",
+            text = title,
             style = Theme.textStyle.title.small,
             color = Theme.colors.body
         )
         Text(
-            text = "Tap the + button to add your first one.",
+            text = stringResource(R.string.tap_the_button_to_add_your_first_one),
             style = Theme.textStyle.body.small,
             color = Theme.colors.hint
         )

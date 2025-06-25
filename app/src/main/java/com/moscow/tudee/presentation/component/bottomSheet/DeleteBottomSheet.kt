@@ -105,8 +105,8 @@ fun DeleteBottomSheetPreview() {
         if (show) {
             DeleteBottomSheet(
                 onDismiss = {},
-                title = "Delete Task",
-                description = "Are you sure you want to continue?",
+                title = stringResource(R.string.delete_task),
+                description = stringResource(R.string.are_you_sure_to_continue),
                 onDelete = { show = false },
                 image = R.drawable.im_robot_normal
 
@@ -118,7 +118,7 @@ fun DeleteBottomSheetPreview() {
             onClick = {
                 show = true
             }) {
-            Text(text = "Show bottom sheet")
+            Text(text = stringResource(R.string.show_bottom_sheet))
         }
     }
 }
