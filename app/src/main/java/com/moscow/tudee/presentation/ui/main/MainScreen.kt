@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.ui.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
@@ -27,6 +28,9 @@ fun MainScreen(
         bottomBar = {
             if (state.isBottomNavigationVisible){
                 BottomNavBar(
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .background(Theme.colors.surface),
                     bottomNavigationItems = BottomNavigationDestination.entries,
                     navController = navController
                 )
