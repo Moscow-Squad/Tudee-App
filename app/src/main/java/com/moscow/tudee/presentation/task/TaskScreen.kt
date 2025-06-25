@@ -200,17 +200,6 @@ private fun TaskContent(
     bottomSheetUiState: AddTaskBottomSheetUiState,
     bottomSheetListener: AddTaskBottomSheetViewModel
 ) {
-    val selectedTabIndex = when (uiState.selectedStatus) {
-        Task.Status.IN_PROGRESS -> 0
-        Task.Status.TODO -> 1
-        Task.Status.DONE -> 2
-    }
-
-    val inProgressCount =
-        uiState.allTasksForSelectedDate.count { it.status == Task.Status.IN_PROGRESS }
-    val todoCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.TODO }
-    val doneCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.DONE }
-
     val allTabs = listOf(
         TabItem(
             stringResource(R.string.to_do),
