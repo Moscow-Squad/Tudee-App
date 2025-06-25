@@ -45,8 +45,6 @@ import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.EmptyScreen
-import com.moscow.tudee.presentation.component.Tab
-import com.moscow.tudee.presentation.component.Tabs
 import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.SnackBar
@@ -123,62 +121,60 @@ fun TaskScreen(
             }
         }
     }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
 
-    Scaffold(
-        containerColor = Theme.colors.surface,
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Theme.colors.surfaceHigh)
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
-            ) {
-                Text(
-                    text = "Task",
-                    style = Theme.textStyle.title.large,
-                    color = Theme.colors.title
+    ) {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Theme.colors.surfaceHigh)
+                        .padding(horizontal = 16.dp, vertical = 20.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.tasks),
+                        style = Theme.textStyle.title.large,
+                        color = Theme.colors.title
+                    )
+                }
+            },
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            floatingActionButton = {
+                CustomFAB(
+                    onClick = { addTaskBottomSheetViewModel.onShowAddTaskBottomSheet() },
+                    icon = R.drawable.ic_add_task
                 )
             }
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        floatingActionButton = {
-            CustomFAB(
-                onClick = { addTaskBottomSheetViewModel.onShowAddTaskBottomSheet() },
-                icon = R.drawable.ic_add_task
-            )
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
+        ) { innerPadding ->
             TaskContent(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.padding(innerPadding),
                 interactionListener = viewModel,
                 uiState = uiState,
                 bottomSheetUiState = bottomSheetUiState,
                 bottomSheetListener = addTaskBottomSheetViewModel,
                 showDatePicker = showDatePicker,
             )
-            if (showCustomSnackBar) {
-                val visuals = getSnackBarVisuals(snackBar.type)
-                AnimatedVisibility(
-                    visible = true,
-                    enter = slideInVertically { -100 } + fadeIn(),
-                    exit = slideOutVertically { -100 } + fadeOut(),
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                ) {
-                    SnackBar(
-                        icon = painterResource(id = visuals.icon),
-                        message = stringResource(snackBar.messageId),
-                        iconBackground = visuals.iconBackground,
-                        iconTint = visuals.iconTint
-                    )
-                }
+        }
+        if (showCustomSnackBar) {
+            val visuals = getSnackBarVisuals(snackBar.type)
+            AnimatedVisibility(
+                visible = true,
+                enter = slideInVertically { -100 } + fadeIn(),
+                exit = slideOutVertically { -100 } + fadeOut(),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+            ) {
+                SnackBar(
+                    icon = painterResource(id = visuals.icon),
+                    message = stringResource(snackBar.messageId),
+                    iconBackground = visuals.iconBackground,
+                    iconTint = visuals.iconTint
+                )
             }
+
 
             if (showDatePicker) {
                 DatePickerModal(
@@ -189,6 +185,7 @@ fun TaskScreen(
                 )
             }
         }
+
     }
 }
 
@@ -201,6 +198,7 @@ private fun TaskContent(
     bottomSheetUiState: AddTaskBottomSheetUiState,
     bottomSheetListener: AddTaskBottomSheetViewModel
 ) {
+
     val allTabs = listOf(
         TabItem(
             stringResource(R.string.to_do),
@@ -230,7 +228,7 @@ private fun TaskContent(
         if (index >= 0) lazyListState.animateScrollToItem(index)
     }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(Theme.colors.surface)
             .fillMaxSize()
     ) {
