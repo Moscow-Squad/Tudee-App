@@ -39,7 +39,7 @@ import com.moscow.tudee.presentation.component.PrimaryButton
 import com.moscow.tudee.presentation.component.SecondaryButton
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.component.modifier.dashedBorder
-import com.moscow.tudee.presentation.components.TudeeTextField
+import com.moscow.tudee.presentation.component.TudeeTextField
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
 import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 

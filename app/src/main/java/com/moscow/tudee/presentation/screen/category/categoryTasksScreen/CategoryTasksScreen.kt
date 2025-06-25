@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
-import com.moscow.tudee.presentation.ObserveAsEvent
+import com.moscow.tudee.presentation.base.ObserveAsEvent
 import com.moscow.tudee.presentation.component.EmptyScreen
-import com.moscow.tudee.presentation.designSystem.component.TaskCard
-import com.moscow.tudee.presentation.designSystem.component.TopBar
+import com.moscow.tudee.presentation.component.TaskCard
+import com.moscow.tudee.presentation.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
