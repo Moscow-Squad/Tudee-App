@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -124,31 +125,38 @@ private fun TasksTopBar(
 
 @Composable
 private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modifier) {
-    AnimatedContent(uiState.tasks.isEmpty()) {
-        if (it){
-            EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
-        }
-        else
+    AnimatedContent(uiState.tasks.isEmpty()) { isEmpty ->
+        if (isEmpty) {
+            androidx.compose.foundation.layout.Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(Theme.colors.surface)
+                    .padding(10.dp),
+                contentAlignment = androidx.compose.ui.Alignment.Center
+            ) {
+                EmptyScreen()
+            }
+        } else {
             LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            items(uiState.tasks) { task ->
-                TaskCard(
-                    category = task.category,
-                    title = task.title,
-                    description = task.description,
-                    date = task.date.toString(),
-                ) {
-                    CategoryPriorityChip(priority = task.priority)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                items(uiState.tasks) { task ->
+                    TaskCard(
+                        category = task.category,
+                        title = task.title,
+                        description = task.description,
+                        date = task.date.toString(),
+                    ) {
+                        CategoryPriorityChip(priority = task.priority)
+                    }
                 }
             }
         }
     }
 }
-
 
 @Composable
 private fun HandleEditBottomSheet(
