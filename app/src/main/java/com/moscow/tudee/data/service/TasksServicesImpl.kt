@@ -53,8 +53,8 @@ class TasksServicesImpl(
         return taskEntity.toTask(domainCategory)
     }
 
-    override suspend fun changeTaskStatus(taskId: Long,updatedStatus: String) {
-        taskDao.updateTaskStatus(taskId, updatedStatus)
+    override suspend fun changeTaskStatus(taskId: Long,updatedStatus: Task.Status) {
+        taskDao.updateTaskStatus(taskId, updatedStatus.name)
     }
 
     override suspend fun addTask(task: Task) {

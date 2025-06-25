@@ -153,7 +153,7 @@ class HomeViewModel(
 
         launchWithResult(
             action = {
-                task.id?.let { tasksServices.changeTaskStatus(it, nextStatus.name) }
+                task.id?.let { tasksServices.changeTaskStatus(it, nextStatus) }
             },
             onSuccess = {
                 updateState {
@@ -173,7 +173,7 @@ class HomeViewModel(
 
     private fun updateTaskStatus(task: TaskUi, nextStatus: Task.Status) {
         when (nextStatus) {
-            Task.Status.IN_PROGRESS -> {
+            Status.IN_PROGRESS -> {
                 updateState {
                     it.copy(
                         inProgressTasks = it.inProgressTasks + task.copy(status = nextStatus),
@@ -182,7 +182,7 @@ class HomeViewModel(
                 }
             }
 
-            Task.Status.DONE -> {
+            Status.DONE -> {
                 updateState {
                     it.copy(
                         doneTasks = it.doneTasks + task.copy(status = nextStatus),
@@ -197,9 +197,9 @@ class HomeViewModel(
 
     private fun getNextStatus(currentStatus: Task.Status): Task.Status {
         return when (currentStatus) {
-            Task.Status.TODO -> Task.Status.IN_PROGRESS
-            Task.Status.IN_PROGRESS -> Task.Status.DONE
-            Task.Status.DONE -> Task.Status.DONE
+            Status.TODO -> Status.IN_PROGRESS
+            Status.IN_PROGRESS ->Status.DONE
+            Status.DONE -> Status.DONE
         }
     }
 

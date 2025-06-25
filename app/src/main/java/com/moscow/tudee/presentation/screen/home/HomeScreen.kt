@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -19,6 +20,7 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.EditTaskBottomSheet
+import com.moscow.tudee.presentation.designSystem.component.topbar.HomeTopAppBar
 import com.moscow.tudee.presentation.screen.home.home_components.OverviewSection
 import com.moscow.tudee.presentation.screen.home.home_components.TaskList
 import com.moscow.tudee.presentation.screen.home.home_components.TaskListHeader
@@ -55,6 +57,12 @@ fun HomeContent(
     interactionListener: HomeInteractionListener,
 ) {
     Scaffold(
+        topBar = {
+            HomeTopAppBar(
+                title = stringResource(id = R.string.tudee),
+                subTitle = stringResource(id = R.string.your_cute_helper_for_every_task),
+            )
+        },
         floatingActionButton = {
             CustomFAB(
                 onClick = { interactionListener.onFloatingActionButtonClick() },

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +33,7 @@ fun SplashScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val hasSeenOnboarding = state.hasSeenOnboarding
-    val backgroundImage: Painter = if (state.isSystemDark) {
+    val backgroundImage: Painter = if (state.isSystemDark ?: isSystemInDarkTheme()) {
         painterResource(id = R.drawable.background_splash_dark)
     } else {
         painterResource(id = R.drawable.background_splash_light)

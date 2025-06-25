@@ -7,6 +7,9 @@ class SplashViewModel(
     private val localService: LocalService
 ) : BaseViewModel<SplashState, SplashEvent>(SplashState()) {
 
+    init {
+        isSystemDark()
+    }
     fun checkIfUserHasSeenOnboarding() {
         launchWithResult(
             action = { localService.hasSeenOnboarding() },
@@ -40,7 +43,7 @@ class SplashViewModel(
         )
     }
 
-    fun isSystemDark(){
+    private fun isSystemDark(){
         launchWithResult(
             action = { localService.isSystemThemeDark() },
             onSuccess = {isDark->

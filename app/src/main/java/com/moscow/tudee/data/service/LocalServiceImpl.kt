@@ -26,13 +26,13 @@ class LocalServiceImpl(private val context: Context) : LocalService {
             .first()
     }
 
-    override suspend fun isSystemThemeDark(): Boolean {
+    override suspend fun isSystemThemeDark(): Boolean? {
         return context.dataStore.data
-            .map { prefs -> prefs[isSystemDarkKey] == true }
+            .map { prefs -> prefs[isSystemDarkKey] }
             .first()
     }
 
-    override suspend fun isSystemThemeDark(isDark: Boolean) {
+    override suspend fun setSystemThemeDark(isDark: Boolean) {
         context.dataStore.edit { prefs ->
             prefs[isSystemDarkKey] = isDark
         }
