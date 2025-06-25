@@ -53,6 +53,7 @@ import com.moscow.tudee.presentation.designSystem.component.SnackBar
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import com.moscow.tudee.presentation.screen.category.toCategoryUi
 import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.task.components.Header
 import com.moscow.tudee.presentation.util.getPriorityBackground
@@ -106,7 +107,10 @@ fun TaskScreen(
             snackBar = event.snackBarUi
             showCustomSnackBar = true
             when (event) {
-                AddTaskBottomSheetEvents.NotifyTaskAdded -> viewModel.selectDate(uiState.selectedDate.date)
+                is AddTaskBottomSheetEvents.NotifyTaskAdded -> {
+                    viewModel.selectDate(event.date)
+                    viewModel.selectStatus(Task.Status.TODO)
+                }
                 AddTaskBottomSheetEvents.NotifyTaskNotAdded -> Unit
             }
             coroutineScope.launch {
@@ -248,13 +252,13 @@ private fun TaskContent(
             items(uiState.monthDays) { date ->
                 val dayName = date.dayOfWeek.name.take(3).lowercase()
                     .replaceFirstChar { it.titlecase(Locale.ROOT) }
-                val isSelected = date == uiState.selectedDate.date
+//                val isSelected =
                 DayItem(
                     day = dayName,
                     dayDate = date.dayOfMonth,
-                    isSelected = isSelected,
+                    isSelected = date == uiState.selectedDate.date,
                     onDayClick = { interactionListener.selectDate(date) },
-                    isToday = isSelected
+                    isToday = date == uiState.selectedDate.date
                 )
             }
         }
@@ -285,7 +289,7 @@ private fun TaskContent(
                         animationDuration = 200L
                     ) {
                         TaskCard(
-                            category = task.category,
+                            category = task.category.toCategoryUi(),
                             title = task.title,
                             description = task.description,
                         ) {

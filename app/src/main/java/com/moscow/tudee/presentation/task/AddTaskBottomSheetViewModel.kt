@@ -76,8 +76,8 @@ class AddTaskBottomSheetViewModel(
     }
 
     private fun onAddTaskSuccess(response: Unit) {
+        sendEvent(AddTaskBottomSheetEvents.NotifyTaskAdded(uiState.value.date.date))
         updateState { AddTaskBottomSheetUiState(availableCategories = it.availableCategories) }
-        sendEvent(AddTaskBottomSheetEvents.NotifyTaskAdded)
     }
 
     private fun onAddTaskError(throwable: Throwable) {

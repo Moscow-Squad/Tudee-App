@@ -1,9 +1,10 @@
 package com.moscow.tudee.presentation.task
 
 import com.moscow.tudee.R
+import kotlinx.datetime.LocalDate
 
 sealed class AddTaskBottomSheetEvents(val snackBarUi: SnackBarUi) {
-    data object NotifyTaskAdded: AddTaskBottomSheetEvents(
+    data class NotifyTaskAdded(val date: LocalDate): AddTaskBottomSheetEvents(
         SnackBarUi(
             type = SnackBarType.SUCCESS,
             messageId = R.string.add_task_successfully

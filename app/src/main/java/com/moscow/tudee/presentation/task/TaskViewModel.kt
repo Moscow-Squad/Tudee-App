@@ -29,6 +29,7 @@ open class TaskViewModel(
 
     init {
         loadTasks()
+        selectStatus(Task.Status.TODO)
     }
 
     override fun showDatePicker() {
@@ -53,7 +54,7 @@ open class TaskViewModel(
         }
     }
 
-    override fun selectStatus(status: Task.Status) {
+    final override fun selectStatus(status: Task.Status) {
         updateState { currentState ->
             val filtered = filterTasksByStatus(currentState.allTasksForSelectedDate, status)
             currentState.copy(
