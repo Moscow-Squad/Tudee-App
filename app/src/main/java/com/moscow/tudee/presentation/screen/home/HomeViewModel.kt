@@ -1,6 +1,4 @@
 package com.moscow.tudee.presentation.screen.home
-
-
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.domain.service.CategoryServices
@@ -45,27 +43,25 @@ class HomeViewModel(
     }
     private fun onSuccessLoadingTasks(tasks:List<TaskUi>){
         val groupedTasks = tasks.groupBy{ it.status }
+
         updateState {
             it.copy(
                 todoTasks = groupedTasks[Status.TODO].orEmpty() ,
                 doneTasks = groupedTasks[Status.DONE].orEmpty(),
                 inProgressTasks = groupedTasks[Status.IN_PROGRESS].orEmpty(),
-                 sliderState = updateSliderState(groupedTasks)
+                sliderState = updateSliderState( uiState.value.doneTasks.size ,uiState.value.todoTasks.size ,uiState.value.inProgressTasks.size)
 
             )
         }
     }
 
-    private fun updateSliderState(groupedTasks: Map<Status, List<TaskUi>>): HomeState.SliderState {
-        val todoTasks = groupedTasks[Status.TODO]?.size ?: 0
-        val inProgressTasks = groupedTasks[Status.IN_PROGRESS]?.size ?: 0
-        val doneTasks = groupedTasks[Status.DONE]?.size ?: 0
+    private fun updateSliderState(doneTasks:Int, todoTasks:Int,inProgressTasks:Int): HomeState.SliderState {
         val totalTasks = todoTasks + inProgressTasks + doneTasks
         return when {
             totalTasks == 0 -> HomeState.SliderState.NOTHING_ON_YOUR_LIST
             doneTasks == totalTasks -> HomeState.SliderState.TADAA
             todoTasks > 0 && doneTasks == 0 && inProgressTasks == 0 -> HomeState.SliderState.ZERO_PROGRESS
-            todoTasks > 0 && doneTasks > 0 && doneTasks < totalTasks -> HomeState.SliderState.STAY_WORKING
+            todoTasks > 0 && doneTasks in 1 until totalTasks -> HomeState.SliderState.STAY_WORKING
             else -> HomeState.SliderState.STAY_WORKING
         }
 

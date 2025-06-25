@@ -69,7 +69,7 @@ fun TaskList(
     LazyHorizontalGrid(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .height(230.dp),
         rows = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
