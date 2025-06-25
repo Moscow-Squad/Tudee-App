@@ -1,33 +1,54 @@
 package com.moscow.tudee.data.service
 
-import com.moscow.tudee.domain.exception.Exceptions
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.mapper.toCategory
 import com.moscow.tudee.data.local.mapper.toCategoryEntity
 import com.moscow.tudee.domain.entity.Category
+import com.moscow.tudee.domain.exception.AppException
 import com.moscow.tudee.domain.service.CategoryServices
 
 class CategoryServicesImpl(
     private val categoryDao: CategoryDao
-): CategoryServices {
+) : CategoryServices {
 
     override suspend fun getCategories(): List<Category> {
-        return categoryDao.getCategories().map { it.toCategory() }
+        try {
+            return categoryDao.getCategories().map { it.toCategory() }
+        } catch (e: Exception) {
+            throw AppException.DatabaseException(e.message ?: "")
+        }
     }
 
     override suspend fun addCategory(category: Category) {
-        categoryDao.addCategory(category.toCategoryEntity())
+        try {
+            categoryDao.addCategory(category.toCategoryEntity())
+        } catch (e: Exception) {
+            throw AppException.CouldNotAddCategoryException(e.message ?: "")
+        }
     }
 
     override suspend fun updateCategory(category: Category) {
-        categoryDao.updateCategory(category.toCategoryEntity())
+        try {
+            categoryDao.updateCategory(category.toCategoryEntity())
+        } catch (e: Exception) {
+            throw AppException.CategoryNotFoundException(e.message ?: "")
+        }
     }
 
     override suspend fun deleteCategory(categoryId: Long) {
-        categoryDao.deleteCategory(categoryId)
+        try {
+            categoryDao.deleteCategory(categoryId)
+        } catch (e: Exception) {
+            throw AppException.CategoryNotFoundException(e.message ?: "")
+        }
     }
 
     override suspend fun getCategoryById(categoryId: Long): Category {
-        return categoryDao.getCategoryById(categoryId)?.toCategory() ?: throw Exceptions.CategoryNotFound(categoryId)
+        try {
+            return categoryDao.getCategoryById(categoryId)?.toCategory()
+                ?: throw Exception()
+        } catch (e: Exception) {
+            throw AppException.CategoryNotFoundException(e.message ?: "")
+        }
     }
 }
