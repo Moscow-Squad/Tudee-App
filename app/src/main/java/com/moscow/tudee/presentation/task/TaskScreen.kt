@@ -88,7 +88,6 @@ fun TaskScreen(
             )
         )
     }
-
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest { event ->
             if (event is TaskUiEvent.ShowSnackBar) {
@@ -101,7 +100,6 @@ fun TaskScreen(
             }
         }
     }
-
     LaunchedEffect(Unit) {
         addTaskBottomSheetViewModel.uiEvent.collect { event ->
             snackBar = event.snackBarUi
@@ -212,12 +210,6 @@ private fun TaskContent(
         TabItem(stringResource(R.string.done), uiState.tasksForSelectedState.size, Task.Status.DONE)
     )
 
-    val currentMonthYear = "${
-        uiState.currentMonth.getDisplayName(
-            TextStyle.FULL,
-            Locale.getDefault()
-        )
-    }, ${uiState.currentYear}"
     val lazyListState = rememberLazyListState()
     val isAtStart by remember { derivedStateOf { lazyListState.firstVisibleItemIndex == 0 } }
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
