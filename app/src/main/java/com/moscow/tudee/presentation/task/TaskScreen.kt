@@ -53,6 +53,8 @@ import com.moscow.tudee.presentation.designSystem.component.SnackBar
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
+import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
+import com.moscow.tudee.presentation.screen.category.component.TabItem
 import com.moscow.tudee.presentation.screen.category.toCategoryUi
 import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.task.components.Header
@@ -207,9 +209,13 @@ private fun TaskContent(
     val doneCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.DONE }
 
     val allTabs = listOf(
-        Tab("In Progress", inProgressCount),
-        Tab("To Do", todoCount),
-        Tab("Done", doneCount)
+        TabItem(stringResource(R.string.to_do), uiState.tasksForSelectedState.size, Task.Status.TODO),
+        TabItem(
+            stringResource(R.string.in_progress_status),
+            uiState.tasksForSelectedState.size,
+            Task.Status.IN_PROGRESS
+        ),
+        TabItem(stringResource(R.string.done),  uiState.tasksForSelectedState.size, Task.Status.DONE)
     )
 
     val currentMonthYear = "${
@@ -263,18 +269,10 @@ private fun TaskContent(
             }
         }
 
-        Tabs(
+        CategoryTabs(
             tabs = allTabs,
-            selectedTabIndex = selectedTabIndex,
-            onTabClick = {
-                interactionListener.selectStatus(
-                    when (it) {
-                        0 -> Task.Status.IN_PROGRESS
-                        1 -> Task.Status.TODO
-                        else -> Task.Status.DONE
-                    }
-                )
-            },
+            selectedStatus = uiState.selectedStatus,
+            onTabClick = {status -> interactionListener.selectStatus(status)},
             modifier = Modifier.background(Theme.colors.surfaceHigh)
         )
 
