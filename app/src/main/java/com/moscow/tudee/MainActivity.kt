@@ -1,7 +1,6 @@
 package com.moscow.tudee
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -16,7 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.moscow.tudee.data.service.LocalServiceImpl
+import com.moscow.tudee.data.service.LocalServicesImpl
 import com.moscow.tudee.presentation.designSystem.theme.ThemeState
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.navigation.TudeeGraph
@@ -36,7 +35,7 @@ class MainActivity : ComponentActivity() {
             )
         )
         setContent {
-            val localService = LocalServiceImpl(this@MainActivity)
+            val localService = LocalServicesImpl(this@MainActivity)
             val isSystemInDarkTheme = isSystemInDarkTheme()
 
             var isDark by remember { mutableStateOf<Boolean>(isSystemInDarkTheme) }

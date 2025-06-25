@@ -35,9 +35,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
-import com.moscow.tudee.presentation.components.TudeeTextField
-import com.moscow.tudee.presentation.designSystem.component.CategoryCard
-import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes

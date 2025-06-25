@@ -22,13 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.ObserveAsEvent
+import com.moscow.tudee.presentation.base.ObserveAsEvent
 import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
 import com.moscow.tudee.presentation.screen.category.component.CategoryBottomSheet
 import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.screen.category.component.CategoryCard
-import com.moscow.tudee.presentation.designSystem.component.TopBar
+import com.moscow.tudee.presentation.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
