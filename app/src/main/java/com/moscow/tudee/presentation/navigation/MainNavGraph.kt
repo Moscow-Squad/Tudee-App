@@ -33,7 +33,6 @@ fun MainNavGraph(
     )
     {
         homeRoute(
-            appBar = appBar,
             isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToTaskScreen = {
                 navController.navigateSafe(
@@ -44,7 +43,6 @@ fun MainNavGraph(
         )
 
         tasksRoute(
-            appBar = appBar,
             isBottomNavigationVisible = isBottomNavigationVisible
         )
 

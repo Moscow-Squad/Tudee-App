@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.component
+package com.moscow.tudee.presentation.task.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
