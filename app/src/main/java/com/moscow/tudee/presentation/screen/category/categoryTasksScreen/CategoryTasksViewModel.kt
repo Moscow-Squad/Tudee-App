@@ -5,7 +5,7 @@ import com.moscow.tudee.domain.entity.Category
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
-import com.moscow.tudee.presentation.BaseViewModel
+import com.moscow.tudee.presentation.base.BaseViewModel
 import com.moscow.tudee.presentation.mapper.toCategory
 import com.moscow.tudee.presentation.mapper.toCategoryUi
 import com.moscow.tudee.presentation.mapper.toTaskUi

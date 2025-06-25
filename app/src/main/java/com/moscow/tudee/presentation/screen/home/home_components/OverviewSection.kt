@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.TudeeText
-import com.moscow.tudee.presentation.designSystem.component.slider.TudeeSlider
+import com.moscow.tudee.presentation.component.slider.TudeeSlider
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
 

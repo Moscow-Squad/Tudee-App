@@ -8,7 +8,7 @@ import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
-import com.moscow.tudee.presentation.screen.category.toCategoryUi
+import com.moscow.tudee.presentation.mapper.toCategoryUi
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

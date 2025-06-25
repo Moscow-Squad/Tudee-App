@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -13,10 +14,9 @@ import com.moscow.tudee.presentation.screen.category.categoryTasksRoute
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
-import com.moscow.tudee.presentation.navigation.entry.TudeeAppBar
 import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
-import com.moscow.tudee.presentation.ui.home.homeRoute
-import com.moscow.tudee.presentation.ui.tasks.tasksRoute
+import com.moscow.tudee.presentation.screen.home.homeRoute
+import com.moscow.tudee.presentation.screen.task.tasksRoute
 
 @Composable
 fun MainNavGraph(
@@ -25,7 +25,7 @@ fun MainNavGraph(
     paddingValues: PaddingValues,
 ) {
     NavHost(
-        modifier = Modifier.padding(paddingValues),
+        modifier = Modifier.padding(bottom = 78.dp),
         navController = navController,
         route = MainScreen::class,
         startDestination = HomeScreen
@@ -46,6 +46,7 @@ fun MainNavGraph(
         )
 
         categoriesRoute(
+            isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToCategoryTasks = { categoryID ->
                 navController.navigateSafe(
                     route = CategoryTasks(categoryID),
@@ -55,19 +56,15 @@ fun MainNavGraph(
         )
 
         categoryTasksRoute(
-            isBottomNavigationType=isBottomNavigationVisible,
+            isBottomNavigationType = isBottomNavigationVisible,
             navigateBackToCategoryScreen = { messageId ->
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set("result_message", messageId)
 
-                navController.popBackStack()
             }
             , navigateBack ={
-                navController.navigateSafe(
-                    route=navController.popBackStack(),
-                    builder = {}
-                )
+                navController.popBackStack()
             }
         )
     }

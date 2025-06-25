@@ -23,14 +23,13 @@ import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.component.TudeeText
-import com.moscow.tudee.presentation.designSystem.component.PriorityChip
-import com.moscow.tudee.presentation.designSystem.component.TaskCard
+import com.moscow.tudee.presentation.component.PriorityChip
+import com.moscow.tudee.presentation.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.mapper.getColor
 import com.moscow.tudee.presentation.mapper.getIcon
 import com.moscow.tudee.presentation.mapper.getText
 import com.moscow.tudee.presentation.model.TaskUi
-import com.moscow.tudee.presentation.screen.home.HomeState
 
 @Composable
 fun TaskListHeader(
