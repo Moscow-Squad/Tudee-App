@@ -29,6 +29,7 @@ fun OverviewSection(
     doneTasksCount: Int,
     modifier: Modifier = Modifier
 ) {
+    val totalTasks = todoTasksCount + doneTasksCount + inProgressTasksCount
     Column(
         modifier
             .fillMaxWidth()
@@ -43,7 +44,7 @@ fun OverviewSection(
                 .padding(top = 8.dp)
         )
 
-        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 12.dp))
+        TudeeSlider(sliderState,totalTasks , doneTasksCount, modifier = Modifier.padding(horizontal = 12.dp))
 
         TudeeText(
             text = stringResource(R.string.overview),

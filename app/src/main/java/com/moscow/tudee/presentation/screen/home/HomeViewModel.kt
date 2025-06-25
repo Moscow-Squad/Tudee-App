@@ -65,7 +65,7 @@ class HomeViewModel(
             totalTasks == 0 -> HomeState.SliderState.NOTHING_ON_YOUR_LIST
             doneTasks == totalTasks -> HomeState.SliderState.TADAA
             todoTasks > 0 && doneTasks == 0 && inProgressTasks == 0 -> HomeState.SliderState.ZERO_PROGRESS
-            todoTasks > 0 && doneTasks > 0 -> HomeState.SliderState.STAY_WORKING
+            todoTasks > 0 && doneTasks > 0 && doneTasks < totalTasks -> HomeState.SliderState.STAY_WORKING
             else -> HomeState.SliderState.STAY_WORKING
         }
 
