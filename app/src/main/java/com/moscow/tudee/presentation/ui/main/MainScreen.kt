@@ -22,16 +22,8 @@ fun MainScreen(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding(),
+            .fillMaxSize(),
         containerColor = Theme.colors.surface,
-        topBar = {
-
-//            TudeeAppBar(
-//                appBar = state.appBar
-//            )
-
-        },
         bottomBar = {
             if (state.isBottomNavigationVisible){
                 BottomNavBar(
@@ -45,9 +37,6 @@ fun MainScreen(
         MainNavGraph(
             navController = navController,
             paddingValues = innerPadding,
-            appBar = {
-                mainViewModel.onEvent(MainScreenEvents.UpdateAppBar(it))
-            },
             isBottomNavigationVisible = {
                 mainViewModel.onEvent(MainScreenEvents.UpdateBottomBarVisibility(it))
             }

@@ -6,11 +6,11 @@ import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.CategoryServices
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.BaseViewModel
+import com.moscow.tudee.presentation.mapper.toCategory
+import com.moscow.tudee.presentation.mapper.toCategoryUi
+import com.moscow.tudee.presentation.mapper.toTaskUi
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
-import com.moscow.tudee.presentation.screen.category.categoryTasksScreen.CategoryTasksEvents
-import com.moscow.tudee.presentation.screen.category.toCategory
-import com.moscow.tudee.presentation.screen.category.toCategoryUi
-import com.moscow.tudee.presentation.screen.category.toTaskUi
 
 class CategoryTasksViewModel(
     private val categoryId: Long,
@@ -84,7 +84,7 @@ class CategoryTasksViewModel(
         }
     }
 
-    override fun onUpdateCategory(newCategory: CategoriesScreenState.CategoryUi) {
+    override fun onUpdateCategory(newCategory: CategoryUi) {
         launchWithResult(
             action = { categoryServices.updateCategory(newCategory.toCategory()) },
             onSuccess = { onUpdateCategorySuccess() },
@@ -114,7 +114,7 @@ class CategoryTasksViewModel(
 
     }
 
-    override fun onDeleteCategory(category: CategoriesScreenState.CategoryUi) {
+    override fun onDeleteCategory(category: CategoryUi) {
         launchWithResult(
             action = { categoryServices.deleteCategory(category.id) },
             onSuccess = { onDeleteCategorySuccess() },

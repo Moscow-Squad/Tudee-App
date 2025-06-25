@@ -21,7 +21,6 @@ import com.moscow.tudee.presentation.ui.tasks.tasksRoute
 @Composable
 fun MainNavGraph(
     navController: NavHostController = rememberNavController(),
-    appBar: (TudeeAppBar) -> Unit,
     isBottomNavigationVisible: (Boolean) -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -72,7 +71,5 @@ fun MainNavGraph(
             }
         )
     }
-
 }
-
 

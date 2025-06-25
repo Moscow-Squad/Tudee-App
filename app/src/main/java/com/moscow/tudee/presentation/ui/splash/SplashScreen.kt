@@ -72,7 +72,7 @@ fun SplashScreen(
 
         Image(
             painter = painterResource(
-                id = if (isSystemInDarkTheme()) {
+                id = if (state.isSystemDark ?: isSystemInDarkTheme()) {
                     R.drawable.background_splash_dark
                 } else {
                     R.drawable.background_splash_light

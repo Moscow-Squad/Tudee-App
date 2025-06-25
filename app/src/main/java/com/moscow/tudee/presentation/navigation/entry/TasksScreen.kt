@@ -4,11 +4,7 @@ import com.moscow.tudee.R
 import kotlinx.serialization.Serializable
 
 @Serializable
-object TasksScreen: TudeeAppType, BottomNavigationType {
-    override val appBar: TudeeAppBar
-        get() = TudeeAppBar.TudeeTopAppBar(
-            titleId = R.string.tasks,
-        )
+object TasksScreen : BottomNavigationType {
     override val isBottomNavigationVisible: Boolean
         get() = true
 }

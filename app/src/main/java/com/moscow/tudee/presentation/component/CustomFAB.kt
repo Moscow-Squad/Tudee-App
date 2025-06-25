@@ -34,8 +34,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CustomFAB(
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     isEnabled: Boolean = true,
     icon : Int
