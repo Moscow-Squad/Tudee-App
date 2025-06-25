@@ -36,7 +36,7 @@
     <string name="to_do">To Do</string>
     <string name="today">today, %1$s</string>
     <string name="delete_item">Delete item</string>
-    <string name="splash_background">background light</string>
+    <string name="splash_background">Splash Background</string>
     <string name="splash_logo">logo icon\n</string>
     <string name="overwhelmed_with_tasks">Overwhelmed with tasks?</string>
     <string name="let_s_bring_some_order_to_the_chaos_tudee_is_here_to_help_you_sort_plan_and_breathe_easier">Let’s bring some order to the chaos.\nTudee is here to help you sort, plan, and breathe easier.</string>
@@ -65,6 +65,7 @@
     <string name="add_task">Add Task</string>
     <string name="edited_task_successfully">Edited task successfully</string>
     <string name="add_task_successfully">Add task successfully</string>
+    <string name="tudee_robot">Tudee robot</string>
     <string name="priority_high">High</string>
     <string name="priority_medium">Medium</string>
     <string name="priority_low">Low</string>
