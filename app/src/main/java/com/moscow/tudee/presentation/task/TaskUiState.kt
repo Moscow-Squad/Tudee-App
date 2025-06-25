@@ -1,9 +1,8 @@
 package com.moscow.tudee.presentation.task
 
-import kotlinx.datetime.LocalDate
 import com.moscow.tudee.domain.entity.Task
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
@@ -19,4 +18,5 @@ data class TaskUiState(
     val monthDays: List<LocalDate> = emptyList(),
     val showDeletedTaskNotification: Boolean = false,
     val isTaskDeleted: Boolean? = null,
+    val showDatePicker: Boolean = false
 )
