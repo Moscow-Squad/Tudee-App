@@ -20,5 +20,6 @@ fun getPredefinedIconRes(title: String): Int = when (title.lowercase()) {
     "budgeting" -> R.drawable.ic_money_bag
     "self-care" -> R.drawable.ic_in_love
     "event" -> R.drawable.ic_birthday_cake
+    "quran" -> R.drawable.ic_quran
     else -> R.drawable.ic_developer
 }
