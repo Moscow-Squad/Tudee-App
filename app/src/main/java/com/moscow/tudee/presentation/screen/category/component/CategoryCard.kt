@@ -1,12 +1,15 @@
-package com.moscow.tudee.presentation.designSystem.component
+package com.moscow.tudee.presentation.screen.category.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,11 +41,11 @@ fun CategoryCard(
     modifier: Modifier = Modifier,
     count: Int? = null,
     selected: Boolean = false,
-    iconTint: Color = Color.Unspecified
+    iconTint: Color = Theme.colors.greenAccent,
+    isPredefined: Boolean = true
 ) {
     Column(
-        modifier = modifier
-            .animateContentSize(),
+        modifier = modifier.animateContentSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -51,22 +55,46 @@ fun CategoryCard(
                 .animateContentSize(),
             contentAlignment = Alignment.TopEnd
         ) {
-            Icon(
-                painter = icon,
-                contentDescription = stringResource(R.string.category_icon),
-                tint = iconTint,
+            Box(
                 modifier = Modifier
-                    .size(78.dp)
+                    .size(72.dp)
                     .clip(CircleShape)
-                    .background(Theme.colors.surfaceHigh)
-                    .padding(23.dp)
-                    .size(32.dp)
-            )
+                    .background(Theme.colors.surfaceHigh), contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = isPredefined,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Icon(
+                        painter = icon,
+                        contentDescription = stringResource(R.string.category_icon),
+                        tint = iconTint,
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .size(32.dp)
+                    )
+                }
+
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = !isPredefined,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Image(
+                        painter = icon,
+                        contentDescription = stringResource(R.string.category_icon),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp)
+                            .clip(CircleShape)
+                    )
+                }
+            }
 
             androidx.compose.animation.AnimatedVisibility(
-                visible = selected,
-                enter = fadeIn(),
-                exit = fadeOut()
+                visible = selected, enter = fadeIn(), exit = fadeOut()
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_tick_double),
@@ -83,12 +111,12 @@ fun CategoryCard(
             }
 
             androidx.compose.animation.AnimatedVisibility(
-                visible = !selected && (count ?: 0) > 0,
-                enter = fadeIn(),
-                exit = fadeOut()
+                visible = !selected && (count ?: 0) >= 0, enter = fadeIn(), exit = fadeOut()
             ) {
                 Text(
-                    text = if ((count ?: 0) > 100) stringResource(R.string.greater_than_100) else (count ?: 0).toString(),
+                    text = if ((count
+                            ?: 0) > 100
+                    ) stringResource(R.string.greater_than_100) else (count ?: 0).toString(),
                     style = Theme.textStyle.label.small,
                     color = Theme.colors.hint,
                     textAlign = TextAlign.Center,
@@ -102,52 +130,35 @@ fun CategoryCard(
         }
 
         Text(
-            text = label,
-            style = Theme.textStyle.label.small,
-            color = Theme.colors.body
-        )
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun CategoryItem_NoBadge_Preview() {
-    TudeeTheme {
-        CategoryCard(
-            icon = painterResource(id = R.drawable.ic_shopping_cart),
-            label = "Shopping",
-            count = null,
-            selected = false,
-            iconTint = Theme.colors.secondary
+            text = label, style = Theme.textStyle.label.small, color = Theme.colors.body
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun CategoryItem_Count_Preview() {
+fun CategoryItem_Custom_Preview() {
     TudeeTheme {
         CategoryCard(
             icon = painterResource(id = R.drawable.ic_book_open),
-            label = "Study",
-            count = 23,
+            label = "Reading",
+            count = 0,
             selected = false,
-            iconTint = Theme.colors.purpleAccent
+            isPredefined = false
         )
     }
 }
 
-@Preview(showBackground = true, apiLevel = 33)
+@Preview(showBackground = true)
 @Composable
-fun CategoryItem_Selected_Preview() {
+fun CategoryItemPreview() {
     TudeeTheme {
         CategoryCard(
-            icon = painterResource(id = R.drawable.ic_chef),
-            label = "Health",
-            count = 5,
-            selected = true,
-            iconTint = Theme.colors.greenAccent
+            icon = painterResource(id = R.drawable.ic_book_open),
+            label = "Reading",
+            count = 0,
+            selected = false,
+            isPredefined = true
         )
     }
 }

@@ -26,6 +26,7 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.component.TaskCard
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.screen.category.toCategoryUi
 import com.moscow.tudee.presentation.screen.home.HomeState
 import com.moscow.tudee.presentation.screen.home.getColor
 import com.moscow.tudee.presentation.screen.home.getIcon
@@ -47,7 +48,7 @@ fun TaskListHeader(
     ) {
         TudeeText(
             text = when (taskState) {
-                Status.IN_PROGRESS -> stringResource(R.string.in_progress)
+                Status.IN_PROGRESS -> stringResource(R.string.in_progress_status)
                 Status.TODO -> stringResource(R.string.to_do)
                 Status.DONE -> stringResource(R.string.done)
             },
@@ -79,16 +80,18 @@ fun TaskList(
                 modifier = modifier
                     .width(320.dp)
                     .clickable { onTaskClick(task) },
-                category = task.category!!,
+                category = task.category!!.toCategoryUi() ,
                 title = task.title,
                 description = task.description,
             ) {
-                PriorityChip(
-                    text = task.priority.getText(),
-                    backgroundColor = task.priority.getColor(),
-                    icon = painterResource(id = task.priority.getIcon()),
-                    selected = true
-                )
+                task.priority?.let {
+                    PriorityChip(
+                        text = task.priority.getText(),
+                        backgroundColor = task.priority.getColor(),
+                        icon = painterResource(id = task.priority.getIcon()),
+                        selected = true
+                    )
+                }
             }
         }
 

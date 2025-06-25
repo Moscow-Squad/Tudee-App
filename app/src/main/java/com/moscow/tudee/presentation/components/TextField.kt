@@ -2,6 +2,7 @@ package com.moscow.tudee.presentation.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -78,10 +80,12 @@ fun TudeeTextField(
                     modifier = Modifier.size(24.dp)
                 )
 
-                Image(
-                    painter = painterResource(R.drawable.ic_line),
-                    contentDescription = stringResource(R.string.divider),
-                    modifier = Modifier.padding(horizontal = 12.dp)
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .width(1.dp)
+                        .height(30.dp)
+                        .background(Theme.colors.stroke)
                 )
             }
             TudeeBasicTextField(
@@ -93,7 +97,7 @@ fun TudeeTextField(
                 interactionSource = interactionSource,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             )
         }
     }
@@ -119,7 +123,7 @@ private fun TudeeBasicTextField(
             color = Theme.colors.body,
         ),
         cursorBrush = SolidColor(Theme.colors.primary),
-        modifier = modifier
+        modifier = modifier,
     ) { innerTextField ->
         Box {
             if (value.isEmpty()) {

@@ -35,7 +35,7 @@ class DatabaseCallback(
             cursor.close()
 
             val statuses = listOf("TODO", "IN_PROGRESS", "DONE")
-            val today    = LocalDateTime.parse("2025-06-20T00:00:00")  // e.g. “2025-06-20”
+            val today    = LocalDateTime.parse("2025-06-20T00:00:00")  // e.g. "2025-06-20"
             entries.forEach { (catId, catTitle) ->
                 statuses.forEach { status ->
                     repeat(3) { idx ->

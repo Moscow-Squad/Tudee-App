@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.moscow.tudee.presentation.designSystem.theme.ThemeState
-import com.moscow.tudee.presentation.navigation.TudeeGraph
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.navigation.TudeeGraph
 
@@ -35,3 +34,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

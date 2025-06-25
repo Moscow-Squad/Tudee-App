@@ -28,9 +28,9 @@ fun MainScreen(
         containerColor = Theme.colors.surface,
         topBar = {
 
-            TudeeAppBar(
-                appBar = state.appBar
-            )
+//            TudeeAppBar(
+//                appBar = state.appBar
+//            )
 
         },
         bottomBar = {
