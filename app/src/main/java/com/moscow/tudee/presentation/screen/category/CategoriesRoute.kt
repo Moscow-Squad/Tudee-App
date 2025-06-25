@@ -10,12 +10,13 @@ import com.moscow.tudee.presentation.navigation.extensions.tudeeComposable
 import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.categoriesRoute(
+    isBottomNavigationVisible: (Boolean) -> Unit,
     navigateToCategoryTasks: (Long) -> Unit
 ) {
     tudeeComposable<CategoriesScreen> { backStackEntry ->
         val args = backStackEntry.toRoute<Categories>()
         val result = backStackEntry.savedStateHandle.remove<Int>("result_message")
-
+        isBottomNavigationVisible(CategoriesScreen.isBottomNavigationVisible)
         CategoryScreen(
             messageId = result ?: args.messageId,
             navigateToCategoryTasks = navigateToCategoryTasks
@@ -53,5 +54,10 @@ data class CategoryTasks(
 @Serializable
 data class Categories(
     val messageId: Int? = null
-)
+){
+    companion object:BottomNavigationType {
+        override val isBottomNavigationVisible: Boolean
+            get() = true
 
+    }
+}

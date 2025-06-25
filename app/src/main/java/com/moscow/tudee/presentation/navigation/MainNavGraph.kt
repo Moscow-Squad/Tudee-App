@@ -46,6 +46,7 @@ fun MainNavGraph(
         )
 
         categoriesRoute(
+            isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToCategoryTasks = { categoryID ->
                 navController.navigateSafe(
                     route = CategoryTasks(categoryID),
@@ -55,19 +56,15 @@ fun MainNavGraph(
         )
 
         categoryTasksRoute(
-            isBottomNavigationType=isBottomNavigationVisible,
+            isBottomNavigationType = isBottomNavigationVisible,
             navigateBackToCategoryScreen = { messageId ->
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set("result_message", messageId)
 
-                navController.popBackStack()
             }
             , navigateBack ={
-                navController.navigateSafe(
-                    route=navController.popBackStack(),
-                    builder = {}
-                )
+                navController.popBackStack()
             }
         )
     }
