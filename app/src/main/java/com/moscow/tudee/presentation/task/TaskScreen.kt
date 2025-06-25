@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -66,6 +67,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.UtcOffset
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import okhttp3.internal.immutableListOf
 import org.koin.androidx.compose.koinViewModel
 import java.time.format.TextStyle
 import java.util.Locale
@@ -88,6 +90,28 @@ fun TaskScreen(
                 messageId = R.string.add_task_successfully
             )
         )
+    }
+    val allTabs = immutableListOf(
+        TabItem(
+            stringResource(R.string.to_do),
+            uiState.tasksForSelectedState.size,
+            Task.Status.TODO
+        ),
+        TabItem(
+            stringResource(R.string.in_progress_status),
+            uiState.tasksForSelectedState.size,
+            Task.Status.IN_PROGRESS
+        ),
+        TabItem(stringResource(R.string.done), uiState.tasksForSelectedState.size, Task.Status.DONE)
+    )
+
+    val lazyListState = rememberLazyListState()
+    val isAtStart by remember { derivedStateOf { lazyListState.firstVisibleItemIndex == 0 } }
+    var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
+
+    LaunchedEffect(uiState.selectedDate) {
+        val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
+        if (index >= 0) lazyListState.animateScrollToItem(index)
     }
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest { event ->
@@ -119,12 +143,44 @@ fun TaskScreen(
             }
         }
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
 
-    ) {
+    TaskContent(
+        interactionListener = viewModel,
+        uiState = uiState,
+        showDatePicker = showDatePicker,
+        bottomSheetUiState = bottomSheetUiState,
+        bottomSheetListener = addTaskBottomSheetViewModel,
+        snackbarHostState = snackbarHostState,
+        snackBar = snackBar,
+        showCustomSnackBar = showCustomSnackBar,
+        allTabs = allTabs,
+        isAtStart = isAtStart,
+        selectedTaskToDelete = selectedTaskToDelete,
+        lazyListState = lazyListState,
+        onDeletedTask = { selectedTaskToDelete = it }
+    )
+}
+
+@Composable
+private fun TaskContent(
+    modifier: Modifier = Modifier,
+    interactionListener: TaskScreenInteractionListener,
+    uiState: TaskUiState,
+    showDatePicker: Boolean,
+    bottomSheetUiState: AddTaskBottomSheetUiState,
+    bottomSheetListener: AddTaskBottomSheetViewModel,
+    snackbarHostState: SnackbarHostState,
+    snackBar: SnackBarUi,
+    showCustomSnackBar: Boolean,
+    allTabs: List<TabItem>,
+    isAtStart: Boolean,
+    selectedTaskToDelete: Task?,
+    lazyListState: LazyListState,
+    onDeletedTask: (Task?) -> Unit
+) {
+    Box(Modifier.fillMaxSize()) {
         Scaffold(
+            containerColor = Theme.colors.surface,
             topBar = {
                 Row(
                     modifier = Modifier
@@ -142,19 +198,143 @@ fun TaskScreen(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             floatingActionButton = {
                 CustomFAB(
-                    onClick = { addTaskBottomSheetViewModel.onShowAddTaskBottomSheet() },
+                    onClick = { bottomSheetListener.onShowAddTaskBottomSheet() },
                     icon = R.drawable.ic_add_task
                 )
             }
         ) { innerPadding ->
-            TaskContent(
-                modifier = Modifier.padding(innerPadding),
-                interactionListener = viewModel,
-                uiState = uiState,
-                bottomSheetUiState = bottomSheetUiState,
-                bottomSheetListener = addTaskBottomSheetViewModel,
-                showDatePicker = showDatePicker,
-            )
+            Column(
+                modifier = modifier
+                    .padding(innerPadding)
+                    .background(Theme.colors.surface)
+                    .fillMaxSize()
+            ) {
+                if (showDatePicker) {
+                    DatePickerModal(
+                        onDateSelected = { interactionListener.updateMonthFromPicker(it) },
+                        onDismiss = interactionListener::dismissDatePicker,
+                        selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO)
+                            .toEpochMilliseconds()
+                    )
+                }
+
+                Header(
+                    date = "${
+                        uiState.currentMonth.getDisplayName(
+                            TextStyle.FULL,
+                            Locale.getDefault()
+                        )
+                    }, ${uiState.currentYear}",
+                    onBackClick = interactionListener::previousMonth,
+                    onNextClick = interactionListener::nextMonth,
+                    onDownClick = interactionListener::showDatePicker
+                )
+
+                LazyRow(
+                    state = lazyListState,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .background(Theme.colors.surfaceHigh)
+                        .padding(
+                            start = if (isAtStart) 16.dp else 0.dp,
+                            top = 8.dp,
+                            bottom = 8.dp
+                        )
+                ) {
+                    items(uiState.monthDays) { date ->
+                        val dayName = date.dayOfWeek.name.take(3).lowercase()
+                            .replaceFirstChar { it.titlecase(Locale.ROOT) }
+//                val isSelected =
+                        DayItem(
+                            day = dayName,
+                            dayDate = date.dayOfMonth,
+                            isSelected = date == uiState.selectedDate.date,
+                            onDayClick = { interactionListener.selectDate(date) },
+                            isToday = date == uiState.selectedDate.date
+                        )
+                    }
+                }
+
+                CategoryTabs(
+                    tabs = allTabs,
+                    selectedStatus = uiState.selectedStatus,
+                    onTabClick = { status -> interactionListener.selectStatus(status) },
+                    modifier = Modifier.background(Theme.colors.surfaceHigh)
+                )
+
+                if (uiState.tasksForSelectedState.isNotEmpty()) {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                    ) {
+                        items(uiState.tasksForSelectedState) { task ->
+                            SwipeToDeleteItem(
+                                onDelete = { onDeletedTask(task) },
+                                animationDuration = 200L
+                            ) {
+                                TaskCard(
+                                    category = task.category.toCategoryUi(),
+                                    title = task.title,
+                                    description = task.description,
+                                ) {
+                                    PriorityChip(
+                                        text = task.priority.name.lowercase()
+                                            .replaceFirstChar { it.uppercase() },
+                                        backgroundColor = task.priority.getPriorityBackground(),
+                                        icon = painterResource(task.priority.iconRes()),
+                                        selected = true
+                                    )
+                                }
+                            }
+                        }
+                    }
+                } else EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
+
+                selectedTaskToDelete?.let {
+                    DeleteBottomSheet(
+                        title = stringResource(R.string.delete_task),
+                        description = stringResource(R.string.are_you_sure_to_continue),
+                        onDelete = {
+                            interactionListener.deleteTask(it)
+                            onDeletedTask(null)
+                        },
+                        onDismiss = { onDeletedTask(null) }
+                    )
+                }
+
+                AddTaskBottomSheet(
+                    isVisible = bottomSheetUiState.showAddTaskBottomSheet,
+                    taskTitle = bottomSheetUiState.title,
+                    onTaskTitleChange = { newTitle ->
+                        bottomSheetListener.onTitleChange(newTitle)
+                    },
+                    taskDescription = bottomSheetUiState.description,
+                    onTaskDescriptionChange = { newDescription ->
+                        bottomSheetListener.onDescriptionChange(newDescription)
+                    },
+                    selectedPriority = bottomSheetUiState.priority,
+                    onPrioritySelected = { newPriority ->
+                        bottomSheetListener.onPriorityClick(newPriority)
+                    },
+                    categories = bottomSheetUiState.availableCategories.map { it.toCategoryUi() },
+                    selectedCategory = bottomSheetUiState.category?.toCategoryUi(),
+                    onCategorySelected = { newCategory ->
+                        bottomSheetListener.onCategoryClick(newCategory.toCategory())
+                    },
+                    selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
+                        .toEpochMilliseconds(),
+                    onDateSelected = { newDate ->
+                        newDate?.let {
+                            val instant = Instant.fromEpochMilliseconds(newDate)
+                            val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+                            bottomSheetListener.onDateChange(date)
+                        }
+                    },
+                    onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
+                    onCancel = { bottomSheetListener.onCancelAddTask() },
+                    onSaveTask = { bottomSheetListener.onAddTask() },
+                )
+            }
         }
         if (showCustomSnackBar) {
             val visuals = getSnackBarVisuals(snackBar.type)
@@ -172,174 +352,8 @@ fun TaskScreen(
                     iconTint = visuals.iconTint
                 )
             }
-
-
-            if (showDatePicker) {
-                DatePickerModal(
-                    onDateSelected = { viewModel.updateMonthFromPicker(it) },
-                    onDismiss = viewModel::dismissDatePicker,
-                    selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO)
-                        .toEpochMilliseconds()
-                )
-            }
         }
 
-    }
-}
-
-@Composable
-private fun TaskContent(
-    modifier: Modifier = Modifier,
-    interactionListener: TaskScreenInteractionListener,
-    uiState: TaskUiState,
-    showDatePicker: Boolean,
-    bottomSheetUiState: AddTaskBottomSheetUiState,
-    bottomSheetListener: AddTaskBottomSheetViewModel
-) {
-
-    val allTabs = listOf(
-        TabItem(
-            stringResource(R.string.to_do),
-            uiState.tasksForSelectedState.size,
-            Task.Status.TODO
-        ),
-        TabItem(
-            stringResource(R.string.in_progress_status),
-            uiState.tasksForSelectedState.size,
-            Task.Status.IN_PROGRESS
-        ),
-        TabItem(stringResource(R.string.done), uiState.tasksForSelectedState.size, Task.Status.DONE)
-    )
-
-    val lazyListState = rememberLazyListState()
-    val isAtStart by remember { derivedStateOf { lazyListState.firstVisibleItemIndex == 0 } }
-    var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
-
-    LaunchedEffect(uiState.selectedDate) {
-        val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
-        if (index >= 0) lazyListState.animateScrollToItem(index)
-    }
-    Column(
-        modifier = modifier
-            .background(Theme.colors.surface)
-            .fillMaxSize()
-    ) {
-        Header(
-            date = "${
-                uiState.currentMonth.getDisplayName(
-                    TextStyle.FULL,
-                    Locale.getDefault()
-                )
-            }, ${uiState.currentYear}",
-            onBackClick = interactionListener::previousMonth,
-            onNextClick = interactionListener::nextMonth,
-            onDownClick = interactionListener::showDatePicker
-        )
-
-        LazyRow(
-            state = lazyListState,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .background(Theme.colors.surfaceHigh)
-                .padding(
-                    start = if (isAtStart) 16.dp else 0.dp,
-                    top = 8.dp,
-                    bottom = 8.dp
-                )
-        ) {
-            items(uiState.monthDays) { date ->
-                val dayName = date.dayOfWeek.name.take(3).lowercase()
-                    .replaceFirstChar { it.titlecase(Locale.ROOT) }
-//                val isSelected =
-                DayItem(
-                    day = dayName,
-                    dayDate = date.dayOfMonth,
-                    isSelected = date == uiState.selectedDate.date,
-                    onDayClick = { interactionListener.selectDate(date) },
-                    isToday = date == uiState.selectedDate.date
-                )
-            }
-        }
-
-        CategoryTabs(
-            tabs = allTabs,
-            selectedStatus = uiState.selectedStatus,
-            onTabClick = { status -> interactionListener.selectStatus(status) },
-            modifier = Modifier.background(Theme.colors.surfaceHigh)
-        )
-
-        if (uiState.tasksForSelectedState.isNotEmpty()) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                items(uiState.tasksForSelectedState) { task ->
-                    SwipeToDeleteItem(
-                        onDelete = { selectedTaskToDelete = task },
-                        animationDuration = 200L
-                    ) {
-                        TaskCard(
-                            category = task.category.toCategoryUi(),
-                            title = task.title,
-                            description = task.description,
-                        ) {
-                            PriorityChip(
-                                text = task.priority.name.lowercase()
-                                    .replaceFirstChar { it.uppercase() },
-                                backgroundColor = task.priority.getPriorityBackground(),
-                                icon = painterResource(task.priority.iconRes()),
-                                selected = true
-                            )
-                        }
-                    }
-                }
-            }
-        } else EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
-
-        selectedTaskToDelete?.let {
-            DeleteBottomSheet(
-                title = stringResource(R.string.delete_task),
-                description = stringResource(R.string.are_you_sure_to_continue),
-                onDelete = {
-                    interactionListener.deleteTask(it)
-                    selectedTaskToDelete = null
-                },
-                onDismiss = { selectedTaskToDelete = null }
-            )
-        }
-
-        AddTaskBottomSheet(
-            isVisible = bottomSheetUiState.showAddTaskBottomSheet,
-            taskTitle = bottomSheetUiState.title,
-            onTaskTitleChange = { newTitle ->
-                bottomSheetListener.onTitleChange(newTitle)
-            },
-            taskDescription = bottomSheetUiState.description,
-            onTaskDescriptionChange = { newDescription ->
-                bottomSheetListener.onDescriptionChange(newDescription)
-            },
-            selectedPriority = bottomSheetUiState.priority,
-            onPrioritySelected = { newPriority ->
-                bottomSheetListener.onPriorityClick(newPriority)
-            },
-            categories = bottomSheetUiState.availableCategories.map { it.toCategoryUi() },
-            selectedCategory = bottomSheetUiState.category?.toCategoryUi(),
-            onCategorySelected = { newCategory ->
-                bottomSheetListener.onCategoryClick(newCategory.toCategory())
-            },
-            selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
-                .toEpochMilliseconds(),
-            onDateSelected = { newDate ->
-                newDate?.let {
-                    val instant = Instant.fromEpochMilliseconds(newDate)
-                    val date = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-                    bottomSheetListener.onDateChange(date)
-                }
-            },
-            onDismiss = { bottomSheetListener.onDismissAddBottomSheet() },
-            onCancel = { bottomSheetListener.onCancelAddTask() },
-            onSaveTask = { bottomSheetListener.onAddTask() },
-        )
     }
 }
 
