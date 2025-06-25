@@ -55,7 +55,8 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
 import com.moscow.tudee.presentation.screen.category.component.TabItem
-import com.moscow.tudee.presentation.screen.category.toCategoryUi
+import com.moscow.tudee.presentation.mapper.toCategory
+import com.moscow.tudee.presentation.mapper.toCategoryUi
 import com.moscow.tudee.presentation.task.components.DayItem
 import com.moscow.tudee.presentation.task.components.Header
 import com.moscow.tudee.presentation.util.getPriorityBackground
@@ -331,10 +332,10 @@ private fun TaskContent(
             onPrioritySelected = { newPriority ->
                 bottomSheetListener.onPriorityClick(newPriority)
             },
-            categories = bottomSheetUiState.availableCategories,
-            selectedCategory = bottomSheetUiState.category,
+            categories = bottomSheetUiState.availableCategories.map { it.toCategoryUi() },
+            selectedCategory = bottomSheetUiState.category?.toCategoryUi(),
             onCategorySelected = { newCategory ->
-                bottomSheetListener.onCategoryClick(newCategory)
+                bottomSheetListener.onCategoryClick(newCategory.toCategory())
             },
             selectedDate = bottomSheetUiState.date.toInstant(offset = UtcOffset.ZERO)
                 .toEpochMilliseconds(),

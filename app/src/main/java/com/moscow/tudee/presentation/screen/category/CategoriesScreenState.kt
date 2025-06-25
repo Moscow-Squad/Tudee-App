@@ -1,7 +1,8 @@
 package com.moscow.tudee.presentation.screen.category
 
-import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
+import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.model.TaskUi
 
 
 data class CategoriesScreenState(
@@ -11,27 +12,10 @@ data class CategoriesScreenState(
     val categories: List<CategoryUi> = listOf(),
     val tasks: List<TaskUi> = listOf(),
     val category: CategoryUi = CategoryUi(),
-    val selectedStatus: Status= Status.TODO,
+    val selectedStatus: Status = Status.TODO,
     val isEditCategoryBottomSheetShow: Boolean = false,
     val isAddCategoryBottomSheetShow: Boolean = false,
     val isDeleteCategoryBottomSheetShow: Boolean = false,
     val isSnackBarShow: Boolean = false,
 
-    ) {
-    data class CategoryUi(
-        val id: Long = 0L,
-        val title: String = "",
-        val isPredefined: Boolean = false,
-        val numberOfTasksInCategory: Int = 0,
-        val iconUrl: String = "",
     )
-
-    data class TaskUi(
-        val title: String = "",
-        val description: String = "",
-        val date: String = "",
-        val priority: Task.Priority,
-        val status: Status = Status.TODO,
-        val category: CategoryUi = CategoryUi(),
-    )
-}

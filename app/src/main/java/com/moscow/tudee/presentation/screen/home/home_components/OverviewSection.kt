@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.component.home_components
+package com.moscow.tudee.presentation.screen.home.home_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,25 +19,17 @@ import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.component.slider.TudeeSlider
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.screen.home.HomeState.SliderState
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toLocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @Composable
 fun OverviewSection(
+    formattedDate: String,
     sliderState: SliderState,
-    todoTasks: List<Task>,
-    inProgressTasks: List<Task>,
-    doneTasks: List<Task>,
+    todoTasksCount: Int,
+    inProgressTasksCount: Int,
+    doneTasksCount: Int,
     modifier: Modifier = Modifier
 ) {
-    val todayDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-    val formattedDate = todayDate.toJavaLocalDateTime()
-        .format(DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.US))
-
+    val totalTasks = todoTasksCount + doneTasksCount + inProgressTasksCount
     Column(
         modifier
             .fillMaxWidth()
@@ -52,7 +44,7 @@ fun OverviewSection(
                 .padding(top = 8.dp)
         )
 
-        TudeeSlider(sliderState, modifier = Modifier.padding(horizontal = 12.dp))
+        TudeeSlider(sliderState,totalTasks , doneTasksCount, modifier = Modifier.padding(horizontal = 12.dp))
 
         TudeeText(
             text = stringResource(R.string.overview),
@@ -69,21 +61,9 @@ fun OverviewSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            Task.Status.entries.forEach { status ->
-                val tasks = when (status) {
-                    Task.Status.TODO -> todoTasks
-                    Task.Status.IN_PROGRESS -> inProgressTasks
-                    Task.Status.DONE -> doneTasks
-                }
-
-                if (tasks.isNotEmpty()) {
-                    val tasksForEachState = tasks.filter { it.status == status }
-                    OverviewCard(status, tasksForEachState.count(), modifier = Modifier.weight(1f))
-
-                } else {
-                    OverviewCard(status, 0, modifier = Modifier.weight(1f))
-                }
-            }
+                OverviewCard(Task.Status.DONE, doneTasksCount, modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.IN_PROGRESS, inProgressTasksCount, modifier = Modifier.weight(1f))
+                OverviewCard(Task.Status.TODO, todoTasksCount, modifier = Modifier.weight(1f))
         }
     }
 }

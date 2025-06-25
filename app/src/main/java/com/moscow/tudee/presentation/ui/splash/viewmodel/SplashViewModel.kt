@@ -1,15 +1,18 @@
 package com.moscow.tudee.presentation.ui.splash.viewmodel
 
-import com.moscow.tudee.domain.service.SplashService
+import com.moscow.tudee.domain.service.LocalService
 import com.moscow.tudee.presentation.BaseViewModel
 
 class SplashViewModel(
-    private val splashService: SplashService
+    private val localService: LocalService
 ) : BaseViewModel<SplashState, SplashEvent>(SplashState()) {
 
+    init {
+        isSystemDark()
+    }
     fun checkIfUserHasSeenOnboarding() {
         launchWithResult(
-            action = { splashService.hasSeenOnboarding() },
+            action = { localService.hasSeenOnboarding() },
             onStart = {
                 updateState { it.copy(isLoading = true) }
             },
@@ -30,12 +33,24 @@ class SplashViewModel(
 
     fun setOnboardingSeen(shown: Boolean) {
         launchWithResult(
-            action = { splashService.markOnboardingAsShown(shown) },
+            action = { localService.markOnboardingAsShown(shown) },
             onSuccess = {
                 updateState { it.copy(hasSeenOnboarding = shown) }
             },
             onError = {
                 sendEvent(SplashEvent.ShowError("Failed to save onboarding state"))
+            }
+        )
+    }
+
+    private fun isSystemDark(){
+        launchWithResult(
+            action = { localService.isSystemThemeDark() },
+            onSuccess = {isDark->
+                updateState { it.copy(isSystemDark = isDark) }
+            },
+            onError = {
+                updateState { it.copy(isSystemDark = false) }
             }
         )
     }

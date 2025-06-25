@@ -30,6 +30,7 @@ import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.screen.category.component.CategoryCard
 import com.moscow.tudee.presentation.designSystem.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import com.moscow.tudee.presentation.util.saveUriToInternalStorage
 import org.koin.androidx.compose.koinViewModel
@@ -80,7 +81,7 @@ fun CategoryContent(
                     ?.let { context.saveUriToInternalStorage(it) }
                     ?.let { savedUri ->
                         listener.onAddCategory(
-                            CategoriesScreenState.CategoryUi(
+                            CategoryUi(
                                 title = title,
                                 iconUrl = savedUri.toString()
                             )
@@ -134,7 +135,7 @@ private fun CategoriesGrid(
 
 @Composable
 private fun CategoryGridItem(
-    category: CategoriesScreenState.CategoryUi,
+    category: CategoryUi,
     onClick: (Long) -> Unit
 ) {
     val iconPainter = if (category.isPredefined) {
@@ -164,7 +165,7 @@ fun CategoryScreenPreview() {
             override fun onCategoryClick(categoryID: Long) {}
             override fun onHideSnackBar() {}
             override fun onShowAddCategoryBottomSheet() {}
-            override fun onAddCategory(categoryUi: CategoriesScreenState.CategoryUi) {}
+            override fun onAddCategory(categoryUi: CategoryUi) {}
             override fun onHideAddCategoryBottomSheet() {}
         }
     )
