@@ -70,6 +70,19 @@ dependencies {
     testImplementation(libs.jupiter.junit.jupiter)
     testImplementation(libs.junit.junit.jupiter)
     testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
+    testImplementation(libs.junit.junit.jupiter)
     ksp(libs.androidx.room.compiler)
 
     // Test dependencies
@@ -99,6 +112,7 @@ dependencies {
     implementation(libs.coil.compose)
     //navigation
     implementation(libs.navigation.compose)
+    testImplementation(kotlin("test"))
 }
 
 tasks.withType<Test> {
