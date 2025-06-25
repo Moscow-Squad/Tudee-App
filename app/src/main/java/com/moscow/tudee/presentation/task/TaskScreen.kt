@@ -113,6 +113,7 @@ fun TaskScreen(
                     viewModel.selectDate(event.date)
                     viewModel.selectStatus(Task.Status.TODO)
                 }
+
                 AddTaskBottomSheetEvents.NotifyTaskNotAdded -> Unit
             }
             coroutineScope.launch {
@@ -123,6 +124,7 @@ fun TaskScreen(
     }
 
     Scaffold(
+        containerColor = Theme.colors.surface,
         topBar = {
             Row(
                 modifier = Modifier
@@ -181,7 +183,8 @@ fun TaskScreen(
                 DatePickerModal(
                     onDateSelected = { viewModel.updateMonthFromPicker(it) },
                     onDismiss = viewModel::dismissDatePicker,
-                    selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO).toEpochMilliseconds()
+                    selectedDate = uiState.selectedDate.toInstant(UtcOffset.ZERO)
+                        .toEpochMilliseconds()
                 )
             }
         }
@@ -209,13 +212,17 @@ private fun TaskContent(
     val doneCount = uiState.allTasksForSelectedDate.count { it.status == Task.Status.DONE }
 
     val allTabs = listOf(
-        TabItem(stringResource(R.string.to_do), uiState.tasksForSelectedState.size, Task.Status.TODO),
+        TabItem(
+            stringResource(R.string.to_do),
+            uiState.tasksForSelectedState.size,
+            Task.Status.TODO
+        ),
         TabItem(
             stringResource(R.string.in_progress_status),
             uiState.tasksForSelectedState.size,
             Task.Status.IN_PROGRESS
         ),
-        TabItem(stringResource(R.string.done),  uiState.tasksForSelectedState.size, Task.Status.DONE)
+        TabItem(stringResource(R.string.done), uiState.tasksForSelectedState.size, Task.Status.DONE)
     )
 
     val currentMonthYear = "${
@@ -238,7 +245,12 @@ private fun TaskContent(
             .fillMaxSize()
     ) {
         Header(
-            date = currentMonthYear,
+            date = "${
+                uiState.currentMonth.getDisplayName(
+                    TextStyle.FULL,
+                    Locale.getDefault()
+                )
+            }, ${uiState.currentYear}",
             onBackClick = interactionListener::previousMonth,
             onNextClick = interactionListener::nextMonth,
             onDownClick = interactionListener::showDatePicker
@@ -272,7 +284,7 @@ private fun TaskContent(
         CategoryTabs(
             tabs = allTabs,
             selectedStatus = uiState.selectedStatus,
-            onTabClick = {status -> interactionListener.selectStatus(status)},
+            onTabClick = { status -> interactionListener.selectStatus(status) },
             modifier = Modifier.background(Theme.colors.surfaceHigh)
         )
 
