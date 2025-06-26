@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,8 +22,9 @@ fun TodayDate(date: String, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_calendar_favorite),
-            contentDescription = stringResource(R.string.calendar_icon)
+           painter = painterResource(R.drawable.ic_calendar_favorite),
+    contentDescription = stringResource(R.string.calendar_icon),
+    colorFilter = ColorFilter.tint(Theme.colors.body)
         )
         TudeeText(
             text = stringResource(R.string.today, date),
