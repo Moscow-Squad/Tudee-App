@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.screen.onboarding
+package com.moscow.tudee.presentation.screen.onboarding.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,12 +26,11 @@ fun DotsIndicator(
     dotHeight: Dp = 5.dp
 ) {
     val selectedColor = colors.primary
-    val unSelectedColor = colors.onPrimaryStroke
+    val unSelectedColor = colors.primaryVariant
 
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(dotSpacing),
         verticalAlignment = Alignment.CenterVertically
     ) {

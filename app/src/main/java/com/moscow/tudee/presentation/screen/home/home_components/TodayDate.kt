@@ -27,6 +27,7 @@ fun TodayDate(date: String, modifier: Modifier = Modifier) {
             painter = painterResource(R.drawable.ic_calendar_favorite),
             colorFilter = ColorFilter.tint(color = Theme.colors.body),
             contentDescription = stringResource(R.string.calendar_icon)
+
         )
         TudeeText(
             text = stringResource(R.string.today, date),
