@@ -12,6 +12,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import com.moscow.tudee.presentation.navigation.entry.TasksScreen
 
 fun <T : Any> NavController?.navigateSafe(
     route: T,
@@ -63,6 +64,12 @@ fun NavController.selectNavigationItem(route: Any) {
          * When returning to a previously visited tab,
          * it restores the saved state (scroll position, form data, etc.)
          */
-        restoreState = true
+        restoreState = !isParameterizedRoute(route)
+    }
+}
+private fun isParameterizedRoute(route: Any): Boolean {
+    return when (route) {
+        is TasksScreen -> true
+        else -> false
     }
 }
