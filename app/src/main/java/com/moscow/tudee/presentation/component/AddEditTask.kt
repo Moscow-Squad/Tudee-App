@@ -1,6 +1,5 @@
 package com.moscow.tudee.presentation.component
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,18 +16,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -58,9 +51,6 @@ fun TaskBottomSheet(
     onDismiss: () -> Unit,
     onCancel: () -> Unit = onDismiss,
     onSaveTask: () -> Unit,
-    onShowSnackBar: (String) -> Unit = {},
-    addSuccessMessage: String = stringResource(R.string.add_task_successfully),
-    editSuccessMessage: String = stringResource(R.string.edited_task_successfully)
 ) {
     if (isVisible) {
         TudeeBottomSheet(
@@ -74,11 +64,9 @@ fun TaskBottomSheet(
             val isDescriptionValid = taskDescription.trim().isNotBlank()
             val isPriorityValid = selectedPriority != null
             val isDateValid = selectedDate != null
-            val isCategoryValid =
-                selectedCategory != null && selectedCategory.id!! > 0
+            val isCategoryValid = selectedCategory != null && selectedCategory.id!! > 0
             val isFormValid =
                 isTitleValid && isDescriptionValid && isDateValid && isCategoryValid && isPriorityValid
-
 
             Box(modifier = modifier.fillMaxSize()) {
                 Column(
@@ -132,7 +120,6 @@ fun TaskBottomSheet(
                     TudeeDatePickerTextField(
                         selectedDate = selectedDate,
                         onDateSelected = { newDate ->
-                            Log.d("TaskBottomSheet_Debug", "📅 Date changed: $newDate")
                             onDateSelected(newDate)
                         },
                         startIcon = painterResource(id = R.drawable.ic_calendar_add),
@@ -169,7 +156,6 @@ fun TaskBottomSheet(
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .clickable {
-                                    Log.d("TaskBottomSheet_Debug", "⚠️ Priority changed: MEDIUM")
                                     onPrioritySelected(Priority.MEDIUM)
                                 }
                         )
@@ -181,7 +167,6 @@ fun TaskBottomSheet(
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .clickable {
-                                    Log.d("TaskBottomSheet_Debug", "⬇️ Priority changed: LOW")
                                     onPrioritySelected(Priority.LOW)
                                 }
                         )
@@ -194,13 +179,6 @@ fun TaskBottomSheet(
                         fontSize = 18.sp,
                         modifier = Modifier.padding(top = 16.dp)
                     )
-
-                    LaunchedEffect(categories) {
-                        Log.d(
-                            "TaskBottomSheet_Debug",
-                            "🏷️ Categories loaded: ${categories.map { "${it.title}(id:${it.id})" }}"
-                        )
-                    }
 
                     Column(
                         modifier = Modifier.padding(top = 8.dp),
@@ -225,10 +203,6 @@ fun TaskBottomSheet(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .clickable {
-                                                    Log.d(
-                                                        "TaskBottomSheet_Debug",
-                                                        "🏷️ Category selected: ${category.title} (id: ${category.id})"
-                                                    )
                                                     onCategorySelected(category)
                                                 }
                                         )
@@ -241,7 +215,6 @@ fun TaskBottomSheet(
                         }
                     }
                 }
-
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
@@ -263,11 +236,6 @@ fun TaskBottomSheet(
                         onClick = {
                             if (isFormValid) {
                                 onSaveTask()
-                                onShowSnackBar(
-                                    if (isEditMode) editSuccessMessage else addSuccessMessage
-                                )
-                            } else {
-                                Log.w("TaskBottomSheet_Debug", "❌ Cannot save - form invalid!")
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
@@ -304,8 +272,7 @@ fun AddTaskBottomSheet(
     onDismiss: () -> Unit,
     onCancel: () -> Unit = onDismiss,
     onSaveTask: () -> Unit,
-    onShowSnackBar: (String) -> Unit = {},
-    ) {
+) {
     TaskBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
@@ -324,9 +291,6 @@ fun AddTaskBottomSheet(
         onDismiss = onDismiss,
         onCancel = onCancel,
         onSaveTask = onSaveTask,
-        onShowSnackBar = onShowSnackBar,
-        addSuccessMessage = stringResource(R.string.add_task_successfully),
-        editSuccessMessage = stringResource(R.string.edited_task_successfully)
     )
 }
 
@@ -346,8 +310,7 @@ fun EditTaskBottomSheet(
     selectedDate: Long?,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
-    onSaveTask: () -> Unit,
-    onShowSnackBar: (String) -> Unit = {}
+    onSaveTask: () -> Unit
 ) {
     TaskBottomSheet(
         modifier = modifier,
@@ -366,43 +329,5 @@ fun EditTaskBottomSheet(
         onDateSelected = onDateSelected,
         onDismiss = onDismiss,
         onSaveTask = onSaveTask,
-        onShowSnackBar = onShowSnackBar,
-        addSuccessMessage = stringResource(R.string.add_task_successfully),
-        editSuccessMessage = stringResource(R.string.edited_task_successfully)
-    )
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun TaskBottomSheetPreview() {
-    val mockCategories = listOf(
-        CategoryUi(id = 1, title = "Work", iconUrl = "", isPredefined = false, countOfTasks = 0),
-        CategoryUi(id = 2, title = "Personal", iconUrl = "", isPredefined = false, countOfTasks = 0),
-        CategoryUi(id = 3, title = "Study", iconUrl = "", isPredefined = false, countOfTasks = 0)
-    )
-
-    var taskTitle by remember { mutableStateOf("My Task") }
-    var taskDescription by remember { mutableStateOf("This is a task description") }
-    var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
-    var selectedCategory by remember { mutableStateOf(mockCategories.first()) }
-    var selectedDate by remember { mutableStateOf<Long?>(System.currentTimeMillis()) }
-
-    TaskBottomSheet(
-        isVisible = true,
-        isEditMode = false,
-        taskTitle = taskTitle,
-        onTaskTitleChange = { taskTitle = it },
-        taskDescription = taskDescription,
-        onTaskDescriptionChange = { taskDescription = it },
-        selectedPriority = selectedPriority,
-        onPrioritySelected = { selectedPriority = it },
-        categories = mockCategories,
-        selectedCategory = selectedCategory,
-        onCategorySelected = { selectedCategory = it },
-        selectedDate = selectedDate,
-        onDateSelected = { selectedDate = it },
-        onDismiss = {},
-        onSaveTask = {},
     )
 }

@@ -45,5 +45,7 @@ interface HomeInteractionListener {
 
     fun onDismissDetailsBottomSheet()
 
+    fun onShowSnackbar(message: String)
 
+    fun onSnackbarDismissed()
 }

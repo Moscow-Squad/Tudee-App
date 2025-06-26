@@ -124,6 +124,8 @@ class HomeViewModel(
                     state.copy(
                         showAddTaskBottomSheet = false,
                         addedTask = null,
+                        showSnackbar = true,
+                        snackbarMessage = "Task added successfully!"
                     )
                 }
             },
@@ -174,7 +176,7 @@ class HomeViewModel(
                     it.copy(
                         inProgressTasks = it.inProgressTasks + task.copy(status = nextStatus),
 
-                    )
+                        )
                 }
             }
 
@@ -183,7 +185,7 @@ class HomeViewModel(
                     it.copy(
                         doneTasks = it.doneTasks + task.copy(status = nextStatus),
 
-                    )
+                        )
                 }
             }
 
@@ -209,6 +211,8 @@ class HomeViewModel(
                         showEditTaskBottomSheet = false,
                         selectedTask = it.addedTask,
                         addedTask = null,
+                        showSnackbar = true,
+                        snackbarMessage = "Task updated successfully!"
                     )
                 }
             },
@@ -262,6 +266,24 @@ class HomeViewModel(
         updateState { it.copy(showTaskDetailsBottomSheet = false) }
     }
 
+    override fun onShowSnackbar(message: String) {
+        updateState {
+            it.copy(
+                showSnackbar = true,
+                snackbarMessage = message
+            )
+        }
+    }
+
+    override fun onSnackbarDismissed() {
+        updateState {
+            it.copy(
+                showSnackbar = false,
+                snackbarMessage = ""
+            )
+        }
+    }
+
     private fun startLoading() {
         updateState { it.copy(isLoading = true) }
     }
@@ -273,5 +295,4 @@ class HomeViewModel(
     private fun handleHomeError(throwable: Throwable) {
         // TODO: Some error handling we can do later
     }
-
 }

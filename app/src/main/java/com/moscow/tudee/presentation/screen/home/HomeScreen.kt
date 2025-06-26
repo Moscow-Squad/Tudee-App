@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,6 +63,10 @@ fun HomeContent(
             HomeTopAppBar(
                 title = stringResource(id = R.string.tudee),
                 subTitle = stringResource(id = R.string.your_cute_helper_for_every_task),
+                showSnackbar = uiState.showSnackbar,
+                snackbarMessage = uiState.snackbarMessage,
+                snackbarIcon = if (uiState.showSnackbar) painterResource(id = R.drawable.ic_checkmark_badge) else null,
+                onSnackbarDismiss = { interactionListener.onSnackbarDismissed() }
             )
         },
         floatingActionButton = {
@@ -69,7 +74,6 @@ fun HomeContent(
                 onClick = { interactionListener.onFloatingActionButtonClick() },
                 icon = R.drawable.ic_add_task,
             )
-
         }
     ) { paddingValues ->
         Box(
@@ -144,17 +148,16 @@ fun HomeContent(
                         }
 
                     } else {
-                        // TODO: handle empty State
                         EmptyScreen(
                             title = "No tasks for today!",
                         )
                     }
                 }
-
             }
         }
-
     }
+
+    // Bottom sheets remain the same...
     if (uiState.showTaskDetailsBottomSheet) {
         uiState.addedTask?.let { task ->
             TaskDetailsBottomSheet(
@@ -175,7 +178,6 @@ fun HomeContent(
                 interactionListener.onTitleChange(it)
             },
             taskDescription = uiState.addedTask?.description ?: "",
-
             onTaskDescriptionChange = {
                 interactionListener.onDescriptionChange(it)
             },
@@ -203,7 +205,7 @@ fun HomeContent(
                 uiState.addedTask?.let { task ->
                     interactionListener.onSaveEditTaskClick(task)
                 }
-            },
+            }
         )
     }
 
@@ -244,7 +246,6 @@ fun HomeContent(
                     interactionListener.onAddTask(task)
                 }
             }
-
         )
     }
 }

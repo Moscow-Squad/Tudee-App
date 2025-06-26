@@ -1,10 +1,7 @@
 package com.moscow.tudee.presentation.screen.home
 
-import com.moscow.tudee.domain.entity.Task.Priority
-import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
-import kotlinx.datetime.LocalDateTime
 
 data class HomeState(
     val isLoading: Boolean = true,
@@ -22,7 +19,9 @@ data class HomeState(
     val showAddTaskBottomSheet: Boolean = false,
     val showEditTaskBottomSheet: Boolean = false,
     val showTaskDetailsBottomSheet: Boolean = false,
-    val formattedDate: String? = null
+    val formattedDate: String? = null,
+    val showSnackbar: Boolean = false,
+    val snackbarMessage: String = ""
 ) {
     enum class SliderState {
         STAY_WORKING,
@@ -30,5 +29,4 @@ data class HomeState(
         ZERO_PROGRESS,
         NOTHING_ON_YOUR_LIST
     }
-
 }
