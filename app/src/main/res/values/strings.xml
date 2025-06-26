@@ -93,4 +93,6 @@
     <string name="deleted_task_successfully">Deleted Task Successfully.</string>
     <string name="some_error_happened">Some error happened</string>
     <string name="no_tasks_for_today">No tasks for today!</string>
+    <string name="upload">Upload</string>
+    <string name="add">Add</string>
 </resources>

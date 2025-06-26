@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
@@ -75,7 +76,7 @@ fun AddCategoryBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Add new category",
+                    text = stringResource(R.string.add_new_category),
                     style = textStyle.title.large,
                     color = colors.title,
                 )
@@ -86,7 +87,7 @@ fun AddCategoryBottomSheet(
                     Text(
                         modifier = Modifier
                             .clickable(onClick = onDeleteCategory),
-                        text = "Delete",
+                        text = stringResource(R.string.delete),
                         style = textStyle.label.large,
                         color = colors.error,
                     )
@@ -98,7 +99,7 @@ fun AddCategoryBottomSheet(
                 onValueChange = onCategoryTitleChange,
                 keyboardOptions = KeyboardOptions.Default,
                 singleLine = true,
-                hint = "Category Title",
+                hint = stringResource(R.string.category_title),
                 startIcon = painterResource(R.drawable.ic_menu_circle_outlined),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -107,7 +108,7 @@ fun AddCategoryBottomSheet(
             )
 
             Text(
-                text = "Category image",
+                text =stringResource(R.string.category_image),
                 style = textStyle.title.medium,
                 color = colors.title
             )
@@ -172,7 +173,7 @@ fun AddCategoryBottomSheet(
                                 )
                                 Spacer(Modifier.padding(top = 8.dp))
                                 Text(
-                                    text = "Upload",
+                                    text = stringResource(R.string.upload),
                                     style = textStyle.label.medium,
                                     color = colors.hint,
                                 )
@@ -190,7 +191,7 @@ fun AddCategoryBottomSheet(
                 .background(colors.surfaceHigh)
         ) {
             PrimaryButton(
-                text = "Add",
+                text = stringResource(R.string.add),
                 onClick = { onNewCategory(categoryTitle) },
                 isEnabled = isEnabled,
                 backgroundColor = if (isEnabled) colors.primaryGradient else Brush.linearGradient(listOf(colors.disable, colors.disable)),
@@ -201,7 +202,7 @@ fun AddCategoryBottomSheet(
             )
 
             SecondaryButton(
-                text = "Cancel",
+                text = stringResource(R.string.cancel),
                 onClick = onDismissRequest,
                 modifier = Modifier
                     .fillMaxWidth()
