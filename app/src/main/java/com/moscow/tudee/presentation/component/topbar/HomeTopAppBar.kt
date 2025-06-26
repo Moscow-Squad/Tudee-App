@@ -86,12 +86,13 @@ fun HomeTopAppBar(
                 painter = painterResource(R.drawable.ic_header),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(48.dp)
                     .padding(end = 8.dp)
             )
 
             Column(
-                modifier = Modifier.padding(vertical = 4.dp),
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .align(Alignment.Top),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.Start
             ) {
@@ -100,7 +101,7 @@ fun HomeTopAppBar(
                     fontFamily = CherryBomb,
                     fontSize = 18.sp,
                     lineHeight = 18.sp,
-                    textAlign = TextAlign.Start,
+                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight(400),
                     color = Theme.colors.onPrimary.copy(.87f),
                 )
@@ -109,7 +110,7 @@ fun HomeTopAppBar(
                     color = Theme.colors.onPrimaryCaption.copy(.70f),
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
-                    textAlign = TextAlign.Start,
+                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight(500),
                     style = Theme.textStyle.label.small,
                 )
