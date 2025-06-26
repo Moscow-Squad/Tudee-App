@@ -2,13 +2,15 @@ package com.moscow.tudee.presentation.screen.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,56 +44,57 @@ fun OnboardingScreen(
 
     val pages = provideOnboardingPages()
 
-    val pagerState = rememberPagerState(pageCount = { pages.size })
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { pages.size })
 
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(colors.surface)
+                .background(colors.overlay)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colors.surface)
-                    .background(colors.overlay)
-            ) {
-                if (pagerState.currentPage != pages.lastIndex) {
-                    TextButton(
-                        modifier = Modifier
-                            .padding(top = 56.dp)
-                            .align(Alignment.Start),
-                        onClick = onFinish
-                    ) {
-                        TudeeText(
-                            text = stringResource(R.string.skip),
-                            style = Theme.textStyle.label.large,
-                            color = colors.primary
-                        )
+            OnboardingPager(
+                pages = pages,
+                pagerState = pagerState,
+                onComplete = {
+                    scope.launch {
+                        viewModel.setOnboardingSeen(true)
+                        onFinish()
                     }
                 }
-
-                OnboardingPager(
-                    pages = pages,
-                    onComplete = {
-                        scope.launch {
-                            viewModel.setOnboardingSeen(true)
-                            onFinish()
-                        }
-                    }
-                )
-            }
-            Image(
-                painter = painterResource(
-                    id = if (state.isSystemDark ?: isSystemInDarkTheme()) {
-                        R.drawable.background_splash_dark
-                    } else {
-                        R.drawable.background_splash_light
-                    }
-                ),
-                contentDescription = stringResource(R.string.splash_background),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
             )
         }
+
+        Image(
+            painter = painterResource(
+                id = if (state.isSystemDark ?: isSystemInDarkTheme()) {
+                    R.drawable.background_splash_dark
+                } else {
+                    R.drawable.background_splash_light
+                }
+            ),
+            contentDescription = stringResource(R.string.splash_background),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        if (pagerState.currentPage != pages.lastIndex) {
+            TudeeText(
+                text = stringResource(R.string.skip),
+                style = Theme.textStyle.label.large,
+                color = colors.primary,
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 16.dp)
+                    .align(Alignment.TopStart)
+                    .clickable(onClick = onFinish)
+            )
+        }
+    }
 }
 
 @Preview

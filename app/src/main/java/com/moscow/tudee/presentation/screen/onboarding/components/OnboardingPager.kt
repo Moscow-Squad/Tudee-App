@@ -1,9 +1,12 @@
 package com.moscow.tudee.presentation.screen.onboarding.components
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -15,10 +18,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnboardingPager(
     pages: List<OnboardingData>,
+    pagerState: PagerState,
     onComplete: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState(initialPage = 0) { pages.size }
 
     Column {
         HorizontalPager(
@@ -29,6 +32,7 @@ fun OnboardingPager(
                 page = pages[index],
             )
         }
+
         OnboardingItem(
             data = pages[pagerState.currentPage],
             onNext = {
@@ -42,6 +46,7 @@ fun OnboardingPager(
                 }
             }
         )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
