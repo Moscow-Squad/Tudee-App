@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.screen.task
 
 import SwipeToDeleteItem
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -27,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -102,7 +104,7 @@ fun TaskScreen(
         val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
         if (index >= 0) lazyListState.animateScrollToItem(index)
     }
-    
+
     LaunchedEffect(Unit) {
         addTaskBottomSheetViewModel.uiEvent.collect { event ->
             when (event) {
@@ -151,6 +153,7 @@ private fun TaskContent(
     allTabs: List<TabItem>,
     lazyListState: LazyListState
 ) {
+    val context = LocalContext.current
     Scaffold(
         containerColor = Theme.colors.surface,
         topBar = {
@@ -196,7 +199,7 @@ private fun TaskContent(
                         TextStyle.FULL,
                         Locale.getDefault()
                     )
-                }, ${uiState.currentYear}",
+                }, ${context.localizeNumber(uiState.currentYear)}",
                 onBackClick = interactionListener::previousMonth,
                 onNextClick = interactionListener::nextMonth,
                 onDownClick = interactionListener::showDatePicker
@@ -214,12 +217,12 @@ private fun TaskContent(
                     )
             ) {
                 items(uiState.monthDays) { date ->
-                    val dayName = date.dayOfWeek.name.take(3).lowercase()
-                        .replaceFirstChar { it.titlecase(Locale.ROOT) }
+                    val dayName = context.getLocalizedDayName(date.dayOfWeek.value)
+                    val dayDate = context.localizeNumber(date.dayOfMonth)
 
                     DayItem(
                         day = dayName,
-                        dayDate = date.dayOfMonth,
+                        dayDate = dayDate,
                         isSelected = date == uiState.selectedDate.date,
                         onDayClick = { interactionListener.selectDate(date) },
                         isToday = date == uiState.selectedDate.date
@@ -324,4 +327,29 @@ private fun TaskContent(
             )
         }
     }
+}
+
+fun Context.getLocalizedDayName(dayOfWeek: Int): String {
+    val fullName = when (dayOfWeek) {
+        1 -> getString(R.string.monday)
+        2 -> getString(R.string.tuesday)
+        3 -> getString(R.string.wednesday)
+        4 -> getString(R.string.thursday)
+        5 -> getString(R.string.friday)
+        6 -> getString(R.string.saturday)
+        7 -> getString(R.string.sunday)
+        else -> ""
+    }
+
+    val currentLang = resources.configuration.locales[0].language
+    return if (currentLang == "en") {
+        fullName.take(3).replaceFirstChar { it.uppercaseChar() }
+    } else {
+        fullName
+    }
+}
+
+fun Context.localizeNumber(number: Int): String {
+    val locale = resources.configuration.locales[0]
+    return String.format(locale, "%d", number)
 }

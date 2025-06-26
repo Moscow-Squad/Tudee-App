@@ -23,7 +23,7 @@ import com.moscow.tudee.presentation.designSystem.theme.Theme.textStyle
 fun DayItem(
     modifier: Modifier = Modifier,
     day: String,
-    dayDate: Int,
+    dayDate: String,
     isSelected: Boolean,
     onDayClick: () -> Unit,
     isToday: Boolean = false
@@ -43,7 +43,7 @@ fun DayItem(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            text = "$dayDate",
+            text = dayDate,
             color = if (isSelected || isToday) colors.onPrimary else colors.body,
             style = textStyle.title.medium,
 
@@ -60,8 +60,8 @@ fun DayItem(
 @Composable
 fun PreviewDay() {
     DayItem(
-        day = "Mon",
-        dayDate = 12,
+        day = "الخميس",
+        dayDate = "12",
         isSelected = true,
         onDayClick = { }
     )
