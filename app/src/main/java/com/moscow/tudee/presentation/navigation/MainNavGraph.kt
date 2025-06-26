@@ -36,7 +36,7 @@ fun MainNavGraph(
         homeRoute(
             isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToTaskScreen = {
-                navController.selectNavigationItem(TasksScreen)
+                navController.selectNavigationItem(TasksScreen(it))
             }
         )
 

@@ -1,10 +1,10 @@
 package com.moscow.tudee.presentation.navigation.entry
 
-import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task
 import kotlinx.serialization.Serializable
 
 @Serializable
-object TasksScreen : BottomNavigationType {
+data class TasksScreen(val status: Task.Status) : BottomNavigationType {
     override val isBottomNavigationVisible: Boolean
         get() = true
 }
