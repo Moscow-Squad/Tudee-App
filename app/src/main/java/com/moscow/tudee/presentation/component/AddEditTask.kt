@@ -111,6 +111,7 @@ fun TaskBottomSheet(
                         keyboardOptions = KeyboardOptions.Default,
                         singleLine = true,
                         hint = stringResource(R.string.description),
+                        placeholderAlignment = Alignment.TopStart,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)

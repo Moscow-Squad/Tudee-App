@@ -9,6 +9,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
@@ -42,6 +44,7 @@ fun TudeeTextField(
     hint: String,
     modifier: Modifier = Modifier,
     startIcon: Painter? = null,
+    placeholderAlignment: Alignment = Alignment.CenterStart
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -96,6 +99,7 @@ fun TudeeTextField(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
+                placeholderAlignment = placeholderAlignment
             )
         }
     }
@@ -109,7 +113,8 @@ private fun TudeeBasicTextField(
     keyboardOptions: KeyboardOptions,
     singleLine: Boolean,
     interactionSource: MutableInteractionSource,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    placeholderAlignment: Alignment = Alignment.CenterStart
 ) {
     BasicTextField(
         value = value,
@@ -123,21 +128,24 @@ private fun TudeeBasicTextField(
         cursorBrush = SolidColor(Theme.colors.primary),
         modifier = modifier,
     ) { innerTextField ->
-        Box {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = placeholderAlignment
+        ) {
             if (value.isEmpty()) {
                 TudeeText(
                     text = hint,
                     color = Theme.colors.hint,
                     maxLines = 1,
                     style = Theme.textStyle.label.medium,
-
+                    modifier = Modifier
+                        .fillMaxWidth()
                 )
             }
             innerTextField()
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
