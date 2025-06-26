@@ -2,6 +2,7 @@ package com.moscow.tudee.presentation.model
 
 import androidx.annotation.DrawableRes
 import com.moscow.tudee.R
+import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
@@ -18,7 +19,7 @@ enum class BottomNavigationDestination(
     ),
 
     Tasks(
-        route = TasksScreen,
+        route = TasksScreen(Task.Status.TODO),
         notSelectedIcon = R.drawable.ic_document_outlined,
         selectedIcon = R.drawable.ic_document_filled,
     ),

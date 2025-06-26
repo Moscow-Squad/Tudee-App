@@ -79,7 +79,8 @@ import java.util.Locale
 @Composable
 fun TaskScreen(
     viewModel: TaskViewModel = koinViewModel(),
-    addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel()
+    addTaskBottomSheetViewModel: AddTaskBottomSheetViewModel = koinViewModel(),
+    status: Task.Status = Task.Status.TODO
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val bottomSheetUiState by addTaskBottomSheetViewModel.uiState.collectAsStateWithLifecycle()
@@ -113,6 +114,10 @@ fun TaskScreen(
     val isAtStart by remember { derivedStateOf { lazyListState.firstVisibleItemIndex == 0 } }
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(status) {
+        viewModel.selectStatus(status)
+    }
 
     LaunchedEffect(lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
