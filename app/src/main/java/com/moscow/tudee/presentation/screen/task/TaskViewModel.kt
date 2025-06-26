@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.screen.task
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
@@ -100,6 +101,7 @@ class TaskViewModel(
                 showSnackBar(snackBarUi)
             },
             onError = {
+                Log.e("TaskViewModel", "Error in deleting task: ${it.message}")
                 updateState { it.copy(selectedTaskToDelete = null) }
                 val snackBarUi = TaskUiState.SnackBarUi(
                     type = TaskUiState.SnackBarUi.SnackBarType.ERROR,

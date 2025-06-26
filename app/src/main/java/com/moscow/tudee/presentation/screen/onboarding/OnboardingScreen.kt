@@ -49,15 +49,12 @@ fun OnboardingScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(colors.surface)
+            .background(colors.overlay)
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.surface)
-                .background(colors.overlay)
-        ) {
+        Column(Modifier.fillMaxSize()) {
             OnboardingPager(
                 pages = pages,
                 pagerState = pagerState,
