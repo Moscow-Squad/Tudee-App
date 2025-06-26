@@ -95,7 +95,7 @@ fun ColumnOfDots(modifier: Modifier = Modifier) {
 fun MessageBox(
     title: String,
     modifier: Modifier = Modifier,
-    ) {
+) {
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp),
