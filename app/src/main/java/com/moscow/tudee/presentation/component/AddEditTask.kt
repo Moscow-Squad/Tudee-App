@@ -109,7 +109,7 @@ fun TaskBottomSheet(
                             onTaskDescriptionChange(newDescription)
                         },
                         keyboardOptions = KeyboardOptions.Default,
-                        singleLine = true,
+                        singleLine = false,
                         hint = stringResource(R.string.description),
                         placeholderAlignment = Alignment.TopStart,
                         modifier = Modifier

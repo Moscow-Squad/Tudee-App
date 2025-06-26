@@ -116,7 +116,9 @@ fun TaskCard(
             Text(
                 text = title,
                 style = Theme.textStyle.label.large,
-                color = Theme.colors.body
+                color = Theme.colors.body,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = description,
