@@ -8,7 +8,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
@@ -28,7 +27,8 @@ fun MainNavGraph(
     paddingValues: PaddingValues,
 ) {
     NavHost(
-        modifier = modifier.padding(paddingValues),
+        modifier = modifier.padding(bottom = 78.dp),
+        //modifier = modifier.padding(paddingValues),
         navController = navController,
         route = MainScreen::class,
         startDestination = HomeScreen
