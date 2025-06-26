@@ -242,7 +242,7 @@ private fun TaskContent(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 ) {
-                    items(uiState.tasksForSelectedState) { task ->
+                    items(uiState.tasksForSelectedState, key = { task -> task.id!! }) { task ->
                         SwipeToDeleteItem(
                             onDelete = { interactionListener.showDeleteTaskBottomSheet(task) },
                             animationDuration = 200L
