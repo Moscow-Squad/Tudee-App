@@ -5,10 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.TextButton
@@ -27,6 +24,8 @@ import com.moscow.tudee.R
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
+import com.moscow.tudee.presentation.screen.onboarding.components.OnboardingPager
+import com.moscow.tudee.presentation.screen.onboarding.components.provideOnboardingPages
 import com.moscow.tudee.presentation.screen.splash.viewmodel.SplashViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -48,9 +47,6 @@ fun OnboardingScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    WindowInsets.navigationBars.asPaddingValues()
-                )
         ) {
             Column(
                 modifier = Modifier

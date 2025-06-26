@@ -1,4 +1,4 @@
-package com.moscow.tudee.presentation.screen.onboarding
+package com.moscow.tudee.presentation.screen.onboarding.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -18,6 +18,7 @@ import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.Theme.colors
+import com.moscow.tudee.presentation.screen.onboarding.OnboardingData
 
 @Composable
 fun OnboardingItem(
@@ -83,6 +84,7 @@ fun OnboardingItem(
                     }
             ) {
                 CustomFAB(
+                    modifier = Modifier.size(64.dp),
                     onClick = onNext,
                     isLoading = false,
                     isEnabled = true,
