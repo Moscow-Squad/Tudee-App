@@ -4,9 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,12 +27,8 @@ fun MainScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = Theme.colors.surface,
         bottomBar = {
-
             if (state.isBottomNavigationVisible) {
                 BottomNavBar(
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .background(Theme.colors.surface),
                     bottomNavigationItems = BottomNavigationDestination.entries,
                     navController = navController
                 )
@@ -46,7 +39,6 @@ fun MainScreen(
         MainNavGraph(
             navController = navController,
             paddingValues = innerPadding,
-            modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
             isBottomNavigationVisible = {
                 mainViewModel.onEvent(MainScreenEvents.UpdateBottomBarVisibility(it))
             })

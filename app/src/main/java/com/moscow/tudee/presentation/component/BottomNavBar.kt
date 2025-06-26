@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +29,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.model.BottomNavigationDestination
@@ -48,6 +48,7 @@ fun BottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .background(Theme.colors.surfaceHigh)
+            .navigationBarsPadding()
             .padding(vertical = 16.dp, horizontal = 32.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -70,8 +71,6 @@ fun BottomNavBar(
                     icon = icon,
                     isSelected = selected,
                     onClick = {
-                        Log.e("jjjdjd","DEBUG: Comparing with ${navBackStackEntry}")
-                        Log.e("jjjdjd", "--------------------------")
                         navController.selectNavigationItem(screen.route)
                     },
                     contentDescription = when (index) {

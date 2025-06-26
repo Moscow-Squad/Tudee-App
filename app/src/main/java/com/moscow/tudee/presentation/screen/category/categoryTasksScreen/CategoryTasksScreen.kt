@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
@@ -105,7 +106,9 @@ private fun TasksTopBar(
     Column {
 
         TopBar(
-            modifier = Modifier.background(Theme.colors.surfaceHigh),
+            modifier = Modifier
+                .background(Theme.colors.surfaceHigh)
+                .statusBarsPadding(),
             title = uiState.category.title,
             startIcon = painterResource(id = R.drawable.ic_arrow_head_back),
             endIcon = if (uiState.category.isPredefined) null else painterResource(id = R.drawable.ic_pencil_edit),

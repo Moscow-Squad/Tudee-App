@@ -131,7 +131,7 @@ open class TaskViewModel(
         }
     }
 
-    private fun loadTasks() {
+    fun loadTasks() {
         val today: LocalDateTime = Clock.System.now()
             .toLocalDateTime(TimeZone.currentSystemDefault())
 

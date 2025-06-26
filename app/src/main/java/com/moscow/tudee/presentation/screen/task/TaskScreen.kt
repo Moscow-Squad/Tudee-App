@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -39,23 +40,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.AddTaskBottomSheet
 import com.moscow.tudee.presentation.component.CustomFAB
 import com.moscow.tudee.presentation.component.DatePickerModal
 import com.moscow.tudee.presentation.component.EmptyScreen
-import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.component.PriorityChip
 import com.moscow.tudee.presentation.component.SnackBar
 import com.moscow.tudee.presentation.component.TaskCard
+import com.moscow.tudee.presentation.component.bottomSheet.DeleteBottomSheet
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
-import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
-import com.moscow.tudee.presentation.screen.category.component.TabItem
 import com.moscow.tudee.presentation.mapper.toCategory
 import com.moscow.tudee.presentation.mapper.toCategoryUi
+import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
+import com.moscow.tudee.presentation.screen.category.component.TabItem
 import com.moscow.tudee.presentation.screen.task.components.DayItem
 import com.moscow.tudee.presentation.screen.task.components.Header
 import com.moscow.tudee.presentation.util.getPriorityBackground
@@ -108,6 +112,13 @@ fun TaskScreen(
     val lazyListState = rememberLazyListState()
     val isAtStart by remember { derivedStateOf { lazyListState.firstVisibleItemIndex == 0 } }
     var selectedTaskToDelete by remember { mutableStateOf<Task?>(null) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewModel.loadTasks()
+        }
+    }
 
     LaunchedEffect(uiState.selectedDate) {
         val index = uiState.monthDays.indexOf(uiState.selectedDate.date)
@@ -186,6 +197,7 @@ private fun TaskContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Theme.colors.surfaceHigh)
+                        .statusBarsPadding()
                         .padding(horizontal = 16.dp, vertical = 20.dp)
                 ) {
                     Text(
