@@ -34,7 +34,7 @@ fun EmptyScreen(
     title: String = stringResource(R.string.no_tasks_here)
 ) {
     Box(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         contentAlignment = Alignment.BottomEnd,
     ) {
         Box(

@@ -288,7 +288,16 @@ private fun TaskContent(
                             }
                         }
                     }
-                } else EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
+                } else {
+                    Column(
+                        modifier = Modifier
+                        .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        EmptyScreen(modifier = Modifier.padding(16.dp))
+                    }
+                }
 
                 selectedTaskToDelete?.let {
                     DeleteBottomSheet(
