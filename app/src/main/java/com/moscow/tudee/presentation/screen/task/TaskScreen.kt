@@ -216,7 +216,7 @@ private fun TaskContent(
                         bottom = 8.dp
                     )
             ) {
-                items(uiState.monthDays, key = { date -> date.toString() }) { date ->
+                items(uiState.monthDays) { date ->
                     val dayName = context.getLocalizedDayName(date.dayOfWeek.value)
                     val dayDate = context.localizeNumber(date.dayOfMonth)
 
