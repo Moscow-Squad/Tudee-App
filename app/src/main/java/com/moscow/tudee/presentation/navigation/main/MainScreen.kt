@@ -1,8 +1,11 @@
 package com.moscow.tudee.presentation.navigation.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,15 +21,14 @@ import com.moscow.tudee.presentation.navigation.MainNavGraph
 fun MainScreen(
     navController: NavHostController = rememberNavController(),
     mainViewModel: MainViewModel = MainViewModel(),
-){
+) {
     val state = mainViewModel.state.collectAsStateWithLifecycle().value
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         containerColor = Theme.colors.surface,
         bottomBar = {
-            if (state.isBottomNavigationVisible){
+            if (state.isBottomNavigationVisible) {
                 BottomNavBar(
                     modifier = Modifier
                         .navigationBarsPadding()
@@ -41,10 +43,10 @@ fun MainScreen(
         MainNavGraph(
             navController = navController,
             paddingValues = innerPadding,
+            modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
             isBottomNavigationVisible = {
                 mainViewModel.onEvent(MainScreenEvents.UpdateBottomBarVisibility(it))
-            }
-        )
+            })
 
     }
 }

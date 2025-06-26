@@ -31,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -76,9 +78,8 @@ fun HomeTopAppBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(vertical = 12.dp)
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.Absolute.Center,
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -86,18 +87,30 @@ fun HomeTopAppBar(
                 contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
-                    .padding(end = 8.dp),
+                    .padding(end = 8.dp)
             )
-            Column {
+
+            Column(
+                modifier = Modifier.padding(vertical = 4.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
                 TudeeText(
                     text = title,
                     fontFamily = CherryBomb,
                     fontSize = 18.sp,
+                    lineHeight = 18.sp,
+                    textAlign = TextAlign.Start,
+                    fontWeight = FontWeight(400),
                     color = Theme.colors.onPrimary.copy(.87f),
                 )
                 TudeeText(
                     text = subTitle,
                     color = Theme.colors.onPrimaryCaption.copy(.70f),
+                    fontSize = 12.sp,
+                    lineHeight = 16.sp,
+                    textAlign = TextAlign.Start,
+                    fontWeight = FontWeight(500),
                     style = Theme.textStyle.label.small,
                 )
             }

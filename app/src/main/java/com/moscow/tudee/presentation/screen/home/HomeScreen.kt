@@ -148,16 +148,14 @@ fun HomeContent(
                         }
 
                     } else {
-                        EmptyScreen(
-                            title = "No tasks for today!",
-                        )
+                        // TODO: handle empty State
+                        EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
                     }
                 }
             }
         }
-    }
 
-    // Bottom sheets remain the same...
+    }
     if (uiState.showTaskDetailsBottomSheet) {
         uiState.addedTask?.let { task ->
             TaskDetailsBottomSheet(
