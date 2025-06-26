@@ -1,6 +1,8 @@
 package com.moscow.tudee.presentation.screen.home
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -148,9 +150,19 @@ fun HomeContent(
                         }
 
                     } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            EmptyScreen(
+                                modifier = Modifier
+                                    .padding(start = 16.dp)
+                                    .padding(top = 48.dp),
+                                title = stringResource(R.string.no_tasks_for_today)
+                            )
 
-                        EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp),title = stringResource(R.string.no_tasks_for_today))
-
+                        }
                     }
                 }
             }
@@ -251,7 +263,7 @@ fun HomeContent(
 
 
 
-@Preview
+@Preview(device = "spec:width=673dp,height=841dp", apiLevel = 33)
 @Composable
 private fun PreviewScreen() {
     HomeScreen(
