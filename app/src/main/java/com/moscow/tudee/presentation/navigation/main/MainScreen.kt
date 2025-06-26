@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.navigation.main
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.moscow.tudee.presentation.component.BottomNavBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
@@ -28,6 +30,7 @@ fun MainScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = Theme.colors.surface,
         bottomBar = {
+
             if (state.isBottomNavigationVisible) {
                 BottomNavBar(
                     modifier = Modifier

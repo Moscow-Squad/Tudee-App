@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
@@ -36,4 +37,32 @@ inline fun <reified T : Any> NavGraphBuilder.tudeeComposable(
         popExitTransition = { fadeOut(tween(ANIMATION_DURATION)) },
         content = content,
     )
+}
+
+fun NavController.selectNavigationItem(route: Any) {
+    navigateSafe(route) {
+        popUpTo(graph.findStartDestination().id) {
+
+            /**
+             *  Preserves the state of the screen you're leaving.
+             *  For example, if you're on a list screen and scroll down,
+             *  then switch tabs and come back, you'll return to the same scroll position
+             */
+
+            saveState = true
+        }
+
+        /**
+         * Prevents creating duplicate instances of the same destination.
+         * If you're already on the "Home" tab and tap "Home" again,
+         * it won't create a new Home screen instance
+         */
+        launchSingleTop = true
+
+        /**
+         * When returning to a previously visited tab,
+         * it restores the saved state (scroll position, form data, etc.)
+         */
+        restoreState = true
+    }
 }
