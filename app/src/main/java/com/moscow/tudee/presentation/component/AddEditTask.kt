@@ -216,7 +216,8 @@ fun TaskBottomSheet(
                                             getPredefinedIconRes(category.title)
                                         )
                                         else rememberAsyncImagePainter(category.iconUrl),
-                                        label = category.title,
+                                        label = category.titleRes?.let { stringResource(category.titleRes) }
+                                            ?: category.title,
                                         selected = selectedCategory?.id == category.id,
                                         modifier = Modifier
                                             .fillMaxWidth()
