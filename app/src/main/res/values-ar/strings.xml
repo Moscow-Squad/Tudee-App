@@ -95,4 +95,6 @@
     <string name="deleted_task_successfully">تم حذف المهمة بنجاح.</string>
     <string name="some_error_happened">حدث خطأ ما</string>
     <string name="no_tasks_for_today">لا يوجد مهام اليوم</string>
+    <string name="upload">تحميل</string>
+    <string name="add">إضافة</string>
 </resources>

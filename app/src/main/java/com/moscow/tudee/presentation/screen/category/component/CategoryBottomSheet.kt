@@ -136,7 +136,7 @@ fun CategoryBottomSheet(
                     ) {
                         AsyncImage(
                             model = selectedImageUri,
-                            contentDescription = "Category Image",
+                            contentDescription = stringResource(R.string.category_image),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.size(112.dp, 112.dp)
                         )
@@ -165,7 +165,7 @@ fun CategoryBottomSheet(
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            text = "Upload",
+                            text = stringResource(R.string.upload),
                             style = Theme.textStyle.label.medium,
                             color = Theme.colors.hint
                         )
