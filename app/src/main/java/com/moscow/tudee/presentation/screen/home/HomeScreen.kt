@@ -144,10 +144,7 @@ fun HomeContent(
                         }
 
                     } else {
-                        // TODO: handle empty State
-                        EmptyScreen(
-                            title = "No tasks for today!",
-                        )
+                        EmptyScreen(title = stringResource(R.string.no_tasks_for_today))
                     }
                 }
 
