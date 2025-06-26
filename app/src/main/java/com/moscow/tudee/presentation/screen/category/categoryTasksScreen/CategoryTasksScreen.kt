@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.screen.category.categoryTasksScreen
 
 import android.net.Uri
+import android.text.TextUtils.substring
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +35,8 @@ import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
 import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
 import com.moscow.tudee.presentation.screen.category.component.DeleteCategoryBottomSheet
 import com.moscow.tudee.presentation.screen.category.component.TabItem
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -151,7 +154,7 @@ private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modif
                         category = task.category ?: CategoryUi(),
                         title = task.title,
                         description = task.description,
-                        date = task.date.toString(),
+                        date = formatDate(task.date),
                     ) {
                         task.priority?.let { priority ->
                             CategoryPriorityChip(priority = priority)
@@ -161,6 +164,11 @@ private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modif
             }
         }
     }
+}
+
+private fun formatDate(date : LocalDateTime): String{
+    val currentDate = date.toString()
+    return currentDate.substring(startIndex = 0, endIndex = currentDate.indexOf('T'))
 }
 
 @Composable
