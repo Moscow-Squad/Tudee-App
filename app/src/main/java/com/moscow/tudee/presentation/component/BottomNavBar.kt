@@ -94,7 +94,7 @@ private fun NavBarIcon(
 ) {
     val backgroundColor = if (isSelected) Theme.colors.primaryVariant else Theme.colors.surfaceHigh
 
-    val tintColor = if (isSelected) Theme.colors.primary else Theme.colors.hint
+    val tintColor = if (isSelected) Theme.colors.primary else Theme.colors.hint.copy(alpha = 1f)
 
 
     Icon(

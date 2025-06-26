@@ -1,4 +1,5 @@
 package com.moscow.tudee.presentation.screen.home
+
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.domain.service.CategoryServices
@@ -29,29 +30,44 @@ class HomeViewModel(
     }
 
 
-    private fun loadTasks() {
+    fun loadTasks() {
         launchWithResult(
-            action    = { tasksServices.getTasksByDate(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date).map { it.toTaskUi() } },
-            onSuccess = ::onSuccessLoadingTasks ,
-            onError   = { handleHomeError(it) },
-            onStart   = { startLoading() },
+            action = {
+                tasksServices.getTasksByDate(
+                    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+                ).map { it.toTaskUi() }
+            },
+            onSuccess = ::onSuccessLoadingTasks,
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
             onFinally = { endLoading() }
         )
         updateSlider()
     }
 
-    private fun getTodayDate(){
-        updateState { it.copy(formattedDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.toJavaLocalDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()) }
+    private fun getTodayDate() {
+        updateState {
+            it.copy(
+                formattedDate = Clock.System.now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault()).date.toJavaLocalDate()
+                    .format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()
+            )
+        }
     }
-    private fun onSuccessLoadingTasks(tasks:List<TaskUi>){
-        val groupedTasks = tasks.groupBy{ it.status }
+
+    private fun onSuccessLoadingTasks(tasks: List<TaskUi>) {
+        val groupedTasks = tasks.groupBy { it.status }
 
         updateState {
             it.copy(
-                todoTasks = groupedTasks[Status.TODO].orEmpty() ,
+                todoTasks = groupedTasks[Status.TODO].orEmpty(),
                 doneTasks = groupedTasks[Status.DONE].orEmpty(),
                 inProgressTasks = groupedTasks[Status.IN_PROGRESS].orEmpty(),
-                sliderState = updateSliderState( uiState.value.doneTasks.size ,uiState.value.todoTasks.size ,uiState.value.inProgressTasks.size)
+                sliderState = updateSliderState(
+                    uiState.value.doneTasks.size,
+                    uiState.value.todoTasks.size,
+                    uiState.value.inProgressTasks.size
+                )
 
             )
         }
@@ -59,7 +75,11 @@ class HomeViewModel(
         updateSlider()
     }
 
-    private fun updateSliderState(doneTasks:Int, todoTasks:Int,inProgressTasks:Int): HomeState.SliderState {
+    private fun updateSliderState(
+        doneTasks: Int,
+        todoTasks: Int,
+        inProgressTasks: Int
+    ): HomeState.SliderState {
         val totalTasks = todoTasks + inProgressTasks + doneTasks
         return when {
             totalTasks == 0 -> HomeState.SliderState.NOTHING_ON_YOUR_LIST
@@ -70,18 +90,17 @@ class HomeViewModel(
         }
 
     }
-    private fun getCategories() {
-        if(uiState.value.categories.isEmpty()) {
-            launchWithResult(
-                action = { categoryServices.getCategories() },
-                onSuccess = { response ->
-                    updateState { it.copy(categories = response.map { it.toCategoryUi() }) }
-                },
-                onError = { handleHomeError(it) },
-                onStart = { startLoading() },
-                onFinally = { endLoading() }
-            )
-        }
+
+    fun getCategories() {
+        launchWithResult(
+            action = { categoryServices.getCategories() },
+            onSuccess = { response ->
+                updateState { it.copy(categories = response.map { it.toCategoryUi() }) }
+            },
+            onError = { handleHomeError(it) },
+            onStart = { startLoading() },
+            onFinally = { endLoading() }
+        )
     }
 
     override fun onFloatingActionButtonClick() {
@@ -197,7 +216,7 @@ class HomeViewModel(
     private fun getNextStatus(currentStatus: Task.Status): Task.Status {
         return when (currentStatus) {
             Status.TODO -> Status.IN_PROGRESS
-            Status.IN_PROGRESS ->Status.DONE
+            Status.IN_PROGRESS -> Status.DONE
             Status.DONE -> Status.DONE
         }
     }

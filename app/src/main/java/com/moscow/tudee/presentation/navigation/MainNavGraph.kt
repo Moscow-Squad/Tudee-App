@@ -60,6 +60,7 @@ fun MainNavGraph(
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set("result_message", messageId)
+                navController.popBackStack()
 
             }
             , navigateBack ={
