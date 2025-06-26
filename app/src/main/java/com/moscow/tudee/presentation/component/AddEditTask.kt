@@ -121,7 +121,7 @@ fun TaskBottomSheet(
                             onTaskDescriptionChange(newDescription)
                         },
                         keyboardOptions = KeyboardOptions.Default,
-                        singleLine = true,
+                        singleLine = false,
                         hint = stringResource(R.string.description),
                         modifier = Modifier
                             .fillMaxWidth()
