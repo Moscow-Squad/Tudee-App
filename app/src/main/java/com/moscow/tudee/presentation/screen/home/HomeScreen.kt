@@ -96,7 +96,7 @@ fun HomeContent(
                         Box(
                             Modifier
                                 .fillMaxWidth()
-                                .height(167.dp)
+                                .height(80.dp)
                                 .background(color = Theme.colors.primary)
                                 .align(Alignment.TopStart)
                                 .zIndex(0f)
