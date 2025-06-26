@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -30,8 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
 import com.moscow.tudee.presentation.designSystem.theme.Theme
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
 import kotlinx.coroutines.delay
 
 @Composable
@@ -94,6 +95,7 @@ private fun SnackBarContent(
     Row(
         modifier = modifier
             .padding(16.dp)
+            .statusBarsPadding()
             .fillMaxWidth()
             .shadow(
                 elevation = 6.dp,
