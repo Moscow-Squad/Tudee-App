@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,7 +34,7 @@ fun EmptyScreen(
     title: String = stringResource(R.string.no_tasks_here)
 ) {
     Box(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.BottomEnd,
     ) {
         Box(
@@ -95,7 +96,7 @@ fun ColumnOfDots(modifier: Modifier = Modifier) {
 fun MessageBox(
     title: String,
     modifier: Modifier = Modifier,
-    ) {
+) {
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp),

@@ -145,9 +145,7 @@ fun HomeContent(
 
                     } else {
                         // TODO: handle empty State
-                        EmptyScreen(
-                            title = "No tasks for today!",
-                        )
+                        EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
                     }
                 }
 
