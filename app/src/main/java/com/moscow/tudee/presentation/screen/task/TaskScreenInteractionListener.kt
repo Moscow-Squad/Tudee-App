@@ -8,7 +8,7 @@ interface TaskScreenInteractionListener {
 
     fun selectStatus(status: Task.Status)
 
-    fun deleteTask(task: Task)
+    fun deleteTask()
 
     fun previousMonth()
 
@@ -16,8 +16,15 @@ interface TaskScreenInteractionListener {
 
     fun updateMonthFromPicker(epochMillis: Long?)
 
+    fun showDeleteTaskBottomSheet(task: Task)
+
+    fun hideDeleteTaskBottomSheet()
+
     fun showDatePicker()
 
     fun dismissDatePicker()
 
+    fun showSnackBar(snackBarUi: TaskUiState.SnackBarUi)
+
+    fun hideSnackBar()
 }

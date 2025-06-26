@@ -5,9 +5,7 @@ import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.service.TasksServices
 import com.moscow.tudee.presentation.base.BaseViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
@@ -20,12 +18,9 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
-open class TaskViewModel(
+class TaskViewModel(
     private val taskService: TasksServices
-) : BaseViewModel<TaskUiState, TaskUiEvent>(TaskUiState()),
-    TaskScreenInteractionListener {
-    private val _showDatePicker = MutableStateFlow(false)
-    val showDatePicker: StateFlow<Boolean> = _showDatePicker.asStateFlow()
+) : BaseViewModel<TaskUiState, Nothing>(TaskUiState()), TaskScreenInteractionListener {
 
     init {
         loadTasks()
@@ -33,11 +28,23 @@ open class TaskViewModel(
     }
 
     override fun showDatePicker() {
-        _showDatePicker.value = true
+        updateState { it.copy(isDatePickerVisible = true) }
     }
 
     override fun dismissDatePicker() {
-        _showDatePicker.value = false
+        updateState { it.copy(isDatePickerVisible = false) }
+    }
+
+    override fun showSnackBar(snackBarUi: TaskUiState.SnackBarUi) {
+        viewModelScope.launch {
+            updateState { it.copy(snackBarUi = snackBarUi) }
+            delay(3000)
+            hideSnackBar()
+        }
+    }
+
+    override fun hideSnackBar() {
+        updateState { it.copy(snackBarUi = null) }
     }
 
     override fun selectDate(date: LocalDate) {
@@ -60,7 +67,7 @@ open class TaskViewModel(
         }
     }
 
-    final override fun selectStatus(status: Task.Status) {
+    override fun selectStatus(status: Task.Status) {
         updateState { currentState ->
             val filtered = filterTasksByStatus(currentState.allTasksForSelectedDate, status)
             currentState.copy(
@@ -70,40 +77,36 @@ open class TaskViewModel(
         }
     }
 
-    override fun deleteTask(task: Task) {
+    override fun deleteTask() {
         launchWithResult(
-            action = { task.id?.let { taskService.deleteTask(it) } },
+            action = { uiState.value.selectedTaskToDelete?.id?.let { taskService.deleteTask(it) } },
             onSuccess = {
                 updateState {
                     val updatedAllTasks =
-                        it.allTasksForSelectedDate.filterNot { t -> t.id == task.id }
+                        it.allTasksForSelectedDate.filterNot { t -> t.id == uiState.value.selectedTaskToDelete?.id }
                     val updatedFiltered =
                         updatedAllTasks.filter { t -> t.status == it.selectedStatus }
                     it.copy(
                         allTasksForSelectedDate = updatedAllTasks,
                         tasksForSelectedState = updatedFiltered,
+                        selectedTaskToDelete = null
                     )
                 }
-                sendEvent(
-                    TaskUiEvent.ShowSnackBar(
-                        SnackBarUi(
-                            type = SnackBarType.SUCCESS,
-                            messageId = R.string.deleted_task_successfully
-                        )
-                    )
+                val snackBarUi = TaskUiState.SnackBarUi(
+                    type = TaskUiState.SnackBarUi.SnackBarType.SUCCESS,
+                    messageId = R.string.deleted_task_successfully,
+                    iconId = R.drawable.ic_checkmark_badge
                 )
-
-
+                showSnackBar(snackBarUi)
             },
             onError = {
-                sendEvent(
-                    TaskUiEvent.ShowSnackBar(
-                        SnackBarUi(
-                            type = SnackBarType.ERROR,
-                            messageId = R.string.some_error_happened
-                        )
-                    )
+                updateState { it.copy(selectedTaskToDelete = null) }
+                val snackBarUi = TaskUiState.SnackBarUi(
+                    type = TaskUiState.SnackBarUi.SnackBarType.ERROR,
+                    messageId = R.string.some_error_happened,
+                    iconId = R.drawable.ic_information_diamond
                 )
+                showSnackBar(snackBarUi)
             }
         )
     }
@@ -111,14 +114,22 @@ open class TaskViewModel(
     override fun previousMonth() {
         val current = uiState.value
         val newDate =
-            LocalDate(current.currentYear, current.currentMonth, 1).minus(DatePeriod(months = 1))
+            LocalDate(
+                current.currentYear,
+                current.currentMonth,
+                current.selectedDate.dayOfMonth
+            ).minus(DatePeriod(months = 1))
         updateMonth(newDate)
     }
 
     override fun nextMonth() {
         val current = uiState.value
         val newDate =
-            LocalDate(current.currentYear, current.currentMonth, 1).plus(DatePeriod(months = 1))
+            LocalDate(
+                current.currentYear,
+                current.currentMonth,
+                current.selectedDate.dayOfMonth
+            ).plus(DatePeriod(months = 1))
         updateMonth(newDate)
     }
 
@@ -129,6 +140,14 @@ open class TaskViewModel(
             val date = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
             updateMonth(date)
         }
+    }
+
+    override fun showDeleteTaskBottomSheet(task: Task) {
+        updateState { it.copy(selectedTaskToDelete = task) }
+    }
+
+    override fun hideDeleteTaskBottomSheet() {
+        updateState { it.copy(selectedTaskToDelete = null) }
     }
 
     fun loadTasks() {
