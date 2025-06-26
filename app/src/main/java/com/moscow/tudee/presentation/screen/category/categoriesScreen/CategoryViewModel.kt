@@ -30,7 +30,7 @@ class CategoryViewModel(
         }
     }
 
-    private fun getAllCategories() {
+    fun getAllCategories() {
         launchWithResult(
             action = { categoryServices.getCategories() },
             onSuccess = ::onGetAllCategoriesSuccess,
