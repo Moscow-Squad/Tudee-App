@@ -62,7 +62,7 @@ fun TudeeSlider(
             contentAlignment = Alignment.Center)
         {
             Image(
-                painter = painterResource(R.drawable.ic_moon_pit_big),
+                painter = painterResource(R.drawable.ic_slider_background),
                 contentDescription = "frame_moon_pit",
                 modifier = Modifier.size(76.dp)
             )
