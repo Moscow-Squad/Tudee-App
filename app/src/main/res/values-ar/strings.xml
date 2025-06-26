@@ -97,4 +97,11 @@
     <string name="no_tasks_for_today">لا يوجد مهام اليوم</string>
     <string name="upload">تحميل</string>
     <string name="add">إضافة</string>
+    <string name="monday">الاثنين</string>
+    <string name="tuesday">الثلاثاء</string>
+    <string name="wednesday">الأربعاء</string>
+    <string name="thursday">الخميس</string>
+    <string name="friday">الجمعة</string>
+    <string name="saturday">السبت</string>
+    <string name="sunday">الأحد</string>
 </resources>
