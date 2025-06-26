@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -23,14 +24,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.base.ObserveAsEvent
-import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
-import com.moscow.tudee.presentation.screen.category.component.CategoryBottomSheet
-import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
 import com.moscow.tudee.presentation.component.CustomFAB
-import com.moscow.tudee.presentation.screen.category.component.CategoryCard
 import com.moscow.tudee.presentation.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.screen.category.CategoriesScreenState
+import com.moscow.tudee.presentation.screen.category.component.CategoryBottomSheet
+import com.moscow.tudee.presentation.screen.category.component.CategoryCard
+import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import com.moscow.tudee.presentation.util.saveUriToInternalStorage
 import org.koin.androidx.compose.koinViewModel
@@ -105,7 +106,9 @@ private fun AddCategoryFAB(categoriesInteractionListener: CategoriesInteractionL
 private fun CategoriesTopBar() {
     TopBar(
         title = stringResource(R.string.categories),
-        modifier = Modifier.background(Theme.colors.surfaceHigh)
+        modifier = Modifier
+            .background(Theme.colors.surfaceHigh)
+            .statusBarsPadding()
     )
 }
 
