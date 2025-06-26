@@ -28,7 +28,6 @@ fun MainNavGraph(
 ) {
     NavHost(
         modifier = modifier.padding(bottom = 78.dp),
-        //modifier = modifier.padding(paddingValues),
         navController = navController,
         route = MainScreen::class,
         startDestination = HomeScreen
