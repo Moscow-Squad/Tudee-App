@@ -22,13 +22,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task.Status
-import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.component.PriorityChip
 import com.moscow.tudee.presentation.component.TaskCard
+import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.mapper.getColor
 import com.moscow.tudee.presentation.mapper.getIcon
 import com.moscow.tudee.presentation.mapper.getText
+import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
 
 @Composable
@@ -79,15 +80,15 @@ fun TaskList(
                 modifier = modifier
                     .width(320.dp)
                     .clickable { onTaskClick(task) },
-                category = task.category,
+                category = task.category ?: CategoryUi(),
                 title = task.title,
                 description = task.description,
             ) {
-                task.priority.let {
+                task.priority?.let { priority ->
                     PriorityChip(
-                        text = task.priority.getText(),
-                        backgroundColor = task.priority.getColor(),
-                        icon = painterResource(id = task.priority.getIcon()),
+                        text = priority.getText(),
+                        backgroundColor = priority.getColor(),
+                        icon = painterResource(id = priority.getIcon()),
                         selected = true
                     )
                 }

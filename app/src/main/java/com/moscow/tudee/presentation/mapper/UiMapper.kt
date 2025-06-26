@@ -39,8 +39,14 @@ fun TaskUi.toTask(): Task =
         id = id,
         title = title,
         description = description,
-        priority = priority,
-        category = category.toCategory(),
+        priority = priority ?: Priority.LOW,
+        category = category?.toCategory() ?: Category(
+            id = 0L,
+            title = "",
+            iconUri = "",
+            isPredefined = false,
+            countOfTasks = 0
+        ),
         status = status,
         date = date
     )

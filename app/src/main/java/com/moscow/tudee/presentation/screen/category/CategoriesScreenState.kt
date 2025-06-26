@@ -4,7 +4,6 @@ import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
 
-
 data class CategoriesScreenState(
     val isLoading: Boolean = false,
     val errorMessage: Int? = null,
@@ -16,6 +15,5 @@ data class CategoriesScreenState(
     val isEditCategoryBottomSheetShow: Boolean = false,
     val isAddCategoryBottomSheetShow: Boolean = false,
     val isDeleteCategoryBottomSheetShow: Boolean = false,
-    val isSnackBarShow: Boolean = false,
-
-    )
+    val isSnackBarShow: Boolean = false
+)
