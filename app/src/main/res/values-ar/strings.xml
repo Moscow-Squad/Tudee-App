@@ -34,7 +34,7 @@
     <string name="right_arrow">سهم يمين</string>
     <string name="done">مكتمل</string>
     <string name="in_progress_status">قيد التنفيذ</string>
-    <string name="to_do">مهام معلقة</string>
+    <string name="to_do">مهام معلقه</string>
     <string name="today">اليوم، %1$s</string>
     <string name="delete_item">حذف العنصر</string>
     <string name="splash_background">خلفية البداية</string>
