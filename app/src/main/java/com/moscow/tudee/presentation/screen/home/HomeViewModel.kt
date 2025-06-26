@@ -25,6 +25,7 @@ class HomeViewModel(
     init {
         getTodayDate()
         loadTasks()
+        updateSlider()
     }
 
 
@@ -36,6 +37,7 @@ class HomeViewModel(
             onStart   = { startLoading() },
             onFinally = { endLoading() }
         )
+        updateSlider()
     }
 
     private fun getTodayDate(){
@@ -53,6 +55,8 @@ class HomeViewModel(
 
             )
         }
+
+        updateSlider()
     }
 
     private fun updateSliderState(doneTasks:Int, todoTasks:Int,inProgressTasks:Int): HomeState.SliderState {
@@ -160,6 +164,8 @@ class HomeViewModel(
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
+
+        updateSlider()
     }
 
     private fun updateTaskStatus(task: TaskUi, nextStatus: Task.Status) {
@@ -184,6 +190,8 @@ class HomeViewModel(
 
             else -> {}
         }
+        updateSlider()
+
     }
 
     private fun getNextStatus(currentStatus: Task.Status): Task.Status {
@@ -213,6 +221,7 @@ class HomeViewModel(
             onStart = { startLoading() },
             onFinally = { endLoading() }
         )
+        updateSlider()
     }
 
     override fun onPriorityClick(taskPriority: Task.Priority) {
@@ -283,6 +292,25 @@ class HomeViewModel(
 
     private fun endLoading() {
         updateState { it.copy(isLoading = false) }
+    }
+
+    private fun updateSlider() {
+        if (uiState.value.todoTasks.isEmpty() && uiState.value.inProgressTasks.isEmpty() && uiState.value.doneTasks.isEmpty()) {
+            updateState { it.copy(sliderState = HomeState.SliderState.NOTHING_ON_YOUR_LIST) }
+            return
+        }
+
+        if ((uiState.value.todoTasks.isNotEmpty() || uiState.value.inProgressTasks.isNotEmpty()) && uiState.value.doneTasks.isEmpty()) {
+            updateState { it.copy(sliderState = HomeState.SliderState.ZERO_PROGRESS) }
+            return
+        }
+
+        if (uiState.value.todoTasks.isEmpty() && uiState.value.inProgressTasks.isEmpty() && uiState.value.doneTasks.isNotEmpty()) {
+            updateState { it.copy(sliderState = HomeState.SliderState.TADAA) }
+            return
+        }
+
+        updateState { it.copy(sliderState = HomeState.SliderState.STAY_WORKING) }
     }
 
     private fun handleHomeError(throwable: Throwable) {
