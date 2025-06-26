@@ -1,6 +1,5 @@
 package com.moscow.tudee.data.service
 
-import android.util.Log
 import com.moscow.tudee.data.local.dao.CategoryDao
 import com.moscow.tudee.data.local.dao.TaskDao
 import com.moscow.tudee.data.local.mapper.toCategory
@@ -55,7 +54,10 @@ class TasksServicesImpl(
         return tasks.toTasksBySingleCategory(category)
     }
 
-    override suspend fun getTasksByCategoryAndStatus(categoryId: Long, status: Task.Status): List<Task> {
+    override suspend fun getTasksByCategoryAndStatus(
+        categoryId: Long,
+        status: Task.Status
+    ): List<Task> {
         val tasks = taskDao.getTasksByCategoryAndStatus(categoryId, status.name)
         val category = categoryDao.getCategoryById(categoryId)
             ?: throw IllegalStateException("No Category for id=$categoryId")
@@ -72,7 +74,7 @@ class TasksServicesImpl(
         return taskEntity.toTask(domainCategory)
     }
 
-    override suspend fun changeTaskStatus(taskId: Long,updatedStatus: Task.Status) {
+    override suspend fun changeTaskStatus(taskId: Long, updatedStatus: Task.Status) {
         taskDao.updateTaskStatus(taskId, updatedStatus.name)
     }
 
@@ -84,7 +86,17 @@ class TasksServicesImpl(
     }
 
     override suspend fun updateTask(task: Task) {
+        task.id?.let { taskId ->
+            taskDao.getTaskById(taskId)?.let { oldTask ->
+                categoryDao.getCategoryById(oldTask.categoryId)?.let { oldCategory ->
+                    categoryDao.decrementTaskCount(oldCategory.id)
+                }
+            }
+        }
+
         taskDao.updateTask(task.toTaskEntity())
+
+        categoryDao.incrementTaskCount(task.category.id)
     }
 
     override suspend fun deleteTask(taskId: Long) {
