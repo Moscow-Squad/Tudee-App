@@ -145,12 +145,14 @@ private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modif
             ) {
                 items(uiState.tasks) { task ->
                     TaskCard(
-                        category = task.category,
+                        category = task.category ?: CategoryUi(),
                         title = task.title,
                         description = task.description,
                         date = task.date.toString(),
                     ) {
-                        CategoryPriorityChip(priority = task.priority)
+                        task.priority?.let { priority ->
+                            CategoryPriorityChip(priority = priority)
+                        }
                     }
                 }
             }

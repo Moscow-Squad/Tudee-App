@@ -8,8 +8,8 @@ data class TaskUi(
     val id: Long? = null,
     val title: String,
     val description: String,
-    val priority: Priority,
+    val priority: Priority? = null,
     val status: Status,
     val date: LocalDateTime,
-    val category: CategoryUi
+    val category: CategoryUi? = null
 )

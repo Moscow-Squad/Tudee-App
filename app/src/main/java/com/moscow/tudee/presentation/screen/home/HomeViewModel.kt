@@ -88,16 +88,9 @@ class HomeViewModel(
                     id = null,
                     title = "",
                     description = "",
-                    priority = Task.Priority.LOW,
+                    priority = null,
                     status = Status.TODO,
-                    category = CategoryUi(
-                        id = 1,
-                        title = "ggfgf",
-                        isPredefined = false,
-                        numberOfTasksInCategory = 5,
-                        iconUrl = "",
-                        countOfTasks = 10
-                    ),
+                    category = null,
                     date = java.time.LocalDateTime.now().toKotlinLocalDateTime()
                 ),
                 showAddTaskBottomSheet = true
