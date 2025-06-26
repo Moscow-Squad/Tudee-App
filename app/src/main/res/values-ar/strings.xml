@@ -67,6 +67,7 @@
     <string name="add_task">إضافة مهمة</string>
     <string name="edited_task_successfully">تم تعديل المهمة بنجاح</string>
     <string name="add_task_successfully">تم إضافة المهمة بنجاح</string>
+    <string name="tudee_robot">الروبوت تادي</string>
     <string name="priority_high">عالي</string>
     <string name="priority_medium">متوسط</string>
     <string name="priority_low">منخفض</string>
@@ -93,4 +94,5 @@
     <string name="circle_small">دائرة صغيرة</string>
     <string name="deleted_task_successfully">تم حذف المهمة بنجاح.</string>
     <string name="some_error_happened">حدث خطأ ما</string>
+    <string name="no_tasks_for_today">لا يوجد مهام اليوم</string>
 </resources>
