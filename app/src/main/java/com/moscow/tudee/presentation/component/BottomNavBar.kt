@@ -1,9 +1,7 @@
 package com.moscow.tudee.presentation.component
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.moscow.tudee.R
 import com.moscow.tudee.presentation.designSystem.theme.Theme
@@ -38,7 +35,7 @@ import com.moscow.tudee.presentation.navigation.extensions.selectNavigationItem
 @Composable
 fun BottomNavBar(
     navController: NavController,
-    bottomNavigationItems:List<BottomNavigationDestination>,
+    bottomNavigationItems: List<BottomNavigationDestination>,
     modifier: Modifier = Modifier
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -53,17 +50,20 @@ fun BottomNavBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        bottomNavigationItems.forEachIndexed{ index,screen->
+        bottomNavigationItems.forEachIndexed { index, screen ->
 
             val isSelected = when {
-            screen.route::class.simpleName == "HomeScreen" ->
-                currentRoute?.contains("Home") == true
-            screen.route::class.simpleName == "TasksScreen" ->
-                currentRoute?.contains("Task") == true
-            screen.route::class.simpleName == "CategoriesScreen" ->
-                currentRoute?.contains("Categor") == true
-            else -> false
-        }
+                screen.route::class.simpleName == "HomeScreen" ->
+                    currentRoute?.contains("Home") == true
+
+                screen.route::class.simpleName == "TasksScreen" ->
+                    currentRoute?.contains("Task") == true
+
+                screen.route::class.simpleName == "CategoriesScreen" ->
+                    currentRoute?.contains("Categor") == true
+
+                else -> false
+            }
             val icon = if (isSelected) screen.selectedIcon else screen.notSelectedIcon
 
             Crossfade(targetState = isSelected) { selected ->
@@ -92,12 +92,10 @@ private fun NavBarIcon(
     onClick: () -> Unit,
     contentDescription: String?
 ) {
-    val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) Theme.colors.primaryVariant else Theme.colors.surfaceHigh
-    )
-    val tintColor by animateColorAsState(
-        targetValue = if (isSelected) Theme.colors.primary else Theme.colors.hint
-    )
+    val backgroundColor = if (isSelected) Theme.colors.primaryVariant else Theme.colors.surfaceHigh
+
+    val tintColor = if (isSelected) Theme.colors.primary else Theme.colors.hint
+
 
     Icon(
         painter = painterResource(id = icon),
