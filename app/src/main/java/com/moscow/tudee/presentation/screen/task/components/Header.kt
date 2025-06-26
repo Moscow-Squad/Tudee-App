@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,9 +37,9 @@ fun Header(
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = {
-            onBackClick()
-        }) {
+//        IconButton(onClick = {
+//            onBackClick()
+//        }) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_head_back),
                 contentDescription = "Previous",
@@ -48,13 +47,13 @@ fun Header(
                 modifier = Modifier
                     .border(1.dp, Theme.colors.stroke, CircleShape)
                     .padding(10.dp)
+                    .clickable { onBackClick() }
             )
-        }
+//        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier
-                .padding(vertical = 3.5.dp)
                 .clip(CircleShape)
                 .clickable {
                     onDownClick()
@@ -76,9 +75,9 @@ fun Header(
                         .size(16.dp)
                 )
         }
-        IconButton(onClick = {
-            onNextClick()
-        }) {
+//        IconButton(onClick = {
+//            onNextClick()
+//        }) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_head_back),
                 contentDescription = "Next",
@@ -87,9 +86,10 @@ fun Header(
                     .rotate(180f)
                     .border(1.dp, Theme.colors.stroke, CircleShape)
                     .padding(10.dp)
+                    .clickable { onNextClick() }
 
             )
-        }
+//        }
     }
 }
 

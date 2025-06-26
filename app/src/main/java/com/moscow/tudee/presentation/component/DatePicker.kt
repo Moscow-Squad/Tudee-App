@@ -181,9 +181,10 @@ fun TudeeDatePickerTextField(
     val hintText = if (hint.isEmpty()) todayDate else hint
     val displayText = selectedDate?.let {
         val date = Instant.fromEpochMilliseconds(it)
-            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .toLocalDateTime(TimeZone.UTC)
             .date
         formatDate(date)
+
     } ?: ""
 
     val borderColor by animateColorAsState(
@@ -229,7 +230,8 @@ fun TudeeDatePickerTextField(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
+                contentAlignment = androidx.compose.ui.Alignment.CenterStart
             ) {
                 if (displayText.isEmpty()) {
                     TudeeText(
