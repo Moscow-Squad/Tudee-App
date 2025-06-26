@@ -12,14 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,6 +34,7 @@ import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
+import kotlin.math.max
 
 @Composable
 fun TaskBottomSheet(
@@ -58,7 +62,11 @@ fun TaskBottomSheet(
             contentHorizontalAlignment = Alignment.Start,
             modifier = Modifier.fillMaxHeight(0.8f)
         ) {
-            val scrollState = rememberScrollState()
+            val configuration = LocalConfiguration.current
+            val screenWidth = configuration.screenWidthDp.dp
+            val categoriesPerRow = remember(screenWidth) {
+                max(2, (screenWidth / 120.dp).toInt().coerceAtMost(4))
+            }
 
             val isTitleValid = taskTitle.trim().isNotBlank()
             val isDescriptionValid = taskDescription.trim().isNotBlank()
@@ -69,153 +77,166 @@ fun TaskBottomSheet(
                 isTitleValid && isDescriptionValid && isDateValid && isCategoryValid && isPriorityValid
 
             Box(modifier = modifier.fillMaxSize()) {
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(scrollState)
                         .padding(
                             start = 16.dp,
                             end = 16.dp,
                             top = 16.dp,
                             bottom = 160.dp
-                        )
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    TudeeText(
-                        text = if (isEditMode) stringResource(R.string.edit_task)
-                        else stringResource(R.string.add_new_task),
-                        color = Theme.colors.title,
-                        style = Theme.textStyle.title.large,
-                        fontSize = 20.sp
-                    )
-
-                    TudeeTextField(
-                        value = taskTitle,
-                        onValueChange = { newTitle ->
-                            onTaskTitleChange(newTitle)
-                        },
-                        keyboardOptions = KeyboardOptions.Default,
-                        singleLine = true,
-                        hint = stringResource(R.string.task_title),
-                        startIcon = painterResource(id = R.drawable.ic_document_outlined),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(72.dp)
-                            .padding(top = 16.dp)
-                    )
-
-                    TudeeTextField(
-                        value = taskDescription,
-                        onValueChange = { newDescription ->
-                            onTaskDescriptionChange(newDescription)
-                        },
-                        keyboardOptions = KeyboardOptions.Default,
-                        singleLine = false,
-                        hint = stringResource(R.string.description),
-                        placeholderAlignment = Alignment.TopStart,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .padding(top = 16.dp)
-                    )
-
-                    TudeeDatePickerTextField(
-                        selectedDate = selectedDate,
-                        onDateSelected = { newDate ->
-                            onDateSelected(newDate)
-                        },
-                        startIcon = painterResource(id = R.drawable.ic_calendar_add),
-                        dateFormat = "dd-MM-yyyy",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(72.dp)
-                            .padding(top = 16.dp)
-                    )
-
-                    TudeeText(
-                        stringResource(R.string.priority),
-                        color = Theme.colors.title,
-                        style = Theme.textStyle.title.medium,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-
-                    Row(modifier = Modifier.padding(top = 8.dp)) {
-                        PriorityChip(
-                            text = stringResource(R.string.high),
-                            selected = selectedPriority == Priority.HIGH,
-                            backgroundColor = Theme.colors.pinkAccent,
-                            icon = painterResource(id = R.drawable.ic_flag),
-                            modifier = Modifier.clickable {
-                                onPrioritySelected(Priority.HIGH)
-                            }
-                        )
-                        PriorityChip(
-                            text = stringResource(R.string.medium),
-                            selected = selectedPriority == Priority.MEDIUM,
-                            backgroundColor = Theme.colors.yellowAccent,
-                            icon = painterResource(id = R.drawable.ic_alert),
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .clickable {
-                                    onPrioritySelected(Priority.MEDIUM)
-                                }
-                        )
-                        PriorityChip(
-                            text = stringResource(R.string.low),
-                            selected = selectedPriority == Priority.LOW,
-                            backgroundColor = Theme.colors.greenAccent,
-                            icon = painterResource(id = R.drawable.ic_trade_down),
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .clickable {
-                                    onPrioritySelected(Priority.LOW)
-                                }
+                    item {
+                        TudeeText(
+                            text = if (isEditMode) stringResource(R.string.edit_task)
+                            else stringResource(R.string.add_new_task),
+                            color = Theme.colors.title,
+                            style = Theme.textStyle.title.large,
+                            fontSize = 20.sp
                         )
                     }
 
-                    TudeeText(
-                        stringResource(R.string.category),
-                        color = Theme.colors.title,
-                        style = Theme.textStyle.title.medium,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+                    item {
+                        TudeeTextField(
+                            value = taskTitle,
+                            onValueChange = { newTitle ->
+                                onTaskTitleChange(newTitle)
+                            },
+                            keyboardOptions = KeyboardOptions.Default,
+                            singleLine = true,
+                            hint = stringResource(R.string.task_title),
+                            startIcon = painterResource(id = R.drawable.ic_document_outlined),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(58.dp)
+                        )
+                    }
 
-                    Column(
-                        modifier = Modifier.padding(top = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        categories.chunked(3).forEach { rowCategories ->
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                rowCategories.forEach { category ->
-                                    Box(
-                                        modifier = Modifier.weight(1f)
-                                    ) {
-                                        CategoryCard(
-                                            icon = if (category.isPredefined) painterResource(
-                                                getPredefinedIconRes(category.title)
-                                            )
-                                            else rememberAsyncImagePainter(category.iconUrl),
-                                            label = category.title,
-                                            selected = selectedCategory?.id == category.id,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .clickable {
-                                                    onCategorySelected(category)
-                                                }
-                                        )
+                    item {
+                        TudeeTextField(
+                            value = taskDescription,
+                            onValueChange = { newDescription ->
+                                onTaskDescriptionChange(newDescription)
+                            },
+                            keyboardOptions = KeyboardOptions.Default,
+                            singleLine = false,
+                            hint = stringResource(R.string.description),
+                            placeholderAlignment = Alignment.TopStart,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                        )
+                    }
+
+                    item {
+                        TudeeDatePickerTextField(
+                            selectedDate = selectedDate,
+                            onDateSelected = { newDate ->
+                                onDateSelected(newDate)
+                            },
+                            startIcon = painterResource(id = R.drawable.ic_calendar_add),
+                            dateFormat = "dd-MM-yyyy",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(58.dp)
+                        )
+                    }
+
+                    item {
+                        TudeeText(
+                            stringResource(R.string.priority),
+                            color = Theme.colors.title,
+                            style = Theme.textStyle.title.medium,
+                            fontSize = 18.sp,
+                        )
+                    }
+
+                    item {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            item {
+                                PriorityChip(
+                                    text = stringResource(R.string.high),
+                                    selected = selectedPriority == Priority.HIGH,
+                                    backgroundColor = Theme.colors.pinkAccent,
+                                    icon = painterResource(id = R.drawable.ic_flag),
+                                    modifier = Modifier.clickable {
+                                        onPrioritySelected(Priority.HIGH)
                                     }
-                                }
-                                repeat(3 - rowCategories.size) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
+                                )
+                            }
+                            item {
+                                PriorityChip(
+                                    text = stringResource(R.string.medium),
+                                    selected = selectedPriority == Priority.MEDIUM,
+                                    backgroundColor = Theme.colors.yellowAccent,
+                                    icon = painterResource(id = R.drawable.ic_alert),
+                                    modifier = Modifier.clickable {
+                                        onPrioritySelected(Priority.MEDIUM)
+                                    }
+                                )
+                            }
+                            item {
+                                PriorityChip(
+                                    text = stringResource(R.string.low),
+                                    selected = selectedPriority == Priority.LOW,
+                                    backgroundColor = Theme.colors.greenAccent,
+                                    icon = painterResource(id = R.drawable.ic_trade_down),
+                                    modifier = Modifier.clickable {
+                                        onPrioritySelected(Priority.LOW)
+                                    }
+                                )
                             }
                         }
                     }
+
+                    item {
+                        TudeeText(
+                            stringResource(R.string.category),
+                            color = Theme.colors.title,
+                            style = Theme.textStyle.title.medium,
+                            fontSize = 18.sp,
+                        )
+                    }
+
+                    items(categories.chunked(categoriesPerRow)) { rowCategories ->
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            rowCategories.forEach { category ->
+                                Box(
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    CategoryCard(
+                                        icon = if (category.isPredefined) painterResource(
+                                            getPredefinedIconRes(category.title)
+                                        )
+                                        else rememberAsyncImagePainter(category.iconUrl),
+                                        label = category.title,
+                                        selected = selectedCategory?.id == category.id,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                onCategorySelected(category)
+                                            }
+                                    )
+                                }
+                            }
+                            repeat(categoriesPerRow - rowCategories.size) {
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
+                        }
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
                 }
+
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
