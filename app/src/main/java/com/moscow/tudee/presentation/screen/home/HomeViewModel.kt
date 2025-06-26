@@ -13,10 +13,10 @@ import com.moscow.tudee.presentation.model.TaskUi
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.datetime.toLocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 class HomeViewModel(
     private val tasksServices: TasksServices,
@@ -47,10 +47,19 @@ class HomeViewModel(
 
     private fun getTodayDate() {
         updateState {
+            val date = Clock.System.now()
+                .toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+            val formattedDate = String.format(
+                Locale.getDefault(),
+                "%d",
+                date.dayOfMonth
+            ) + " " + date.month.getDisplayName(
+                TextStyle.FULL,
+                Locale.getDefault()
+            ) + " " + String.format(Locale.getDefault(), "%d", date.year)
             it.copy(
-                formattedDate = Clock.System.now()
-                    .toLocalDateTime(TimeZone.currentSystemDefault()).date.toJavaLocalDate()
-                    .format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()
+                formattedDate = formattedDate
             )
         }
     }
