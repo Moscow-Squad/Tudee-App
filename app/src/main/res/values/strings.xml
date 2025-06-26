@@ -102,4 +102,22 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
+    <string name="quran">quran</string>
+    <string name="shopping">shopping</string>
+    <string name="education">education</string>
+    <string name="medical">medical</string>
+    <string name="gym">gym</string>
+    <string name="entertainment">entertainment</string>
+    <string name="cooking">cooking</string>
+    <string name="family_and_friend">family &amp; friend</string>
+    <string name="traveling">traveling</string>
+    <string name="agriculture">agriculture</string>
+    <string name="coding">coding</string>
+    <string name="adoration">adoration</string>
+    <string name="fixing_bugs">fixing bugs</string>
+    <string name="cleaning">cleaning</string>
+    <string name="work">work</string>
+    <string name="budgeting">budgeting</string>
+    <string name="self_care">self-care</string>
+    <string name="event">event</string>
 </resources>

@@ -118,4 +118,8 @@ class CategoryViewModel(
     private fun onFinally() {
         updateState { it.copy(isLoading = false) }
     }
+
+    private fun mapPredefinedCategoriesToStringResources() {
+
+    }
 }

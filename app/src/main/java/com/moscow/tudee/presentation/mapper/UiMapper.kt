@@ -1,6 +1,7 @@
 package com.moscow.tudee.presentation.mapper
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,7 @@ fun Task.toTaskUi() = TaskUi(
 fun Category.toCategoryUi() = CategoryUi(
     id = id,
     title = title,
+    titleRes = mapPredefinedCategoryToStringResource(title),
     iconUrl = iconUri,
     numberOfTasksInCategory = countOfTasks,
     isPredefined = isPredefined,
@@ -117,4 +119,31 @@ fun Task.Status.getColor(): Color {
 }
 fun LocalDateTime.asLong(): Long {
     return this.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+}
+
+@StringRes
+fun mapPredefinedCategoryToStringResource(
+    categoryTitle: String
+): Int? {
+    return when (categoryTitle) {
+        "quran" -> R.string.quran
+        "shopping" -> R.string.shopping
+        "education" -> R.string.education
+        "medical" -> R.string.medical
+        "gym" -> R.string.gym
+        "entertainment" -> R.string.entertainment
+        "cooking" -> R.string.cooking
+        "family & friend" -> R.string.family_and_friend
+        "traveling" -> R.string.traveling
+        "agriculture" -> R.string.agriculture
+        "coding" -> R.string.coding
+        "adoration" -> R.string.adoration
+        "fixing bugs" -> R.string.fixing_bugs
+        "cleaning" -> R.string.cleaning
+        "work" -> R.string.work
+        "budgeting" -> R.string.budgeting
+        "self-care" -> R.string.self_care
+        "event" -> R.string.event
+        else -> null
+    }
 }

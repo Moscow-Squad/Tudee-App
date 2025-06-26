@@ -104,4 +104,22 @@
     <string name="friday">الجمعة</string>
     <string name="saturday">السبت</string>
     <string name="sunday">الأحد</string>
+    <string name="quran">قرآن</string>
+    <string name="shopping">تسوق</string>
+    <string name="education">تعليم</string>
+    <string name="medical">طبي</string>
+    <string name="gym">رياضة</string>
+    <string name="entertainment">ترفيه</string>
+    <string name="cooking">طبخ</string>
+    <string name="family_and_friend">عائلة وأصدقاء</string>
+    <string name="traveling">سفر</string>
+    <string name="agriculture">زراعة</string>
+    <string name="coding">برمجة</string>
+    <string name="adoration">عبادة</string>
+    <string name="fixing_bugs">حل أخطاء برمجية</string>
+    <string name="cleaning">تنظيف</string>
+    <string name="work">عمل</string>
+    <string name="budgeting">ميزانية</string>
+    <string name="self_care">عناية شخصية</string>
+    <string name="event">حدث</string>
 </resources>
