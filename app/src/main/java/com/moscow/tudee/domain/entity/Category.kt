@@ -1,8 +1,7 @@
 package com.moscow.tudee.domain.entity
 
-import kotlin.uuid.ExperimentalUuidApi
 
-data class Category @OptIn(ExperimentalUuidApi::class) constructor(
+data class Category(
     val id: Long,
     val title: String,
     val iconUri: String,

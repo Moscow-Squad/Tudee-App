@@ -17,51 +17,19 @@ import org.koin.dsl.module
 
 private const val TUDEE_DATABASE = "tudee_database"
 
-val dataModule = module {
+val databaseModule = module {
 
     single {
-        listOf(
-            "quran",
-            "shopping",
-            "education",
-            "medical",
-            "gym",
-            "entertainment",
-            "cooking",
-            "family & friend",
-            "traveling",
-            "agriculture",
-            "coding",
-            "adoration",
-            "fixing bugs",
-            "cleaning",
-            "work",
-            "budgeting",
-            "self-care",
-            "event"
-        )
-    }
-
-    single<TudeeDatabase> {
         Room.databaseBuilder(
             androidContext(),
             TudeeDatabase::class.java,
             TUDEE_DATABASE
         )
             .fallbackToDestructiveMigration(false)
-            .addCallback(DatabaseCallback(get()))
+            .addCallback(DatabaseCallback())
             .build()
     }
 
     single<CategoryDao> { get<TudeeDatabase>().categoryDao() }
     single<TaskDao> { get<TudeeDatabase>().taskDao() }
-
-    single<TasksServices> {
-        TasksServicesImpl(get(), get())
-    }
-
-    single<CategoryServices> {
-        CategoryServicesImpl(get())
-    }
-    single<LocalService> { LocalServicesImpl(androidApplication()) }
 }

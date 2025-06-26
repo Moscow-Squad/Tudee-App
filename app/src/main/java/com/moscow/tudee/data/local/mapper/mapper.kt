@@ -19,7 +19,7 @@ fun CategoryEntity.toCategory(): Category {
 
 fun Category.toCategoryEntity(): CategoryEntity {
     return CategoryEntity(
-        id = id ?: 0L,
+        id = id,
         title = title,
         iconUri = iconUri,
         isPredefined = isPredefined,
@@ -71,4 +71,17 @@ private fun getStatusFromString(status: String): Task.Status {
         "DONE" -> Task.Status.DONE
         else -> throw IllegalArgumentException("Invalid status string: $status")
     }
+}
+
+fun List<TaskEntity>.toTasksByCategories(categoriesById: Map<Long, CategoryEntity>): List<Task> {
+    return this.map { taskEntity ->
+        val categoryEntity = categoriesById[taskEntity.categoryId]
+            ?: throw IllegalStateException("No Category for id=${taskEntity.categoryId}")
+        taskEntity.toTask(categoryEntity.toCategory())
+    }
+}
+
+fun List<TaskEntity>.toTasksBySingleCategory(categoryEntity: CategoryEntity): List<Task> {
+    val domainCategory = categoryEntity.toCategory()
+    return this.map { it.toTask(domainCategory) }
 }
