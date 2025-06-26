@@ -38,12 +38,12 @@
     <string name="delete_item">Delete item</string>
     <string name="splash_background">Splash Background</string>
     <string name="splash_logo">logo icon\n</string>
-    <string name="overwhelmed_with_tasks">Overwhelmed with tasks?</string>
-    <string name="let_s_bring_some_order_to_the_chaos_tudee_is_here_to_help_you_sort_plan_and_breathe_easier">Let’s bring some order to the chaos.\nTudee is here to help you sort, plan, and breathe easier.</string>
-    <string name="uh_oh_procrastinating_again">Uh-oh! Procrastinating again</string>
-    <string name="tudee_not_mad_just_a_little_disappointed">Tudee not mad… just a little\ndisappointed, Let’s get back on track\ntogether.</string>
-    <string name="let_s_complete_tasks_and_celebrate_together">Let’s complete tasks and celebrate\ntogether.</string>
-    <string name="tudee_will_celebrate_you_on_every_win">Progress is progress.Tudee will\ncelebrate you on for every win, big or\nsmall.</string>
+    <string name="overwhelmed_with_tasks">Overwhelmed with tasks?\n</string>
+    <string name="let_s_bring_some_order_to_the_chaos_tudee_is_here_to_help_you_sort_plan_and_breathe_easier">Let’s bring some order to the chaos.Tudee is here to help you sort, plan, and breathe easier.</string>
+    <string name="uh_oh_procrastinating_again">Uh-oh! Procrastinating again\n</string>
+    <string name="tudee_not_mad_just_a_little_disappointed">Tudee not mad… just a little disappointed, Let’s get back on track together.</string>
+    <string name="let_s_complete_tasks_and_celebrate_together">Let’s complete tasks and celebrate together.</string>
+    <string name="tudee_will_celebrate_you_on_every_win">Progress is progress.Tudee will celebrate you on for every win, big or small.</string>
     <string name="skip">Skip</string>
     <string name="are_you_sure_to_continue">Are you sure to continue?</string>
     <string name="delete">Delete</string>
@@ -92,4 +92,5 @@
     <string name="circle_small">circle small</string>
     <string name="deleted_task_successfully">Deleted Task Successfully.</string>
     <string name="some_error_happened">Some error happened</string>
+    <string name="no_tasks_for_today">No tasks for today!</string>
 </resources>

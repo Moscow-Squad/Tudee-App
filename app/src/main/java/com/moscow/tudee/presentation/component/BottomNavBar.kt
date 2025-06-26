@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.component
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,10 +29,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.moscow.tudee.R
-import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 import com.moscow.tudee.presentation.model.BottomNavigationDestination
+import com.moscow.tudee.presentation.navigation.extensions.selectNavigationItem
 
 
 @Composable
@@ -46,12 +48,22 @@ fun BottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .background(Theme.colors.surfaceHigh)
+            .navigationBarsPadding()
             .padding(vertical = 16.dp, horizontal = 32.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         bottomNavigationItems.forEachIndexed{ index,screen->
-            val isSelected = currentRoute == screen.route::class.java.name
+
+            val isSelected = when {
+            screen.route::class.simpleName == "HomeScreen" ->
+                currentRoute?.contains("Home") == true
+            screen.route::class.simpleName == "TasksScreen" ->
+                currentRoute?.contains("Task") == true
+            screen.route::class.simpleName == "CategoriesScreen" ->
+                currentRoute?.contains("Categor") == true
+            else -> false
+        }
             val icon = if (isSelected) screen.selectedIcon else screen.notSelectedIcon
 
             Crossfade(targetState = isSelected) { selected ->
@@ -99,36 +111,6 @@ private fun NavBarIcon(
             .padding(9.dp)
             .size(24.dp)
     )
-}
-
-
-
-private fun NavController.selectNavigationItem(route: Any) {
-    navigateSafe(route) {
-        popUpTo(graph.findStartDestination().id) {
-
-            /**
-             *  Preserves the state of the screen you're leaving.
-             *  For example, if you're on a list screen and scroll down,
-             *  then switch tabs and come back, you'll return to the same scroll position
-             */
-
-            saveState = true
-        }
-
-        /**
-         * Prevents creating duplicate instances of the same destination.
-         * If you're already on the "Home" tab and tap "Home" again,
-         * it won't create a new Home screen instance
-         */
-        launchSingleTop = true
-
-        /**
-         * When returning to a previously visited tab,
-         * it restores the saved state (scroll position, form data, etc.)
-         */
-        restoreState = true
-    }
 }
 
 

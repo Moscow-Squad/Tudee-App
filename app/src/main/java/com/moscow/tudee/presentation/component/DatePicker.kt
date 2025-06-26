@@ -2,6 +2,7 @@ package com.moscow.tudee.presentation.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,11 +13,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,8 +50,24 @@ fun DatePickerModal(
     onDismiss: () -> Unit,
     selectedDate: Long? = null
 ) {
+    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val lastMonth = if (today.monthNumber == 1) {
+        LocalDate(today.year - 1, 12, today.dayOfMonth)
+    } else {
+        LocalDate(today.year, today.monthNumber - 1, today.dayOfMonth)
+    }
+    val lastMonthSameDayMillis = lastMonth
+        .atTime(0, 0)
+        .toInstant(TimeZone.currentSystemDefault())
+        .toEpochMilliseconds()
+
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = selectedDate
+        initialSelectedDateMillis = selectedDate,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis > lastMonthSameDayMillis
+            }
+        }
     )
 
     DatePickerDialog(
@@ -197,10 +217,12 @@ fun TudeeDatePickerTextField(
                     modifier = Modifier.size(24.dp)
                 )
 
-                Image(
-                    painter = painterResource(R.drawable.ic_line),
-                    contentDescription = stringResource(R.string.divider),
-                    modifier = Modifier.padding(horizontal = 12.dp)
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .fillMaxHeight()
+                        .width(1.dp)
+                        .background(color = Theme.colors.stroke)
                 )
             }
 

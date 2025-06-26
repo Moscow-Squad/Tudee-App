@@ -8,24 +8,27 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.moscow.tudee.presentation.screen.category.CategoryTasks
-import com.moscow.tudee.presentation.screen.category.categoriesRoute
-import com.moscow.tudee.presentation.screen.category.categoryTasksRoute
+import com.moscow.tudee.presentation.navigation.entry.CategoriesScreen
 import com.moscow.tudee.presentation.navigation.entry.HomeScreen
 import com.moscow.tudee.presentation.navigation.entry.MainScreen
 import com.moscow.tudee.presentation.navigation.entry.TasksScreen
 import com.moscow.tudee.presentation.navigation.extensions.navigateSafe
+import com.moscow.tudee.presentation.navigation.extensions.selectNavigationItem
+import com.moscow.tudee.presentation.screen.category.CategoryTasks
+import com.moscow.tudee.presentation.screen.category.categoriesRoute
+import com.moscow.tudee.presentation.screen.category.categoryTasksRoute
 import com.moscow.tudee.presentation.screen.home.homeRoute
 import com.moscow.tudee.presentation.screen.task.tasksRoute
 
 @Composable
 fun MainNavGraph(
+    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     isBottomNavigationVisible: (Boolean) -> Unit,
     paddingValues: PaddingValues,
 ) {
     NavHost(
-        modifier = Modifier.padding(bottom = 78.dp),
+        modifier = modifier.padding(paddingValues),
         navController = navController,
         route = MainScreen::class,
         startDestination = HomeScreen
@@ -34,10 +37,7 @@ fun MainNavGraph(
         homeRoute(
             isBottomNavigationVisible = isBottomNavigationVisible,
             navigateToTaskScreen = {
-                navController.navigateSafe(
-                    route = TasksScreen,
-                    builder = {}
-                )
+                navController.selectNavigationItem(TasksScreen)
             }
         )
 

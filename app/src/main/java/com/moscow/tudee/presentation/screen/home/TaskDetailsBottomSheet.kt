@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,10 +25,10 @@ import coil.compose.rememberAsyncImagePainter
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.component.OutlinedIconButton
+import com.moscow.tudee.presentation.component.PriorityChip
 import com.moscow.tudee.presentation.component.SecondaryButton
 import com.moscow.tudee.presentation.component.TudeeText
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
-import com.moscow.tudee.presentation.component.PriorityChip
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.mapper.getBackgroundColor
 import com.moscow.tudee.presentation.mapper.getColor
@@ -48,7 +50,7 @@ fun TaskDetailsBottomSheet(
 ) {
     TudeeBottomSheet(
         onDismissRequest = onDismiss,
-        modifier = modifier
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -70,16 +72,16 @@ fun TaskDetailsBottomSheet(
                     .background(Theme.colors.surfaceHigh)
                     .padding(12.dp)
             ) {
-                Image(
-                    painter = if (task.category.isPredefined == true) painterResource(
-                        getPredefinedIconRes(
-                            task.category.title
-                        )
-                    ) else rememberAsyncImagePainter(task.category.iconUrl),
-                    contentDescription = task.category.title,
-                    modifier = Modifier
-                        .size(32.dp)
-                )
+                task.category?.let { category ->
+                    Image(
+                        painter = if (category.isPredefined == true)
+                            painterResource(getPredefinedIconRes(category.title))
+                        else
+                            rememberAsyncImagePainter(category.iconUrl),
+                        contentDescription = category.title,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
 
             TudeeText(
@@ -111,11 +113,11 @@ fun TaskDetailsBottomSheet(
                     statusColor = task.status.getColor(),
                     dotColor = task.status.getColor()
                 )
-                task.priority.let {
+                task.priority?.let { priority ->
                     PriorityChip(
-                        text = task.priority.getText(),
-                        backgroundColor = task.priority.getColor(),
-                        icon = painterResource(task.priority.getIcon()),
+                        text = priority.getText(),
+                        backgroundColor = priority.getColor(),
+                        icon = painterResource(priority.getIcon()),
                         selected = true
                     )
                 }

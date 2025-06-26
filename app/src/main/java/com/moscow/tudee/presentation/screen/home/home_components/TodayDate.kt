@@ -3,6 +3,7 @@ package com.moscow.tudee.presentation.screen.home.home_components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,13 +23,16 @@ fun TodayDate(date: String, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Image(
-           painter = painterResource(R.drawable.ic_calendar_favorite),
-    contentDescription = stringResource(R.string.calendar_icon),
-    colorFilter = ColorFilter.tint(Theme.colors.body)
+            modifier = Modifier.size(16.dp),
+            painter = painterResource(R.drawable.ic_calendar_favorite),
+            colorFilter = ColorFilter.tint(color = Theme.colors.body),
+            contentDescription = stringResource(R.string.calendar_icon)
+
         )
         TudeeText(
             text = stringResource(R.string.today, date),
-            style = Theme.textStyle.body.small.copy(color = Theme.colors.body)
+            style = Theme.textStyle.body.small,
+            color = Theme.colors.body
         )
     }
 }

@@ -25,7 +25,8 @@ fun TudeeText(
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
     lineHeight: TextUnit = TextUnit.Unspecified,
-    letterSpacing: TextUnit = TextUnit.Unspecified
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    minLines: Int = 1,
 ) {
     val finalStyle = style.merge(
         TextStyle(
@@ -44,7 +45,8 @@ fun TudeeText(
         modifier = modifier,
         style = finalStyle,
         maxLines = maxLines,
-        overflow = overflow
+        overflow = overflow,
+        minLines = minLines
     )
 
 }
