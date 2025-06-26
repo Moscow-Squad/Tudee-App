@@ -6,6 +6,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
                 Color.Transparent.toArgb()
             )
         )
+
         setContent {
             val localService = LocalServicesImpl(this@MainActivity)
             val isSystemInDarkTheme = isSystemInDarkTheme()
@@ -73,11 +75,34 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+
+            ChangeSystemBarsTheme(!isDarkThemeState.value)
+
             TudeeTheme(state = themeState) {
                 TudeeGraph()
             }
 
         }
     }
-}
 
+    @Composable
+    private fun ChangeSystemBarsTheme(lightTheme: Boolean) {
+        val barColor = Color.Transparent.toArgb()
+        LaunchedEffect(lightTheme) {
+            if (lightTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.light(
+                        barColor, barColor,
+                    )
+                )
+            } else {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.dark(
+                        barColor,
+                    )
+                )
+            }
+        }
+    }
+
+}
