@@ -148,8 +148,9 @@ fun HomeContent(
                         }
 
                     } else {
-                        // TODO: handle empty State
-                        EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp))
+
+                        EmptyScreen(modifier = Modifier.padding(start = 10.dp, top = 121.dp),title = stringResource(R.string.no_tasks_for_today))
+
                     }
                 }
             }
