@@ -86,7 +86,7 @@ class TasksServicesImpl(
     }
 
     override suspend fun updateTask(task: Task) {
-        task.id?.let { taskId ->
+        task.id.let { taskId ->
             taskDao.getTaskById(taskId)?.let { oldTask ->
                 categoryDao.getCategoryById(oldTask.categoryId)?.let { oldCategory ->
                     categoryDao.decrementTaskCount(oldCategory.id)

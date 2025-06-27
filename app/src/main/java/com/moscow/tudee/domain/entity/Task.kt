@@ -3,7 +3,7 @@ import kotlinx.datetime.LocalDateTime
 
 
 data class Task(
-    val id: Long? = null,
+    val id: Long,
     val title: String,
     val description: String,
     val priority: Priority,

@@ -92,7 +92,7 @@ class CategoryViewModelTest {
 
     @Test
     fun `should return success state when category is added successfully`() {
-        coEvery { categoryServices.addCategory(any()) } returns Unit
+        coEvery { categoryServices.addCategory(any(), any(), any(), any()) } returns Unit
         coEvery { categoryServices.getCategories() } returns listOf(category)
 
         viewModel.onAddCategory(category.toCategoryUi())
@@ -106,7 +106,14 @@ class CategoryViewModelTest {
 
     @Test
     fun `should return error state when adding category fails`() {
-        coEvery { categoryServices.addCategory(any()) } throws Exception("Failed")
+        coEvery {
+            categoryServices.addCategory(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } throws Exception("Failed")
 
         viewModel.onAddCategory(category.toCategoryUi())
         testScope.advanceUntilIdle()

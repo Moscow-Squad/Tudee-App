@@ -38,7 +38,7 @@ fun Category.toCategoryUi() = CategoryUi(
 
 fun TaskUi.toTask(): Task =
     Task(
-        id = id,
+        id = id ?: 0L,
         title = title,
         description = description,
         priority = priority ?: Priority.LOW,
