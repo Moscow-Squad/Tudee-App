@@ -54,7 +54,7 @@ class AddTaskBottomSheetViewModel(
             action = {
                 tasksServices.addTask(
                     Task(
-                        id = null,
+                        id = 0L,
                         title = uiState.value.title,
                         description = uiState.value.description,
                         priority = uiState.value.priority ?: return@launchWithResult onErrorAddTask(

@@ -1,4 +1,3 @@
-
 package com.moscow.tudee.data.local.mapper
 
 import com.moscow.tudee.data.local.entity.CategoryEntity
@@ -29,7 +28,7 @@ fun Category.toCategoryEntity(): CategoryEntity {
 
 fun TaskEntity.toTask(category: Category): Task {
     return Task(
-        id = id.takeIf { it.toInt() != 0 },
+        id = id,
         title = title,
         description = description,
         priority = getPriorityFromString(priority),
@@ -45,7 +44,7 @@ fun TaskEntity.toTask(category: Category): Task {
 
 fun Task.toTaskEntity(): TaskEntity {
     return TaskEntity(
-        id = id ?: 0,
+        id = id,
         title = title,
         description = description,
         priority = priority.toString(),
@@ -84,4 +83,19 @@ fun List<TaskEntity>.toTasksByCategories(categoriesById: Map<Long, CategoryEntit
 fun List<TaskEntity>.toTasksBySingleCategory(categoryEntity: CategoryEntity): List<Task> {
     val domainCategory = categoryEntity.toCategory()
     return this.map { it.toTask(domainCategory) }
+}
+
+fun createCategoryEntity(
+    title: String,
+    iconUri: String,
+    isPredefined: Boolean,
+    countOfTasks: Int
+): CategoryEntity {
+    return CategoryEntity(
+        id = 0,
+        title = title,
+        iconUri = iconUri,
+        isPredefined = isPredefined,
+        countOfTasks = countOfTasks
+    )
 }

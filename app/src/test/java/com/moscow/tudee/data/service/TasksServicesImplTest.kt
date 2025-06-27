@@ -204,7 +204,7 @@ class TasksServicesImplTest {
     @Test
     fun `should insert task into dao when adding new task`() = runTest {
         val newTask = Task(
-            id = null,
+            id = 0L,
             title = "Test Task",
             description = "Description",
             priority = Task.Priority.HIGH,
@@ -217,7 +217,7 @@ class TasksServicesImplTest {
             title = "Test Task",
             description = "Description",
             priority = Task.Priority.HIGH.name,
-            categoryId = sampleCategory.id!!,
+            categoryId = sampleCategory.id,
             status = Task.Status.TODO.name,
             date = "2025-06-18"
         )
@@ -226,7 +226,7 @@ class TasksServicesImplTest {
         tasksServices.addTask(newTask)
 
         coVerify { taskDao.addTask(expectedEntity) }
-        coVerify { categoryDao.incrementTaskCount(sampleCategory.id!!) }
+        coVerify { categoryDao.incrementTaskCount(sampleCategory.id) }
     }
 
     @Test
@@ -245,7 +245,7 @@ class TasksServicesImplTest {
             title = "Updated Task",
             description = "Updated Description",
             priority = Task.Priority.MEDIUM.name,
-            categoryId = sampleCategory.id!!,
+            categoryId = sampleCategory.id,
             status = Task.Status.IN_PROGRESS.name,
             date = "2025-06-18"
         )

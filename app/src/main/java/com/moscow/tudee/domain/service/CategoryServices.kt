@@ -6,7 +6,12 @@ interface CategoryServices {
 
     suspend fun getCategories(): List<Category>
 
-    suspend fun addCategory(category: Category)
+    suspend fun addCategory(
+        title: String,
+        iconUri: String,
+        isPredefined: Boolean = false,
+        countOfTasks: Int = 0
+    )
 
     suspend fun updateCategory(category: Category)
 
