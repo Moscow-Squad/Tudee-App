@@ -120,4 +120,5 @@
     <string name="budgeting">budgeting</string>
     <string name="self_care">self-care</string>
     <string name="event">event</string>
+    <string name="no_tasks_in_reading_category">No tasks in %1$s category!</string>
 </resources>

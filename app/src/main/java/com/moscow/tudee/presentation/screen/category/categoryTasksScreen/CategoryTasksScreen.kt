@@ -1,7 +1,6 @@
 package com.moscow.tudee.presentation.screen.category.categoryTasksScreen
 
 import android.net.Uri
-import android.text.TextUtils.substring
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.presentation.base.ObserveAsEvent
-import com.moscow.tudee.presentation.component.EmptyScreen
+import com.moscow.tudee.presentation.component.CategoryEmptyScreen
 import com.moscow.tudee.presentation.component.TaskCard
 import com.moscow.tudee.presentation.component.TopBar
 import com.moscow.tudee.presentation.designSystem.theme.Theme
@@ -35,7 +34,6 @@ import com.moscow.tudee.presentation.screen.category.component.CategorySnackBar
 import com.moscow.tudee.presentation.screen.category.component.CategoryTabs
 import com.moscow.tudee.presentation.screen.category.component.DeleteCategoryBottomSheet
 import com.moscow.tudee.presentation.screen.category.component.TabItem
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -112,7 +110,7 @@ private fun TasksTopBar(
             modifier = Modifier
                 .background(Theme.colors.surfaceHigh)
                 .statusBarsPadding(),
-            title = uiState.category.title,
+            title = uiState.category.titleRes?.let { stringResource(uiState.category.titleRes) } ?: uiState.category.title ,
             startIcon = painterResource(id = R.drawable.ic_arrow_head_back),
             endIcon = if (uiState.category.isPredefined) null else painterResource(id = R.drawable.ic_pencil_edit),
             onEndClick = listener::onShowEditCategoryBottomSheet,
@@ -140,7 +138,12 @@ private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modif
                     .padding(10.dp),
                 contentAlignment = androidx.compose.ui.Alignment.Center
             ) {
-                EmptyScreen()
+                CategoryEmptyScreen(
+                    title = stringResource(
+                        R.string.no_tasks_in_reading_category,
+                        uiState.category.titleRes?.let { stringResource(uiState.category.titleRes) } ?: uiState.category.title
+                    )
+                )
             }
         } else {
             LazyColumn(
@@ -166,7 +169,7 @@ private fun TasksList(uiState: CategoriesScreenState, modifier: Modifier = Modif
     }
 }
 
-private fun formatDate(date : LocalDateTime): String{
+private fun formatDate(date: LocalDateTime): String {
     val currentDate = date.toString()
     return currentDate.substring(startIndex = 0, endIndex = currentDate.indexOf('T'))
 }

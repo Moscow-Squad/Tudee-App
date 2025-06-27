@@ -1,6 +1,5 @@
 package com.moscow.tudee.presentation.screen.category.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -87,7 +86,6 @@ fun CategoryCard(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(8.dp)
                             .clip(CircleShape)
                     )
                 }

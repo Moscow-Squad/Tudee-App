@@ -122,4 +122,5 @@
     <string name="budgeting">ميزانية</string>
     <string name="self_care">عناية شخصية</string>
     <string name="event">حدث</string>
+    <string name="no_tasks_in_reading_category">لا توجد مهام في فئة %1$s!</string>
 </resources>
