@@ -33,6 +33,7 @@ import com.moscow.tudee.domain.entity.Task.Priority
 import com.moscow.tudee.presentation.component.bottomSheet.TudeeBottomSheet
 import com.moscow.tudee.presentation.designSystem.theme.Theme
 import com.moscow.tudee.presentation.model.CategoryUi
+import com.moscow.tudee.presentation.screen.category.component.CategoryCard
 import com.moscow.tudee.presentation.util.getPredefinedIconRes
 import kotlin.math.max
 
@@ -219,6 +220,9 @@ fun TaskBottomSheet(
                                         label = category.titleRes?.let { stringResource(category.titleRes) }
                                             ?: category.title,
                                         selected = selectedCategory?.id == category.id,
+                                        isPredefined = category.isPredefined,
+                                        iconTint = Color.Unspecified,
+                                        count = -1,
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clickable {
