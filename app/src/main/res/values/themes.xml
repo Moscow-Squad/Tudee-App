@@ -2,6 +2,6 @@
 <resources>
 
     <style name="Theme.Tudee" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowIsTranslucent">true</item>
+<!--        <item name="android:windowIsTranslucent">true</item>-->
     </style>
 </resources>
