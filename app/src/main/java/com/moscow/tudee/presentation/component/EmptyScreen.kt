@@ -31,7 +31,8 @@ import com.moscow.tudee.presentation.designSystem.theme.TudeeTheme
 @Composable
 fun EmptyScreen(
     modifier: Modifier = Modifier,
-    title: String = stringResource(R.string.no_tasks_here)
+    title: String = stringResource(R.string.no_tasks_here),
+    description: String = stringResource(R.string.tap_the_button_to_add_your_first_one)
 ) {
     Box(
         modifier = modifier,
@@ -62,6 +63,47 @@ fun EmptyScreen(
             )
         }
         MessageBox(
+            title = title,
+            modifier = Modifier.padding(bottom = 90.dp, end = 147.dp),
+            description = description
+        )
+    }
+}
+
+@Composable
+fun CategoryEmptyScreen(
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.no_tasks_here)
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.BottomEnd,
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(top = 12.dp, end = 18.dp)
+                .height(149.dp)
+                .width(148.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.circle_background),
+                contentDescription = "circle background",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(end = 5.dp)
+            )
+            Image(
+                painter = painterResource(R.drawable.im_robot_normal),
+                contentDescription = "normal robot",
+                modifier = Modifier.padding(top = 45.dp, start = 42.dp)
+            )
+            ColumnOfDots(
+                modifier = Modifier
+                    .padding(top = 65.dp, start = 19.dp)
+            )
+        }
+        MessageBoxTitleOnly(
             title = title,
             modifier = Modifier.padding(bottom = 90.dp, end = 147.dp)
         )
@@ -95,6 +137,7 @@ fun ColumnOfDots(modifier: Modifier = Modifier) {
 @Composable
 fun MessageBox(
     title: String,
+    description: String,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -111,7 +154,7 @@ fun MessageBox(
                 Theme.colors.surfaceHigh,
                 RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp, bottomStart = 16.dp)
             )
-            .padding(vertical = 12.dp, horizontal = 8.dp)
+            .padding(vertical = 8.dp, horizontal = 12.dp)
     ) {
         Text(
             text = title,
@@ -119,9 +162,37 @@ fun MessageBox(
             color = Theme.colors.body
         )
         Text(
-            text = stringResource(R.string.tap_the_button_to_add_your_first_one),
+            text = description,
             style = Theme.textStyle.body.small,
             color = Theme.colors.hint
+        )
+    }
+}
+
+@Composable
+fun MessageBoxTitleOnly(
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = modifier
+            .shadow(
+                4.dp,
+                RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp, bottomStart = 16.dp),
+                ambientColor = Theme.colors.body,
+                spotColor = Theme.colors.hint
+            )
+            .background(
+                Theme.colors.surfaceHigh,
+                RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp, bottomStart = 16.dp)
+            )
+            .padding(vertical = 8.dp, horizontal = 12.dp)
+    ) {
+        Text(
+            text = title,
+            style = Theme.textStyle.title.small,
+            color = Theme.colors.body
         )
     }
 }
@@ -136,7 +207,6 @@ private fun EmptyScreenPreview() {
             modifier = Modifier.background(Theme.colors.surface)
         )
     }
-
 }
 
 @Preview
@@ -145,7 +215,6 @@ private fun ColumnOfDotsPreview() {
     TudeeTheme {
         ColumnOfDots()
     }
-
 }
 
 @Preview(apiLevel = 33)
@@ -154,7 +223,18 @@ private fun MessageBoxPreview() {
     TudeeTheme {
         MessageBox(
             title = "blablabla",
+            description = "nnnnnnnnnnnnnnnnn"
         )
     }
+}
 
+@Preview(apiLevel = 33)
+@Composable
+private fun CategoryEmptyScreenPreview() {
+    TudeeTheme {
+        CategoryEmptyScreen(
+            title = "No tasks in this category",
+            modifier = Modifier.background(Theme.colors.surface)
+        )
+    }
 }
