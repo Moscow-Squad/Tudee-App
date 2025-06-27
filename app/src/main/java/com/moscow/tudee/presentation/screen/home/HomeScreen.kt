@@ -78,7 +78,7 @@ fun HomeContent(
                 title = stringResource(id = R.string.tudee),
                 subTitle = stringResource(id = R.string.your_cute_helper_for_every_task),
                 showSnackbar = uiState.showSnackbar,
-                snackbarMessage = uiState.snackbarMessage,
+                snackbarMessage = stringResource(uiState.snackbarMessageId),
                 snackbarIcon = if (uiState.showSnackbar) painterResource(id = R.drawable.ic_checkmark_badge) else null,
                 onSnackbarDismiss = { interactionListener.onSnackbarDismissed() }
             )

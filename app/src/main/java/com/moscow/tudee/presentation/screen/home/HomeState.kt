@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.screen.home
 
+import com.moscow.tudee.R
 import com.moscow.tudee.presentation.model.CategoryUi
 import com.moscow.tudee.presentation.model.TaskUi
 
@@ -21,7 +22,7 @@ data class HomeState(
     val showTaskDetailsBottomSheet: Boolean = false,
     val formattedDate: String? = null,
     val showSnackbar: Boolean = false,
-    val snackbarMessage: String = ""
+    val snackbarMessageId: Int = R.string.add_task_successfully
 ) {
     enum class SliderState {
         STAY_WORKING,
