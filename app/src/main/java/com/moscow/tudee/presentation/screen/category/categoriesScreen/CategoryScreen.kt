@@ -159,7 +159,7 @@ private fun CategoryGridItem(
 
     CategoryCard(
         icon = iconPainter,
-        label = category.title,
+        label = category.titleRes?.let { stringResource(category.titleRes) } ?: category.title,
         count = category.numberOfTasksInCategory,
         isPredefined = category.isPredefined,
         iconTint = Color.Unspecified,
