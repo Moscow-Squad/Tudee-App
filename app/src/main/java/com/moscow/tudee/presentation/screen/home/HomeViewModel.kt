@@ -1,5 +1,6 @@
 package com.moscow.tudee.presentation.screen.home
 
+import com.moscow.tudee.R
 import com.moscow.tudee.domain.entity.Task
 import com.moscow.tudee.domain.entity.Task.Status
 import com.moscow.tudee.domain.service.CategoryServices
@@ -141,7 +142,7 @@ class HomeViewModel(
                         showAddTaskBottomSheet = false,
                         addedTask = null,
                         showSnackbar = true,
-                        snackbarMessage = "Task added successfully!"
+                        snackbarMessageId = R.string.add_task_successfully
                     )
                 }
             },
@@ -232,7 +233,7 @@ class HomeViewModel(
                         selectedTask = it.addedTask,
                         addedTask = null,
                         showSnackbar = true,
-                        snackbarMessage = "Task updated successfully!"
+                        snackbarMessageId = R.string.edited_task_successfully
                     )
                 }
             },
@@ -289,19 +290,13 @@ class HomeViewModel(
 
     override fun onShowSnackbar(message: String) {
         updateState {
-            it.copy(
-                showSnackbar = true,
-                snackbarMessage = message
-            )
+            it.copy(showSnackbar = true)
         }
     }
 
     override fun onSnackbarDismissed() {
         updateState {
-            it.copy(
-                showSnackbar = false,
-                snackbarMessage = ""
-            )
+            it.copy(showSnackbar = false)
         }
     }
 
