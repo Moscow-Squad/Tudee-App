@@ -1,8 +1,6 @@
 package com.moscow.tudee.presentation.component.tudeeSwitch
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,10 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -32,15 +26,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.moscow.tudee.presentation.designSystem.theme.Theme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Stable
 @Composable
 fun TudeeSwitchLightTheme(
     onToggleState: () -> Unit,
     isClickable: Boolean,
-    transitionFloatAnimationSpec: TweenSpec<Float>,
+    sunAlignment: BiasAlignment,
     movingCloudySize: Dp,
     outerTopCloudSize: Dp,
     cloudyOutlierBottomDp: Dp,
@@ -52,19 +44,6 @@ fun TudeeSwitchLightTheme(
     circlePositionY: Dp,
     surfaceLow: Color = Color(0xFFF0F0F0)
 ) {
-
-    val coroutineScope = rememberCoroutineScope()
-
-    val sunBiasAlignment = remember {
-        Animatable(-1f)
-    }
-
-    val sunAlignment by remember {
-        derivedStateOf {
-            BiasAlignment(sunBiasAlignment.value, 0f)
-        }
-    }
-
     Box(
         modifier = Modifier
             .requiredSize(width = 64.dp, height = 36.dp)
@@ -151,15 +130,10 @@ fun TudeeSwitchLightTheme(
                     edgeTreatment = BlurredEdgeTreatment(CircleShape)
                 )
                 .clip(CircleShape)
-                .clickable(isClickable) {
-                    coroutineScope.launch(Dispatchers.Main.immediate) {
-                        sunBiasAlignment.animateTo(
-                            targetValue = 1f,
-                            animationSpec = transitionFloatAnimationSpec
-                        )
-                    }
-                    onToggleState()
-                }
+                .clickable(
+                    enabled = isClickable,
+                    onClick = onToggleState
+                )
                 .align(sunAlignment)
         )
 
